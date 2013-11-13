@@ -2,7 +2,7 @@
 
 require_once('../libs/tcpdf/config/lang/eng.php');
 require_once('../libs/tcpdf/tcpdf.php');
-require_once('../db/dbclass.php');
+include('../db/dbclass.php');
 $id = $_GET['id'];
 
 // Extend the TCPDF class to create custom Header and Footer
@@ -26,11 +26,18 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             }
             $id_entidad=$rs2->id;
         }
-        if($id_entidad<>2 && $id_entidad<>4){
-        $this->Image($image_file, 89, 5, 40, 23, 'PNG');
-        }
-        $this->SetFont('helvetica', 'B', 20);
+        //logo escudo
+        $this->Image('../media/logos/escudo_bolivia.png', 25, 5, 30, 18, 'PNG');
+        //logo entidad
+        $this->Image($image_file, 155, 5, 40, 18, 'PNG');
+        $this->SetFont('helvetica', 'B', 13);
         //$this->Ln(120);
+        $this->MultiCell(155, 0, 'Ministerio de Medio Ambiente y Agua', 0, 'C', false, 1, 30, 14, true, 0, false, true, 0, 'T', false);
+        // draw some reference lines
+        $linestyle = array('width' => 0.1, 'cap' => 'butt', 'join' => 'miter', 'dash' => '', 'phase' => 0, 'color' => array(0, 0, 0));
+        $this->Line(20, 25, 195, 25, $linestyle);
+
+        
     }
 
     // Page footer
@@ -50,20 +57,20 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             $pie2 = $rs->pie_2;
             $id_entidad=$rs->id;
         }
-        if($id_entidad<>2 && $id_entidad<>4){
-        // Linea vertical negra
+        
+        // Linea horizontal
             
-        $style = array('width' => 1.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0));
-        $this->Line(140, 257, 140, 272, $style);
+        $linestyle = array('width' => 0.1, 'cap' => 'butt', 'join' => 'miter', 'dash' => '', 'phase' => 0, 'color' => array(0, 0, 0));
+        $this->Line(20, 257, 195, 257, $linestyle);
         // logo quinua
-        $this->Image('../media/logos/logo_quinua.jpg', 140, 253, 40, 22, 'JPG');
+        $this->Image('../media/logos/logo_quinua.jpg', 20, 253, 40, 22, 'JPG');
         // Pie de pagina
         $this->SetFont('helvetica', 'I', 7);
-        $this->MultiCell(85, 0, $pie1, 0, 'R', false, 1, 50, 260, true, 0, false, true, 0, 'T', false);
-        $this->MultiCell(90, 0, $pie2, 0, 'R', false, 1, 45, 266, true, 0, false, true, 0, 'T', false);
+        $this->MultiCell(150, 0, utf8_encode($pie1), 0, 'C', false, 1, 50, 260, true, 0, false, true, 0, 'T', false);
+        $this->MultiCell(150, 0, utf8_encode($pie2), 0, 'C', false, 1, 45, 266, true, 0, false, true, 0, 'T', false);
         $this->SetY(30);
+        
         }
-    }
 
 }
 
@@ -84,7 +91,6 @@ $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PD
 $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
-
 // set default monospaced font
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
@@ -95,13 +101,7 @@ $stmt->execute();
 while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {
             $id_entidad=$rs->id_entidad;
         } 
-$margin_top=33;
-if($id_entidad==2){
-    $margin_top=33;
-}elseif ($id_entidad==4) {
-    $margin_top=60;
-}
-
+$margin_top=28;
 //set margins
 $pdf->SetMargins(20, $margin_top, 20);
 //$pdf->SetMargins(20, PDF_MARGIN_TOP, 20);
@@ -121,7 +121,7 @@ $pdf->SetFont('Helvetica', 'B', 18);
 
 // add a page
 $pdf->AddPage();
-$nombre = 'informe';
+$nombre = 'certificacion';
 try {
     $dbh = New db();
     $stmt = $dbh->prepare("SELECT * FROM documentos d 
@@ -188,7 +188,7 @@ try {
         $pdf->writeHTML('cc. ' . strtoupper($rs->copias));
         $pdf->writeHTML('Adj. ' . strtoupper($rs->adjuntos));
         $pdf->writeHTML(strtoupper($rs->mosca_remitente));
-        //$pdf->writeHTML();
+
         /*   $pdf->SetY(-5);
           // Set font
           $pdf->SetFont('helvetica', 'I', 7);

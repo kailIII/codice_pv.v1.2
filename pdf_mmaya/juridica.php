@@ -26,11 +26,18 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             }
             $id_entidad=$rs2->id;
         }
-        if($id_entidad<>2 && $id_entidad<>4){
-        $this->Image($image_file, 20, 5, 40, 23, 'PNG');
-        }
-        $this->SetFont('helvetica', 'B', 20);
+        //logo escudo
+        $this->Image('../media/logos/escudo_bolivia.png', 25, 5, 30, 18, 'PNG');
+        //logo entidad
+        $this->Image($image_file, 155, 5, 40, 18, 'PNG');
+        $this->SetFont('helvetica', 'B', 13);
         //$this->Ln(120);
+        $this->MultiCell(155, 0, 'Ministerio de Medio Ambiente y Agua', 0, 'C', false, 1, 30, 14, true, 0, false, true, 0, 'T', false);
+        // draw some reference lines
+        $linestyle = array('width' => 0.1, 'cap' => 'butt', 'join' => 'miter', 'dash' => '', 'phase' => 0, 'color' => array(0, 0, 0));
+        $this->Line(20, 25, 195, 25, $linestyle);
+
+        
     }
 
 //    // Page footer
@@ -69,13 +76,7 @@ $stmt->execute();
 while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {
             $id_entidad=$rs->id_entidad;
         } 
-$margin_top=33;
-if($id_entidad==2){
-    $margin_top=33;
-}elseif ($id_entidad==4) {
-    $margin_top=60;
-}
-
+$margin_top=28;
 //set margins
 $pdf->SetMargins(20, $margin_top, 20);
 //$pdf->SetMargins(20, PDF_MARGIN_TOP, 20);

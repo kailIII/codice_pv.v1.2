@@ -24,13 +24,20 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             if ($rs2->logo) {
                 $image_file = '../media/logos/' . $rs2->logo;
             }
-            $id_entidad = $rs2->id;
+            $id_entidad=$rs2->id;
         }
-        if ($id_entidad <> 2 && $id_entidad <> 4) {
-            $this->Image($image_file, 89, 5, 40, 23, 'PNG');
-        }
-        $this->SetFont('helvetica', 'B', 20);
+        //logo escudo
+        $this->Image('../media/logos/escudo_bolivia.png', 25, 5, 30, 18, 'PNG');
+        //logo entidad
+        $this->Image($image_file, 155, 5, 40, 18, 'PNG');
+        $this->SetFont('helvetica', 'B', 13);
         //$this->Ln(120);
+        $this->MultiCell(155, 0, 'Ministerio de Medio Ambiente y Agua', 0, 'C', false, 1, 30, 14, true, 0, false, true, 0, 'T', false);
+        // draw some reference lines
+        $linestyle = array('width' => 0.1, 'cap' => 'butt', 'join' => 'miter', 'dash' => '', 'phase' => 0, 'color' => array(0, 0, 0));
+        $this->Line(20, 25, 195, 25, $linestyle);
+
+        
     }
 
     // Page footer
@@ -48,24 +55,23 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
         while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {
             $pie1 = $rs->pie_1;
             $pie2 = $rs->pie_2;
-            $id_entidad = $rs->id;
+            $id_entidad=$rs->id;
         }
-        if ($id_entidad <> 2 && $id_entidad <> 4) {
-            // Linea vertical negra
-
-            $style = array('width' => 1.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0));
-            $this->Line(140, 257, 140, 272, $style);
-            // logo quinua
-            $this->Image('../media/logos/logo_quinua.jpg', 140, 253, 40, 22, 'JPG');
-            // Pie de pagina
-            $this->SetFont('helvetica', 'I', 7);
-            $this->MultiCell(85, 0, $pie1, 0, 'R', false, 1, 50, 260, true, 0, false, true, 0, 'T', false);
-            $this->MultiCell(90, 0, $pie2, 0, 'R', false, 1, 45, 266, true, 0, false, true, 0, 'T', false);
-            $this->SetY(30);
-        }
+        
+        // Linea horizontal
+            
+        $linestyle = array('width' => 0.1, 'cap' => 'butt', 'join' => 'miter', 'dash' => '', 'phase' => 0, 'color' => array(0, 0, 0));
+        $this->Line(20, 257, 195, 257, $linestyle);
+        // logo quinua
+        $this->Image('../media/logos/logo_quinua.jpg', 20, 253, 40, 22, 'JPG');
+        // Pie de pagina
+        $this->SetFont('helvetica', 'I', 7);
+        $this->MultiCell(150, 0, utf8_encode($pie1), 0, 'C', false, 1, 50, 260, true, 0, false, true, 0, 'T', false);
+        $this->MultiCell(150, 0, utf8_encode($pie2), 0, 'C', false, 1, 45, 266, true, 0, false, true, 0, 'T', false);
+        $this->SetY(30);
+        
     }
 
-    
 }
 
 // create new PDF document
@@ -90,19 +96,13 @@ $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
 $dbh = New db();
-$sql = "SELECT d.id_entidad FROM documentos d WHERE d.id='$id'";
+$sql="SELECT d.id_entidad FROM documentos d WHERE d.id='$id'";
 $stmt = $dbh->prepare($sql);
 $stmt->execute();
 while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {
-    $id_entidad = $rs->id_entidad;
-}
-$margin_top = 33;
-if ($id_entidad == 2) {
-    $margin_top = 33;
-} elseif ($id_entidad == 4) {
-    $margin_top = 60;
-}
-
+            $id_entidad=$rs->id_entidad;
+        } 
+$margin_top=28;
 //set margins
 $pdf->SetMargins(20, $margin_top, 20);
 //$pdf->SetMargins(20, PDF_MARGIN_TOP, 20);
@@ -122,17 +122,17 @@ $pdf->SetFont('Helvetica', 'B', 18);
 
 // add a page
 $pdf->AddPage();
-$nombre = 'memorandum';
+$nombre = 'informe';
 try {
     $dbh = New db();
-    $stmtp = $dbh->prepare("SELECT d.*,t.tipo, t.via FROM documentos d 
+    $stmt = $dbh->prepare("SELECT * FROM documentos d 
                                INNER JOIN tipos t ON d.id_tipo=t.id
                                WHERE d.id='$id'");
     // call the stored procedure
-    $stmtp->execute();
+    $stmt->execute();
     //echo "<B>outputting...</B><BR>";
     //$pdf->Ln(7);
-    while ($rs = $stmtp->fetch(PDO::FETCH_OBJ)) {
+    while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {
         $pdf->SetFont('Helvetica', 'B', 15);
         $pdf->Write(0, strtoupper($rs->tipo), '', 0, 'C');
         $pdf->Ln();
@@ -179,18 +179,11 @@ try {
         $pdf->Write(0, $fecha, '', 0, 'L');
         $pdf->Ln(10);
         $pdf->SetFont('Helvetica', 'B', 10);
-        if ($rs->fucov == 1)
-            $pdf->Cell(15, 5, 'Motivo:');
-        else
-            $pdf->Cell(15, 5, 'Ref:');
-
+        $pdf->Cell(15, 5, 'Ref:');
         $pdf->SetFont('Helvetica', '', 10);
         $pdf->MultiCell(170, 5, utf8_encode($rs->referencia), 0, 'L');
         $pdf->Ln(10);
-        
-        $pdf->writeHTML(utf8_encode($rs->contenido));
-        
-
+        $pdf->writeHTML($rs->contenido);
         $pdf->Ln(10);
         $pdf->SetFont('Helvetica', '', 5);
         $pdf->writeHTML('cc. ' . strtoupper($rs->copias));
@@ -198,7 +191,8 @@ try {
         $pdf->writeHTML(strtoupper($rs->mosca_remitente));
         //$pdf->writeHTML();
         /*   $pdf->SetY(-5);
-          
+          // Set font
+          $pdf->SetFont('helvetica', 'I', 7);
           $pdf->Write(0, $fecha,'',0,'L');
          * */
 

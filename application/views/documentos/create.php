@@ -151,6 +151,7 @@ $('#hora_inicio,#hora_fin').timeEntry({show24Hours: true, showSeconds: true});
             else: ?>
             <legend>Proceso: <?php echo Form::select('proceso', $options, NULL);?>
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                NUR:
                 <?php if ($documento->tipo == 'Memorandum'){?>FUCOV: <?php echo Form::checkbox('fucov',1,FALSE,array('id'=>'fucov','name'=>'fucov','title'=>'seleccione si quiere habilitar un memoramdum de viaje'))?><?php }?>    
             </legend>
             <hr/>
