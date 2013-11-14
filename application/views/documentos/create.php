@@ -114,6 +114,14 @@ $('#fucov').click(function(){
         }  
 });
 
+$("#asignar_nur").fcbkcomplete({
+    json_url: "/ajax/documentos_nur",
+                    addontab: true,                   
+                    maxitems: 1,
+                    height: 5,
+                    cache: true
+   });
+
 $.datepicker.regional['es'] = {
                 closeText: 'Cerrar',
                 prevText: '&#x3c;Ant',
@@ -151,11 +159,12 @@ $('#hora_inicio,#hora_fin').timeEntry({show24Hours: true, showSeconds: true});
             else: ?>
             <legend>Proceso: <?php echo Form::select('proceso', $options, NULL);?>
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-                NUR:
                 <?php if ($documento->tipo == 'Memorandum'){?>FUCOV: <?php echo Form::checkbox('fucov',1,FALSE,array('id'=>'fucov','name'=>'fucov','title'=>'seleccione si quiere habilitar un memoramdum de viaje'))?><?php }?>    
             </legend>
             <hr/>
         <?php endif; ?>
+        NUR: <select id="asignar_nur" name="asignar_nur">                                    
+                </select>
         <table width="100%">
             <tr>
                 <td style=" border-right:1px dashed #ccc; padding-left: 5px;">

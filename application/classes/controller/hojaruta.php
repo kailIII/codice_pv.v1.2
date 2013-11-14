@@ -347,7 +347,6 @@ class Controller_Hojaruta extends Controller_DefaultTemplate {
                 }
 
 
-
         $nur = $documento->nur;
         if ($documento->loaded()) {
             $session = Session::instance();

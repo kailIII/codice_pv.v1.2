@@ -118,6 +118,13 @@ class Controller_Ajax extends Controller {
             $seguimiento->prioridad = $prioridad;
             $seguimiento->save();
 
+            //Modificado por freddy
+             // if($seguimiento->id){
+             //     $sql = "UPDATE documentos SET estado=1, id_seguimiento= ".$seguimiento->id." WHERE nur = '".$nur."' AND original=1 AND id <> ".$id_doc;
+             //     $this->_db->query(Database::SELECT, $sql, TRUE);
+             // }
+            ////////////////////////
+
             $result = array(
                 'id' => $seguimiento->id,
                 'remite_nombre' => $seguimiento->nombre_emisor,
@@ -195,6 +202,21 @@ class Controller_Ajax extends Controller {
             $doc = array();
             foreach ($documentos as $d) {
                 $doc[] = array('key' => $d->codigo, 'value' => $d->codigo);
+            }
+            echo json_encode($doc);
+        }
+    }
+
+    //LISTA DE NUR CREADOS 
+    public function action_documentos_nur() {
+        $auth = Auth::instance();
+        if ($auth->logged_in()) {
+            $documentos = ORM::factory('documentos')
+                    ->where('id_user', '=', $auth->get_user())
+                    ->find_all();
+            $doc = array();
+            foreach ($documentos as $d) {
+                $doc[] = array('key' => $d->nur, 'value' => $d->nur);
             }
             echo json_encode($doc);
         }

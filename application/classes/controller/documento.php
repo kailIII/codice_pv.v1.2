@@ -134,14 +134,18 @@ class Controller_documento extends Controller_DefaultTemplate {
                         $pvcomision->save();
                     }
                     ///////////end//////////////////
+                    if (isset($_POST['asignar_nur'])) {
+                        $nur = $_POST['asignar_nur'];   
+                        $nur_asignado = $_POST['asignar_nur'];   
+                    }else{
                     //generamos la hoja de ruta a partir de la entidad
                     $entidad = ORM::factory('entidades', $this->user->id_entidad);
                     $oNur = New Model_nurs();
-                    //$nur=$oNur->correlativo($tipo->id, $entidad->sigla.'/',$this->user->id_entidad);   
-                    //codigo Freddy
-                    $nur = $oNur->correlativo_nur($entidad->sigla . '/', $this->user->id_entidad);
-
-                    $nur_asignado = $oNur->asignarNur($nur, $this->user->id, $this->user->nombre);
+                    $nur=$oNur->correlativo(-2, $entidad->sigla.'/',$this->user->id_entidad);   
+                    
+                    $nur_asignado = $oNur->asignarNur($nur, $this->user->id, $this->user->nombre);    
+                    }
+                                       
                     $documento->nur = $nur;
                     $documento->save();
                     //cazamos al documento con el nur asignado
@@ -165,8 +169,8 @@ class Controller_documento extends Controller_DefaultTemplate {
         }
         //$this->template->scripts = array('ckeditor/adapters/jquery.js', 'ckeditor/ckeditor.js');
         //$this->template->scripts = array('tinymce/tinymce.min.js');
-        $this->template->styles = array('media/css/jquery-ui-1.8.16.custom.css' => 'screen');
-        $this->template->scripts = array('tinymce/tinymce.min.js', 'media/js/jquery-ui-1.8.16.custom.min.js', 'media/js/jquery.timeentry.js'); ///
+        $this->template->styles = array('media/css/jquery-ui-1.8.16.custom.css' => 'screen','media/css/tablas.css' => 'screen', 'media/css/fcbk.css' => 'screen', 'media/css/modal.css' => 'screen');
+        $this->template->scripts = array('tinymce/tinymce.min.js', 'media/js/jquery-ui-1.8.16.custom.min.js', 'media/js/jquery.timeentry.js','media/js/jquery.fcbkcomplete.min.js'); ///
         $this->template->title .= ' | Crear ' . $tipo->tipo;
         if ($t == 'circular') {
             $oficina = ORM::factory('oficinas')->where('id', '=', $this->user->id_oficina)->find();
@@ -181,7 +185,8 @@ class Controller_documento extends Controller_DefaultTemplate {
                     ->bind('oficinas', $oficinas)
                     ->bind('tipo', $tipo)
                     ->bind('destinatarios', $destinatarios);
-        } else {
+        } 
+        else {
 
             $this->template->content = View::factory('documentos/create')
                     ->bind('options', $options)
