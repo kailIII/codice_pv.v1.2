@@ -74,9 +74,6 @@ class Controller_documento extends Controller_DefaultTemplate {
                         <p style="text-align: justify;">Sírvase tramitar ante la Dirección General de Asuntos Administrativos la asignación de pasajes y viáticos de acuerdo a escala autorizada para lo cual su persona deberá coordinar la elaboración del FUCOV. Una vez completada la comisión sírvase hacer llegar el informe de descargo dentro de los próximos 8 días hábiles de concluída la comisión de acuerdo al artículo 25 del reglamento de Pasajes y Viáticos del Ministerio de Desarrollo Productivo y Economía Plural.</p>
                         <p></p>
                         <p style="text-align: justify;">Saludo a usted atentamente. </p>';
-                    // if ($_POST['observacion']) {
-                    //     $contenido.= $_POST['observacion'];
-                    // }
                 }
                 
                 $oOficina = New Model_Oficinas();
@@ -133,6 +130,29 @@ class Controller_documento extends Controller_DefaultTemplate {
                         $pvcomision->estado = 1;
                         $pvcomision->save();
                     }
+
+                    if($tipo->id=14){
+                        $poa = ORM::factory('poas');
+                        $poa->fecha_creacion = date('Y-m-d H:i:s');
+                        $poa->id_obj_gestion = $_POST['id_obj_gestion'];
+                        $poa->id_obj_esp = $_POST['id_obj_esp'];
+                        $poa->id_actividad = $_POST['id_actividad'];
+                        $poa->id_documento = $documento->id;
+                        $poa->fecha_modificacion = date('Y-m-d H:i:s');
+                        $poa->tipo_actividad = $_POST['tipo_actividad'];
+                        $poa->id_tipocontratacion = $_POST['id_tipocontratacion'];
+                        $poa->otro_tipocontratacion = $_POST['otro_tipocontratacion'];
+                        $poa->ri_financiador = $_POST['ri_financiador'];
+                        $poa->ri_porcentaje = $_POST['ri_porcentaje'];
+                        $poa->re_financiador = $_POST['re_financiador'];
+                        $poa->re_porcentaje = $_POST['re_porcentaje'];
+                        $poa->proceso_con = $_POST['proceso_con'];
+                        $poa->cantidad = $_POST['cantidad'];
+                        $poa->monto_total = $_POST['monto_total'];
+                        $poa->plazo_ejecucion = $_POST['plazo_ejecucion'];
+                        $poa->save();
+                    }
+
                     ///////////end//////////////////
                     if (isset($_POST['asignar_nur'])) {
                         $nur = $_POST['asignar_nur'];   
@@ -185,7 +205,38 @@ class Controller_documento extends Controller_DefaultTemplate {
                     ->bind('oficinas', $oficinas)
                     ->bind('tipo', $tipo)
                     ->bind('destinatarios', $destinatarios);
-        } 
+        } elseif ($t == 'poa') {
+                // Modificado Freddy
+                $uEjepoa = New Model_oficinas();
+                $uejecutorapoa = $uEjepoa->uejecutorapoa($this->user->id_oficina);
+                
+                $ogestion = ORM::factory('pvogestiones')->where('id_oficina','=',$uejecutorapoa->id)->and_where('estado','=',1)->find_all();///objetivos de gestion
+                $objgestion[''] = 'Seleccione Objetivo de Gestion';
+                foreach ($ogestion as $og){$objgestion[$og->id] = $og->codigo;}
+                
+                $objespecifico[''] = 'Seleccione Objetivo Especifico';
+                $actividad[''] = 'Seleccione la Actividad';
+
+                $tipoc = ORM::factory('poatipocontrataciones')->where('estado','=','1')->find_all();
+                $tipocontratacion[''] = 'Seleccionar Tipo Contratacion';
+                foreach ($tipoc as $tc){$tipocontratacion[$tc->id] = $tc->nombre;}
+                /////////////////////
+
+
+                    $this->template->content = View::factory('documentos/crear_poa')
+                    ->bind('options', $options)
+                    ->bind('user', $this->user)
+                    ->bind('documento', $tipo)
+                    ->bind('superior', $superior)
+                    ->bind('dependientes', $dependientes)
+                    ->bind('tipo', $tipo)
+                    ->bind('destinatarios', $destinatarios)
+                    ->bind('obj_gestion', $objgestion)//ista de objetivos de gestion para la oficina
+                    ->bind('obj_esp', $objespecifico)
+                    ->bind('actividad', $actividad)
+                    ->bind('tipocontratacion', $tipocontratacion);
+        }
+
         else {
 
             $this->template->content = View::factory('documentos/create')

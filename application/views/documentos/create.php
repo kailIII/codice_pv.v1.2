@@ -163,7 +163,7 @@ $('#hora_inicio,#hora_fin').timeEntry({show24Hours: true, showSeconds: true});
             </legend>
             <hr/>
         <?php endif; ?>
-        NUR: <select id="asignar_nur" name="asignar_nur">                                    
+        ASIGNAR NUR: <select id="asignar_nur" name="asignar_nur" >                                    
                 </select>
         <table width="100%">
             <tr>
