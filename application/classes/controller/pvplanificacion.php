@@ -387,6 +387,56 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
                 ->bind('mensajes', $mensajes)
                 ;
     }
+
+
+    //MOdificado Freddy Velasco
+    public function action_modificarpoa($id = '') {
+        $poa = ORM::factory('poas')->where('id','=',$id)->find();
+        if ($poa->loaded()) {
+            if($poa->estado == 0){
+                    $poa->id_obj_gestion = $_POST['obj_gestion'];
+                    $poa->id_obj_esp = $_POST['obj_esp'];
+                    $poa->id_actividad = $_POST['actividad'];
+                    $poa->fecha_modificacion = date('Y-m-d H:i:s');
+                    $poa->tipo_actividad = $_POST['tipo_actividad'];
+                    $poa->id_tipocontratacion = $_POST['id_tipocontratacion'];
+                    $poa->otro_tipocontratacion = $_POST['otro_tipocontratacion'];
+                    $poa->ri_financiador = $_POST['ri_financiador'];
+                    $poa->ri_porcentaje = $_POST['ri_porcentaje'];
+                    $poa->re_financiador = $_POST['re_financiador'];
+                    $poa->re_porcentaje = $_POST['re_porcentaje'];
+                    $poa->proceso_con = $_POST['referencia'];
+                    $poa->cantidad = $_POST['cantidad'];
+                    $poa->monto_total = $_POST['monto_total'];
+                    $poa->plazo_ejecucion = $_POST['plazo_ejecucion'];
+                    $poa->save();
+                $this->request->redirect('documento/detalle/'.$poa->id_documento);
+                }
+            else
+                $this->template->content = '<b>EL DOCUMENTO YA FUE AUTORIZADO Y NO SE PUEDE MODIFICAR.</b><div class="info" style="text-align:center;margin-top: 50px; width:800px">
+                                        <p><span style="float: left; margin-right: .3em;" class=""></span>    
+                                        &larr;<a onclick="javascript:history.back(); return false;" href="#" style="font-weight: bold; text-decoration: underline;  " > Regresar<a/></p></div>';
+        }
+        else
+                $this->template->content = 'El documento no existe';
+    }
+
+    public function action_aprobarpoa($id = '') {
+        $poa = ORM::factory('poas')->where('id','=',$id)->find();
+        if ($poa->loaded()) {
+
+            $oNur = New Model_nurs();
+            $nur=$oNur->correlativo(-4, '',$this->user->id_entidad);
+
+            $poa->fecha_aprobacion = date('Y-m-d H:i:s');
+            $poa->id_user_auto = $this->user->id;
+            $poa->nro_poa = $nur;
+            $poa->estado = 1;
+            $poa->save();
+            $this->request->redirect('documento/detalle/'.$poa->id_documento);
+        }
+    }
+    ///////////////////////end////
 }
 
 ?>

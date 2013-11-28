@@ -28,7 +28,7 @@ $('a.destino').click(function(){
     return false;
 });
 
-///Modificado Rodrigo 260813
+///Modificado Freddy Velasco
 $('#obj_gestion').change(function(){
     var id = $('#obj_gestion').val();
     $('#det_obj_gestion').html('');
@@ -79,7 +79,7 @@ function ajaxs(id, accion, control)
     });
 }
 
-        ///Fin - 260813
+        ///Fin
 
         $('#btnword').click(function(){
             $('#word').val(1);
@@ -118,7 +118,8 @@ $("#asignar_nur").fcbkcomplete({
         <table width="100%">
             <tr>
                 <td style=" border-right:1px dashed #ccc; padding-left: 5px;">
-                    <input type="hidden" name="titulo" />   
+                    <input type="hidden" name="titulo" />
+                    <input type="hidden" name="descripcion">
                     <p>
                         <?php
                         echo Form::label('destinatario', 'Nombre del destinatario:',array('class'=>'form'));
@@ -315,7 +316,7 @@ $("#asignar_nur").fcbkcomplete({
                         </thead>
                         <tbody>
                             <tr>
-                                <td><textarea name="proceso_con" id="proceso_con" style="width: 380px;" ></textarea></td>
+                                <td><textarea name="referencia" id="referencia" style="width: 380px;" ></textarea></td>
                                 <td><?php echo Form::input('cantidad','',array('id'=>'cantidad','size'=>'4')); ?></td>
                                 <td><?php echo Form::input('monto_total','',array('id'=>'monto_total','size'=>'8')); ?></td>
                                 <td><?php echo Form::input('plazo_ejecucion','',array('id'=>'plazo_ejecucion','size'=>'15')); ?></td>

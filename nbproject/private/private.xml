@@ -3,18 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/var/www/codice_pv/pdf/certificacion.php</file>
-            <file>file:/var/www/codice_pv/pdf/administrativa.php</file>
-            <file>file:/var/www/codice_pv/pdf/carta.php</file>
-            <file>file:/var/www/codice_pv/pdf/circular.php</file>
-            <file>file:/var/www/codice_pv/pdf/certificacionpoa.php</file>
-            <file>file:/var/www/codice_pv/pdf/informe.php</file>
-            <file>file:/var/www/codice_pv/pdf/nota.php</file>
-            <file>file:/var/www/codice_pv/pdf/memo.php</file>
-            <file>file:/var/www/codice_pv/pdf/certificacionppt.php</file>
-            <file>file:/var/www/codice_pv/pdf/instructivo.php</file>
-            <file>file:/var/www/codice_pv/pdf/fucov.php</file>
-            <file>file:/var/www/codice_pv/pdf/juridica.php</file>
+            <file>file:/var/www/codice_pv2/index.php</file>
+            <file>file:/var/www/codice_pv2/application/classes/controller/documento.php</file>
+            <file>file:/var/www/codice_pv2/modules/orm/classes/kohana/orm.php</file>
+            <file>file:/var/www/codice_pv2/application/views/pvplanificacion/contenidopoa.php</file>
         </group>
     </open-files>
 </project-private>

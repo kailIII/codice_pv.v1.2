@@ -134,9 +134,9 @@ class Controller_documento extends Controller_DefaultTemplate {
                     if($tipo->id=14){
                         $poa = ORM::factory('poas');
                         $poa->fecha_creacion = date('Y-m-d H:i:s');
-                        $poa->id_obj_gestion = $_POST['id_obj_gestion'];
-                        $poa->id_obj_esp = $_POST['id_obj_esp'];
-                        $poa->id_actividad = $_POST['id_actividad'];
+                        $poa->id_obj_gestion = $_POST['obj_gestion'];
+                        $poa->id_obj_esp = $_POST['obj_esp'];
+                        $poa->id_actividad = $_POST['actividad'];
                         $poa->id_documento = $documento->id;
                         $poa->fecha_modificacion = date('Y-m-d H:i:s');
                         $poa->tipo_actividad = $_POST['tipo_actividad'];
@@ -146,7 +146,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                         $poa->ri_porcentaje = $_POST['ri_porcentaje'];
                         $poa->re_financiador = $_POST['re_financiador'];
                         $poa->re_porcentaje = $_POST['re_porcentaje'];
-                        $poa->proceso_con = $_POST['proceso_con'];
+                        $poa->proceso_con = $_POST['referencia'];
                         $poa->cantidad = $_POST['cantidad'];
                         $poa->monto_total = $_POST['monto_total'];
                         $poa->plazo_ejecucion = $_POST['plazo_ejecucion'];
@@ -173,7 +173,8 @@ class Controller_documento extends Controller_DefaultTemplate {
                     $documento->add('nurs', $nur_asignado);
                     $_POST = array();
 
-                    $this->request->redirect('documento/editar/' . $documento->id);
+                    $this->request->redirect('documento/editar/' . $documento->id);    
+                    
                 }
             }
         }
@@ -332,6 +333,13 @@ class Controller_documento extends Controller_DefaultTemplate {
                     $pvcomision = ORM::factory('pvcomisiones')->where('id_documento','=',$id)->find();
                 }
                 /////////////////
+
+                // Modifica Freddy Velasco
+                if($this->user->nivel == '8')
+                    $contenido_doc = $this->contenido_documento($id,$documento->id_tipo,$documento->id_oficina,$estado);
+                ////////end//////////////
+
+
                 ///rodrigo detallepasajes, 210813
                 $detallepv = $this->pvmodificar($id, $estado);
                 $this->template->scripts = array('tinymce/tinymce.min.js', 'media/js/jquery-ui-1.8.16.custom.min.js', 'media/js/jquery.timeentry.js');
@@ -345,7 +353,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                         ->bind('errors', $errors)
                         ->bind('mensajes', $mensajes)
                         ->bind('pvcomision', $pvcomision)
-                        ->bind('detallepv', $detallepv);
+                        ->bind('detallepv', $contenido_doc);
             } else {
                 $this->template->content = View::factory('no_access');
             }
@@ -422,9 +430,6 @@ class Controller_documento extends Controller_DefaultTemplate {
                         <p style="text-align: justify;">Sírvase tramitar ante la Dirección General de Asuntos Administrativos la asignación de pasajes y viáticos de acuerdo a escala autorizada para los cual su persona deberá coordinar la elaboración del FUCOV. Una vez completada la comisión sírvase hacer llegar el informe de descargo dentro de los próximos 8 días hábiles de concluída la comisión de acuerdo al artículo 25 del reglamento de Pasajes y viáticos del Ministerio de Desarrollo Productivo y Economía Plural. </p> 
                         <br>
                         <p style="text-align: justify;">Saludo a usted atentamente. </p>';
-                    // if ($_POST['observacion']) {
-                    //     $contenido.= $_POST['observacion'];
-                    // }
                 }
 
                 $documento->nombre_destinatario = $_POST['destinatario'];
@@ -464,6 +469,29 @@ class Controller_documento extends Controller_DefaultTemplate {
                     //$pvcomision->estado = 1;
                     $pvcomision->save();
                 }
+
+                //MOdificado Freddy Velasco - Editar POA
+                $poa = ORM::factory('poas')->where('id_documento','=',$id)->find();
+                if ($poa->loaded()) {
+                    $poa->id_obj_gestion = $_POST['obj_gestion'];
+                    $poa->id_obj_esp = $_POST['obj_esp'];
+                    $poa->id_actividad = $_POST['actividad'];
+                    $poa->fecha_modificacion = date('Y-m-d H:i:s');
+                    $poa->tipo_actividad = $_POST['tipo_actividad'];
+                    $poa->id_tipocontratacion = $_POST['id_tipocontratacion'];
+                    $poa->otro_tipocontratacion = $_POST['otro_tipocontratacion'];
+                    $poa->ri_financiador = $_POST['ri_financiador'];
+                    $poa->ri_porcentaje = $_POST['ri_porcentaje'];
+                    $poa->re_financiador = $_POST['re_financiador'];
+                    $poa->re_porcentaje = $_POST['re_porcentaje'];
+                    $poa->proceso_con = $_POST['referencia'];
+                    $poa->cantidad = $_POST['cantidad'];
+                    $poa->monto_total = $_POST['monto_total'];
+                    $poa->plazo_ejecucion = $_POST['plazo_ejecucion'];
+                    $poa->save();
+                }
+
+                ///////end///////////
 
                 //cuando se edita un fucov
                 $pvfucov = ORM::factory('pvfucovs')->where('id_documento', '=', $id)->find();
@@ -644,8 +672,62 @@ class Controller_documento extends Controller_DefaultTemplate {
                         ->bind('partidasgasto', $partidasgasto)
                         ->bind('tipo_cambio', $tipo_cambio)
                 ;
-                ///POA
-            } else {
+                // Modificado por Freddy Velasco POA
+            } else if ($tipo->action == 'poa') {
+                
+                $poa = ORM::factory('poas')->where('id_documento', '=', $documento->id)->find();
+
+                $uEjepoa = New Model_oficinas();
+                $uejecutorapoa = $uEjepoa->uejecutorapoa($this->user->id_oficina);
+                
+                $ogestion = ORM::factory('pvogestiones')->where('id_oficina','=',$uejecutorapoa->id)->and_where('estado','=',1)->find_all();///objetivos de gestion
+                $objgestion[''] = 'Seleccione Objetivo de Gestion';
+                foreach ($ogestion as $og){$objgestion[$og->id] = $og->codigo;}
+                
+                $objespecifico[''] = 'Seleccione Objetivo Especifico';
+                $actividad[''] = 'Seleccione la Actividad';
+                if($poa->id_obj_gestion){
+                    $det = ORM::factory('pvogestiones')->where('id', '=', $poa->id_obj_gestion)->find(); ///Detalle Objetivo de Gestion
+                    $detallegestion = $det->objetivo;
+                    $oesp = ORM::factory('pvoespecificos')->where('id_obj_gestion', '=', $poa->id_obj_gestion)->find_all(); ///objetivo especifico
+                    foreach ($oesp as $oe) {
+                        $objespecifico[$oe->id] = $oe->codigo;
+                        if ($oe->id == $poa->id_obj_esp)
+                            $detalleespecifico = $oe->objetivo;
+                    }
+                    $act = ORM::factory('pvactividades')->where('id_objespecifico', '=', $poa->id_obj_esp)->find_all(); ///actividades del POA
+                    foreach ($act as $a) {
+                        $actividad[$a->id] = $a->codigo;
+                        if ($a->id == $poa->id_actividad)
+                            $detalleactividad = $a->actividad;
+                    }    
+                }
+               
+                $tipoc = ORM::factory('poatipocontrataciones')->where('estado','=','1')->find_all();
+                $tipocontratacion[''] = 'Seleccionar Tipo Contratacion';
+                foreach ($tipoc as $tc){$tipocontratacion[$tc->id] = $tc->nombre;}
+                
+                $this->template->content = View::factory('documentos/edit_poa')
+                        ->bind('documento', $documento)
+                        ->Bind('archivos', $archivos)
+                        ->bind('tipo', $tipo)
+                        ->bind('superior', $superior)
+                        ->bind('vias', $vias)
+                        ->bind('user', $this->user)
+                        ->bind('options', $options)
+                        ->bind('mensajes', $mensajes)
+                        ->bind('archivos', $archivos)
+                        ->bind('destinatarios', $destinatarios)
+                        ->bind('poa', $poa)
+                        ->bind('obj_gestion', $objgestion)
+                        ->bind('obj_esp', $objespecifico)
+                        ->bind('actividad', $actividad)
+                        ->bind('det_obj_gestion', $detallegestion)//detalle del objetivo de gestion
+                        ->bind('det_obj_esp', $detalleespecifico)
+                        ->bind('det_act', $detalleactividad)
+                        ->bind('tipocontratacion', $tipocontratacion);
+            }  /// en poa//
+            else {
                 $pvcomision = ORM::factory('pvcomisiones')->where('id_documento', '=', $documento->id)->find();
                 $this->template->content = View::factory('documentos/edit')
                         ->bind('documento', $documento)
@@ -704,6 +786,60 @@ class Controller_documento extends Controller_DefaultTemplate {
         $this->template->content = View::factory('documentos/archivos')
                 ->bind('results', $archivo);
     }
+
+    // modificado Freddy Velasco 
+    public function contenido_documento($id,$id_tipo,$id_oficina,$estado){
+        $contenido = '';
+        $poa = ORM::factory('poas')->where('id_documento','=',$id)->find();
+        if($estado =='2' && $id_tipo == '14' && $poa->loaded()){
+                $uEjepoa = New Model_oficinas();
+                $uejecutorapoa = $uEjepoa->uejecutorapoa($id_oficina);
+                
+                $ogestion = ORM::factory('pvogestiones')->where('id_oficina','=',$uejecutorapoa->id)->and_where('estado','=',1)->find_all();///objetivos de gestion
+                $objgestion[''] = 'Seleccione Objetivo de Gestion';
+                foreach ($ogestion as $og){$objgestion[$og->id] = $og->codigo;}
+                
+                $objespecifico[''] = 'Seleccione Objetivo Especifico';
+                $actividad[''] = 'Seleccione la Actividad';
+                if($poa->id_obj_gestion){
+                    $det = ORM::factory('pvogestiones')->where('id', '=', $poa->id_obj_gestion)->find(); ///Detalle Objetivo de Gestion
+                    $detallegestion = $det->objetivo;
+                    $oesp = ORM::factory('pvoespecificos')->where('id_obj_gestion', '=', $poa->id_obj_gestion)->find_all(); ///objetivo especifico
+                    foreach ($oesp as $oe) {
+                        $objespecifico[$oe->id] = $oe->codigo;
+                        if ($oe->id == $poa->id_obj_esp)
+                            $detalleespecifico = $oe->objetivo;
+                    }
+                    $act = ORM::factory('pvactividades')->where('id_objespecifico', '=', $poa->id_obj_esp)->find_all(); ///actividades del POA
+                    foreach ($act as $a) {
+                        $actividad[$a->id] = $a->codigo;
+                        if ($a->id == $poa->id_actividad)
+                            $detalleactividad = $a->actividad;
+                    }    
+                }
+               
+                $tipoc = ORM::factory('poatipocontrataciones')->where('estado','=','1')->find_all();
+                $tipocontratacion[''] = 'Seleccionar Tipo Contratacion';
+                foreach ($tipoc as $tc){$tipocontratacion[$tc->id] = $tc->nombre;}
+                $mensajes = '';
+                
+                $contenido = View::factory('pvplanificacion/contenidopoa')
+                        ->bind('mensajes', $mensajes)
+                        ->bind('poa', $poa)
+                        ->bind('obj_gestion', $objgestion)
+                        ->bind('obj_esp', $objespecifico)
+                        ->bind('actividad', $actividad)
+                        ->bind('det_obj_gestion', $detallegestion)//detalle del objetivo de gestion
+                        ->bind('det_obj_esp', $detalleespecifico)
+                        ->bind('det_act', $detalleactividad)
+                        ->bind('tipocontratacion', $tipocontratacion)
+                        ->bind('ue_poa', $uejecutorapoa);
+        }
+        return $contenido;
+
+    }
+    //////////end/////////////
+
 
     ///rodrigo(opciones por usuario) 210813
     public function pvmodificar($id, $estado) {
