@@ -1,7 +1,8 @@
 <script type="text/javascript">   
 
     $(function(){
-
+        $('#frmEditar').validate();       
+        
         var tabContainers=$('div.tabs > div');
         tabContainers.hide().filter(':first').show();
         $('div.tabs ul.tabNavigation a').click(function(){
@@ -12,35 +13,6 @@
             return false;
         }).filter(':first').click();
 
-
-        $('#frmEditar').validate();
-        
-        $('#insertarImagen').click(function(){
-            var left=screen.availWidth;
-            var top=screen.availHeight;
-            left=(left-700)/2;
-            top=(top-500)/2;
-            var r=window.showModalDialog("../otros/imagenes","","center:0;dialogWidth:600px;dialogHeight:450px;scroll=yes;resizable=yes;status=yes;"+"dialogLeft:"+left+"px;dialogTop:"+top+"px");
-            InsertHTML(r[0]);
-        });
-        $('#subirImagen').click(function(){
-            var left=screen.availWidth;
-            var top=screen.availHeight;
-            left=(left-700)/2;
-            top=(top-500)/2;
-            var r=window.showModalDialog("../otros/subirImagen","","center:0;dialogWidth:600px;dialogHeight:450px;scroll=yes;resizable=yes;status=yes;"+"dialogLeft:"+left+"px;dialogTop:"+top+"px");
-            InsertHTML(r[0]);
-        });
-
-        $('#cambiarImagen').click(function(){
-            var left=screen.availWidth;
-            var top=screen.availHeight;
-            left=(left-700)/2;
-            top=(top-500)/2;
-            var r=window.showModalDialog("../otros/imagenes2","","center:0;dialogWidth:600px;dialogHeight:450px;scroll=yes;resizable=yes;status=yes;"+"dialogLeft:"+left+"px;dialogTop:"+top+"px");
-            $('#foto').val(r[0]);
-            $('#fotox').attr('src',r[0]);
-        });
         //incluir destinatario
         $('a.destino').click(function(){
             var nombre=$(this).attr('nombre');   
@@ -60,65 +32,139 @@
             $('#referencia').focus();
             return false;
         });
-
-        ///Modificado Freddy Velasco
-$('#obj_gestion').change(function(){
-    var id = $('#obj_gestion').val();
-    $('#det_obj_gestion').html('');
-    $('#obj_esp').html('');
-    $('#det_obj_esp').html('');
-    $('#actividad').html('');
-    $('#det_act').html('');
-            var act = 'detobjgestion';///detalle del Objetivo de Gestion 
-            var ctr = $('#det_obj_gestion');
-            ajaxs(id, act, ctr);
-            act = 'objespecifico';
-            ctr = $('#obj_esp');
-            ajaxs(id, act, ctr);
+///Presupueto
+$('#fuente').change(function(){///fuente = id_programatica 
+        var id = $('#fuente').val();
+        $('#partida').html('');
+        $('#disponible').val(0);
+        $('#saldo').val(0);
+        $("#x_tableMeta").html("<table id='x_tableMeta' border='1' class='classy'><thead><th>Partida</th><th>Disponible</th><th>Solicitado</th><th>Saldo</th></thead><tbody></tbody></table>");
+        if(id){
+            $.ajax({
+                type: "POST",
+                data: { id: id},
+                url: "/pvajax/partidas",
+                dataType: "json",
+                success: function(item){
+                    $('#partida').html(item);
+                },
+                    error: $(partida).html('error')
+                });
+            }
         });
-$('#obj_esp').change(function(){
-    var id = $('#obj_esp').val();
-    $('#det_obj_esp').html('');
-    $('#actividad').html('');
-    $('#det_act').html('');
-            var act = 'detobjespecifico';///detalle del Objetivo Especifico 
-            var ctr = $('#det_obj_esp');
-            ajaxs(id, act, ctr);
-            act = 'actividad';///actividades 
-            ctr = $('#actividad');
-            ajaxs(id, act, ctr);
+$('#partida').change(function(){
+        var f = $('#fuente').val();///id_programatica
+        var p = $('#partida').val();
+        $('#disponible').val(0);
+        $('#saldo').val(0);
+        if(f && p){
+            $.ajax({
+                type: "POST",
+                data: { f: f, p: p},
+                url: "/pvajax/saldopartida",
+                dataType: "json",
+                success: function(item){
+                    $('#disponible').val(item.saldo);
+                    calculo();
+                },
+                    error: $('#disponible').text('error')
+                });
+            }
+        
         });
-$('#actividad').change(function(){
-    var id = $('#actividad').val();
-    $('#det_act').html('');
-            var act = 'detactividad';///detalle del Objetivo Especifico 
-            var ctr = $('#det_act');
-            ajaxs(id, act, ctr);
-            
-        });
-
-function ajaxs(id, accion, control)
-{        
-    $.ajax({
-        type: "POST",
-        data: { id: id},
-        url: "/pvajax/"+accion,
-        dataType: "json",
-        success: function(item)
-        {
-            $(control).html(item);
-        },
-        error: $(control).html('')
+function calculo(){
+        var disp = $('#disponible').val();
+        var solicitado = parseFloat($('#solicitado').val());
+        $('#saldo').val(parseFloat(disp - solicitado));
+    }
+$('#solicitado').change(function(){
+        var m = $('#solicitado').val();
+        var expreg = /[0-9]$/;
+        if(expreg.test(m)){
+            calculo();
+        }
+        else{
+            alert('Introduzca Un Numero en el campo "solicitado"');
+            $('#solicitado').val(0);
+            $('#solicitado').focus();
+        }
     });
+//adicionar las partidas a la tabla
+var x;
+x=$(document);
+x.ready(inicializarEventos);
+function inicializarEventos()
+{
+  var x,y;
+    x=$("#indicadorAdd");
+  x.click(anadirIndicadorFinal);
+  x=$("#indicadorDelete");
+  x.click(eliminarIndicadorFinal);
+  // meta
+  y=$("#metaAdd");
+  y.click(anadirMetaFinal);
+  y=$("#metaDelete");
+  y.click(eliminarMetaFinal);
+
+}
+function anadirIndicadorFinal()
+{
+  var x,y;
+  x=$("#x_tableIndicador");
+  y=$("#x_tableIndicador tr");
+ y=y.length;
+ x.append("<tr><td><input name='x_indicador[]' id='x_indicador_"+y+"/></td></tr>");
+
+ }
+function eliminarIndicadorFinal()
+{
+  var x;
+  x=$("#x_tableIndicador tr");
+  var cantidad=x.length;
+  if(cantidad>0){
+  x=x.eq(cantidad-1);
+  x.remove();
+}
+}
+//metas
+function anadirMetaFinal()
+{
+    if($('#fuente').val()!='' && $('#partida').val()!='' && $('#solicitado').val()!='' && $('#solicitado').val()!=0){
+        var x,y;
+        x=$("#x_tableMeta");
+        y=$("#x_tableMeta tr");
+        y=y.length;
+        var id_partida = $('#partida').val();
+        var partida = $("#partida option:selected").html();
+        var disponible = $('#disponible').val();
+        var solicitado = $('#solicitado').val();
+        var saldo = $('#saldo').val();
+        x.append("<tr><td><input type='hidden' size='2' name='x_id_partida[] id='x_id_partida_"+y+"' value='"+id_partida+"' readonly/><input type='text' size='35' name='x_partida[]' id='x_partida_"+y+"' value='"+partida+"' readonly/></td><td><input type='text' size='5' name='x_disponible[]' id='x_disponible_"+y+"' value='"+disponible+"' readonly/></td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_"+y+"' value='"+solicitado+"' readonly/></td><td><input type='text' size='5' name='x_saldo[]' id='x_saldo_"+y+"' value='"+saldo+"' readonly/></td></tr>");
+        $('#partida').val('');
+        $('#disponible').val(0);
+        $('#solicitado').val(0);
+        $('#saldo').val(0);
+    }
+    else
+        alert('Seleccione Fuente, Partida y Cantidad Solicitada');
+}
+function eliminarMetaFinal()
+{
+  var x;
+  x=$("#x_tableMeta tr");
+  var cantidad=x.length;
+  if(cantidad>1){
+  x=x.eq(cantidad-1);
+  x.remove();
+}
 }
 
-        ///Fin
 
-
+    
+///Fin Presupuesto    
         $('#btnword').click(function(){
             $('#word').val(1);
             return true
-
         });
         $('#save').click(function(){
             $('#frmEditar').submit();        
@@ -133,7 +179,7 @@ function ajaxs(id, accion, control)
             alert(r);
             return false;
         });        
-        $("input.file").si();
+//        $("input.file").si();
 
     });
 </script>
@@ -308,143 +354,81 @@ function ajaxs(id, accion, control)
 
                 </tr>
                 <tr>
+                    <td colspan="2">
+                        <?php echo Form::label('referencia','Referencia')?>
+                        <textarea name="referencia" id="referencia" style="width: 600px;" class="required" ><?php echo $documento->referencia?></textarea>
+                    </td>
+                </tr>
+                <tr>
                     <td colspan="3"><hr /><br/></td>
                 </tr>
                 <tr>
                     <td colspan="3">
-                        <table>
+                        <table border="2">
                             <tr>
-                                <td><b><?php echo Form::label('obj_gestion', 'Objetivo de Gesti&oacute;n:', array('class' => 'form')); ?></b></td>
-                                <td><?php echo Form::select('obj_gestion', $obj_gestion, $poa->id_obj_gestion, array('class' => 'form', 'name' => 'obj_gestion', 'id' => 'obj_gestion', 'class' => 'required')); ?></td>
+                                <td colspan="2">
+                                    <?php echo Form::label('referencia','Antecedentes')?>
+                                    <textarea name="antecedente" id="antecedente" style="width: 600px;" ><?php echo $pre->antecedente?></textarea>
+                                </td>
                             </tr>
                             <tr>
-                                <td><b><?php echo Form::label('detalle_obj_gestion', 'Detalle:', array('class' => 'form')); ?></b>    </td>
-                                <td><br><textarea name="det_obj_gestion" id="det_obj_gestion" style="width: 600px;" readonly ><?php echo $det_obj_gestion; ?></textarea></td>
+                                <td><br />Unidad Ejecutora de Presupuesto:<br />&nbsp;</td>
+                                <td><br/><b> <?php echo $uejecutorapre->oficina?></b><br />&nbsp;</td>
                             </tr>
                             <tr>
-                                <td><b><?php echo Form::label('obj_esp', 'Objetivo Espec&iacute;fico:', array('class' => 'form')); ?></b></td>
-                                <td><?php echo Form::select('obj_esp', $obj_esp,$poa->id_obj_esp, array('class' => 'form', 'class' => 'required', 'id' => 'obj_esp', 'name' => 'obj_esp')); ?></td>
+                                <td style=" width: 35%"><?php echo Form::label('fuente','Fuentes de Financiamiento')?></td>
+                                <td><?php echo Form::select('fuente', $fuente, $pre->id_programatica, array('id' => 'fuente', 'class' => 'required')) ?></td>
                             </tr>
                             <tr>
-                                <td><b><?php echo Form::label('det_obj_esp', 'Detalle:', array('class' => 'form')); ?></b></td>
-                                <td><br /><textarea name="det_obj_esp" id="det_obj_esp" style="width: 600px;" readonly ><?php echo $det_obj_esp; ?></textarea></td>
+                                <td><?php echo Form::label('partida','Partida')?></td>
+                                <td><?php echo Form::select('partida', $partidas, NULL, array('id' => 'partida')) ?></td>
                             </tr>
                             <tr>
-                                <td><b><?php echo Form::label('actividad', 'Actividad', array('class' => 'form')); ?></b></td>
-                                <td><?php echo Form::select('actividad', $actividad, $poa->id_actividad, array('class' => 'form', 'class' => 'required', 'id' => 'actividad', 'name' => 'actividad')); ?></td>
+                                <td><?php echo Form::label('disponible','Saldo Actual Disponible')?></td>
+                                <td><?php echo Form::input('disponible',0,array('size'=>10,'readonly','id'=>'disponible')) ?></td>
                             </tr>
                             <tr>
-                                <td><b><?php echo Form::label('det_act', 'Detalle:', array('class' => 'form')); ?></b></td>
-                                <td><br><textarea name="det_act" id="det_act" style="width: 600px;" readonly ><?php echo $det_act; ?></textarea></td>
+                                <td><?php echo Form::label('solicitado','Cantidad Solicitada')?></td>
+                                <td><?php echo Form::input('solicitado',0,array('size'=>10,'id'=>'solicitado')) ?></td>
                             </tr>
-
+                            <tr>
+                                <td><?php echo Form::label('saldo','Nuevo Saldo')?></td>
+                                <td><?php echo Form::input('saldo',0,array('size'=>10,'readonly','id'=>'saldo')) ?></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td><div><img src="/media/images/mail_ham2.png" style="border: none; cursor: pointer" id="metaAdd" title="Adicionar Partida"/></div></td>
+                            </tr>
                         </table>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="3"><hr /><br /></td>
+                    <td colspan="3"><hr /><br />Lista de partidas de Gasto Adicionadas</td>
                 </tr>
                 <tr>
                     <td colspan="3">
-                        <table>
-                            <tr>
-                                <td><b><?php echo Form::label('tipo_contratacion', 'Tipo de Contrataci&oacute;n:', array('class' => 'form')); ?></b></td>
-                                <td><?php echo Form::select('id_tipocontratacion', $tipocontratacion, $poa->id_tipocontratacion, array('class' => 'form', 'name' => 'id_tipocontratacion', 'id' => 'id_tipocontratacion', 'class' => 'required')); ?><br></td>
-                                <td><b><?php echo Form::label('otro_tc', 'Otro:', array('class' => 'form')); ?></b></td>
-                                <td><?php echo Form::input('otro_tipocontratacion',$poa->otro_tipocontratacion,array('id'=>'otro_tipocontratacion')); ?><br></td>
-                            </tr>
+                        <table id="x_tableMeta" border="1" class="classy">
+                            <thead>
+                                <th>Partida</th>
+                                <th>Disponible</th>
+                                <th>Solicitado</th>
+                                <th>Saldo</th>
+                            </thead>
+                            <tbody>
+                                <?php for($f=0;$f<count($x_partida);$f++):?>
+                                <tr>
+                                    <td><?php echo Form::hidden('x_id_partida[]',$x_id_partida[$f],array('id'=>'x_id_partida_'.$f,'readonly','size'=>2))?>
+                                    <?php echo Form::input('x_partida[]',$x_partida[$f],array('id'=>'x_partida_'.$f,'readonly','size'=>35))?></td>
+                                    <td><?php echo Form::input('x_disponible[]',$x_disponible[$f],array('id'=>'x_disponible_'.$f,'readonly','size'=>5))?></td>
+                                    <td><?php echo Form::input('x_solicitado[]',$x_solicitado[$f],array('id'=>'x_solicitado_'.$f,'readonly','size'=>5))?></td>
+                                    <td><?php echo Form::input('x_solicitado[]',$x_disponible[$f] - $x_solicitado[$f],array('id'=>'x_solicitado_'.$f,'readonly','size'=>5))?></td>
+                                </tr>
+                                <?php endfor?>
+                            </tbody>
                         </table>
+                        <div style="text-align: center;"><img src="/media/images/delete.png" style="border: none; cursor: pointer" id="metaDelete" title="Eliminar Ultima Partida"/></div>
                     </td>
                 </tr>
-
-                <tr>
-                    <br>
-                    <td colspan="3">
-                        <table>
-                            <tr>
-                                <td>
-                                    <table class="classy" border="1">
-                                        <thead>
-                                            <tr>
-                                                <th style="text-align:center;" colspan="2">TIPO DE ACTIVIDAD</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>INVERSION</td>
-                                                <td><input type="radio" name="tipo_actividad" value="INVERSION" <?php if($poa->tipo_actividad == "INVERSION") { echo 'checked';} ?> ></td>
-
-                                            </tr>
-                                            <tr>
-                                                <td>FUNCIONAMIENTO</td>
-                                                <td><input type="radio" name="tipo_actividad" value="FUNCIONAMIENTO" <?php if($poa->tipo_actividad == "FUNCIONAMIENTO") { echo 'checked';} ?>></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                                <td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                                <td>
-                                    <table class="classy" border="1">
-                                        <thead>
-                                            <tr>
-                                                <th style="text-align:center;">RECURSOS</th>
-                                                <th style="text-align:center;">Organismo Financiador</th>
-                                                <th style="text-align:center;">%</th>
-                                            </tr>
-                                        </thead>
-                                        <TBODY>
-                                            <tr>  
-                                                <td>Internos</td>
-                                                <td><?php echo Form::input('ri_financiador',$poa->ri_financiador,array('id'=>'ri_financiador')); ?></td>
-                                                <td><?php echo Form::input('ri_porcentaje',$poa->ri_porcentaje,array('id' => 'ri_porcentaje','size'=>'6')); ?> %</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Externos</td>
-                                                <td><?php echo Form::input('re_financiador',$poa->re_financiador,array('id'=>'re_financiador')); ?></td>
-                                                <td><?php echo Form::input('re_porcentaje',$poa->re_porcentaje,array('id' => 're_porcentaje','size'=>'6')); ?> %</td>
-                                            </tr>
-                                        </TBODY>
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>
-
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3"><hr /><br /></td>
-                </tr>
-                <tr>
-                    <td colspan="3">
-                        <table>
-                            <tr>
-                                <td>
-                                    <table class="classy" border="1">
-                                        <thead>
-                                            <tr>
-                                                <th style="text-align:center;">PROCESO DE CONTRATACI&Oacute;N / ADQUISICI&Oacute;N (descripci&oacute;n especifica)</th>
-                                                <th style="text-align:center;">Cantidad</th>
-                                                <th style="text-align:center;">Monto Total (Bs)</th>
-                                                <th style="text-align:center;">Plazo de Ejecuci&oacute;n</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><textarea name="referencia" id="referencia" style="width: 380px;" ><?php echo $poa->proceso_con; ?></textarea></td>
-                                                <td><?php echo Form::input('cantidad',$poa->cantidad,array('id'=>'cantidad','size'=>'4')); ?></td>
-                                                <td><?php echo Form::input('monto_total',$poa->monto_total,array('id'=>'monto_total','size'=>'8')); ?></td>
-                                                <td><?php echo Form::input('plazo_ejecucion',$poa->plazo_ejecucion,array('id'=>'plazo_ejecucion','size'=>'15')); ?></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </table>
-
-                    </td>
-                </tr>
-
-
             </table>
 
 
