@@ -131,7 +131,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                         $pvcomision->save();
                     }
 
-                    if($tipo->id=14){
+                    if($tipo->id=='14'){
                         $poa = ORM::factory('poas');
                         $poa->fecha_creacion = date('Y-m-d H:i:s');
                         $poa->id_obj_gestion = $_POST['obj_gestion'];
@@ -520,15 +520,20 @@ class Controller_documento extends Controller_DefaultTemplate {
                     $pvfucov->tipo_cambio = $_POST['tipo_cambio'];
                     $pvfucov->tipo_moneda = $_POST['tipo_moneda'];
                     $pvfucov->viatico_dia = $_POST['viatico_dia'];
-                    $pvfucov->id_programatica = $_POST['fuente']; ///rodrigo
+                    //$pvfucov->id_programatica = $_POST['fuente']; ///rodrigo
                     $pvfucov->save();
-                    /// rodrigo -modificar POA 260813
-                    $pvpoas = ORM::factory('pvpoas')->where('id_fucov', '=', $pvfucov->id)->find();
-                    $pvpoas->fecha_modificacion = date('Y-m-d H:i:s');
-                    $pvpoas->id_obj_gestion = $_POST['obj_gestion'];
-                    $pvpoas->id_obj_esp = $_POST['obj_esp'];
-                    $pvpoas->id_actividad = $_POST['actividad'];
-                    $pvpoas->save();
+                    
+                    //MOdificado Freddy Velasco - Editar POA
+                        $poa = ORM::factory('poas')->where('id_memo','=',$pvfucov->id_memo)->find();
+                        if ($poa->loaded()) {
+                            $poa->id_obj_gestion = $_POST['obj_gestion'];
+                            $poa->id_obj_esp = $_POST['obj_esp'];
+                            $poa->id_actividad = $_POST['actividad'];
+                            $poa->fecha_modificacion = date('Y-m-d H:i:s');
+                            $poa->save();
+                        }
+
+                ///////end///////////
                     ///
                 }
                 ///////////end//////////////////
@@ -606,45 +611,42 @@ class Controller_documento extends Controller_DefaultTemplate {
                     $opt_tv[$tv->id] = $tv->tipoviaje;
                 }
 
-                ///rodrigo 260813, Unidad Ejecutora POA para el usuario
+                ///Modificado Freddy Velasco POA
                 $cambio = ORM::factory('pvtipocambios')->find_all();
                 foreach($cambio as $c)
                     $tipo_cambio = $c->cambio_venta;
+
+                $poa = ORM::factory('poas')->where('id_memo', '=', $pvfucov->id_memo)->find();
                 $uEjepoa = New Model_oficinas();
                 $uejecutorapoa = $uEjepoa->uejecutorapoa($this->user->id_oficina); ///buscar la unidad ejecutora POA y PPT para la oficina de este usuario
-                $uejecutorappt = $uEjepoa->uejecutorappt($this->user->id_oficina);
-                $oFuente = New Model_Pvprogramaticas(); ///fuentes de financiamiento
-                $fte = $oFuente->listafuentesuser($uejecutorappt->id);
-                $fuente[''] = 'Seleccione Una Fuente de Financiamiento';
-                foreach ($fte as $f){$fuente[$f->id] = $f->actividad;}
-                
+
                 $ogestion = ORM::factory('pvogestiones')->where('id_oficina','=',$uejecutorapoa->id)->and_where('estado','=',1)->find_all();///objetivos de gestion
                 $objgestion[''] = 'Seleccione Objetivo de Gestion';
                 foreach ($ogestion as $og){$objgestion[$og->id] = $og->codigo;}
-
-                $pvpoas = ORM::factory('pvpoas')->where('id_fucov', '=', $pvfucov->id)->find();
+                
                 $objespecifico[''] = 'Seleccione Objetivo Especifico';
                 $actividad[''] = 'Seleccione la Actividad';
-                $partidasgasto = '';
-                if ($pvpoas->id_obj_gestion) {
-                    $det = ORM::factory('pvogestiones')->where('id', '=', $pvpoas->id_obj_gestion)->find(); ///Detalle Objetivo de Gestion
+                if($poa->id_obj_gestion){
+                    $det = ORM::factory('pvogestiones')->where('id', '=', $poa->id_obj_gestion)->find(); ///Detalle Objetivo de Gestion
                     $detallegestion = $det->objetivo;
-                    $oesp = ORM::factory('pvoespecificos')->where('id_obj_gestion', '=', $pvpoas->id_obj_gestion)->find_all(); ///objetivo especifico
+                    $oesp = ORM::factory('pvoespecificos')->where('id_obj_gestion', '=', $poa->id_obj_gestion)->find_all(); ///objetivo especifico
                     foreach ($oesp as $oe) {
                         $objespecifico[$oe->id] = $oe->codigo;
-                        if ($oe->id == $pvpoas->id_obj_esp)
+                        if ($oe->id == $poa->id_obj_esp)
                             $detalleespecifico = $oe->objetivo;
                     }
-                    $act = ORM::factory('pvactividades')->where('id_objespecifico', '=', $pvpoas->id_obj_esp)->find_all(); ///actividades del POA
+                    $act = ORM::factory('pvactividades')->where('id_objespecifico', '=', $poa->id_obj_esp)->find_all(); ///actividades del POA
                     foreach ($act as $a) {
                         $actividad[$a->id] = $a->codigo;
-                        if ($a->id == $pvpoas->id_actividad)
+                        if ($a->id == $poa->id_actividad)
                             $detalleactividad = $a->actividad;
-                    }
-                    $oPart = New Model_Pvprogramaticas();
-                    $partidasgasto = $oPart->pptdisponibleuser($pvfucov->id_programatica, $pvfucov->total_pasaje, $pvfucov->total_viatico, $pvfucov->id_tipoviaje, $pvfucov->gasto_representacion,$tipo_cambio);//mostrar las partidas presupuestarias almacenadas
+                    }    
                 }
                 /// fin 260813/
+
+                // Presupuesto
+
+                ///////end/////////////
 
                 $this->template->content = View::factory('documentos/edit_fucov')
                         ->bind('documento', $documento)
@@ -658,22 +660,18 @@ class Controller_documento extends Controller_DefaultTemplate {
                         ->bind('destinatarios', $destinatarios)
                         ->bind('opt_tv', $opt_tv)
                         ->bind('pvfucov', $pvfucov)
-                        ///rodrigo-POA
+                        ->bind('tipo_cambio', $tipo_cambio)
+                        // POA
                         ->bind('uejecutorapoa', $uejecutorapoa)
-                        ->bind('uejecutorappt', $uejecutorappt)
-                        ->bind('fuente', $fuente)
-                        ->bind('pvpoas', $pvpoas)
-                        ->bind('obj_gestion', $objgestion)//ista de objetivos de gestion para la oficina
+                        ->bind('poa', $poa)
+                        ->bind('obj_gestion', $objgestion)
                         ->bind('obj_esp', $objespecifico)
                         ->bind('actividad', $actividad)
                         ->bind('det_obj_gestion', $detallegestion)//detalle del objetivo de gestion
                         ->bind('det_obj_esp', $detalleespecifico)
-                        ->bind('det_act', $detalleactividad)
-                        ->bind('partidasgasto', $partidasgasto)
-                        ->bind('tipo_cambio', $tipo_cambio)
-                ;
-                // Modificado por Freddy Velasco POA
-            } else if ($tipo->action == 'poa') {
+                        ->bind('det_act', $detalleactividad);
+            } // Modificado por Freddy Velasco POA
+            else if ($tipo->action == 'poa') {
                 
                 $poa = ORM::factory('poas')->where('id_documento', '=', $documento->id)->find();
 

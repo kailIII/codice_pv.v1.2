@@ -527,7 +527,7 @@ function dia_literal($n) {
                                     echo Form::input('cargo_des', $documento->cargo_destinatario, array('id' => 'cargo_des', 'size' => 45, 'class' => 'required'));
                                     ?>
                                 </p> 
-                                <?php if ($tipo->tipo == 0): ?>
+                                <?php if ($tipo->via == 0): ?>
                                     <p>
                                         <label>Institución Destinatario</label>
                                         <input type="text" size="40" value="<?php echo $documento->institucion_destinatario; ?>" name="institucion_des" />    
@@ -788,7 +788,7 @@ function dia_literal($n) {
                                 <b><?php echo Form::label('obj_gestion', 'C&oacute;digo Objetivo de Gesti&oacute;n:', array('class' => 'form')); ?></b>
                             </td>
                             <td>
-                                <?php echo Form::select('obj_gestion', $obj_gestion, $pvpoas->id_obj_gestion, array('class' => 'form', 'name' => 'obj_gestion', 'id' => 'obj_gestion', 'class' => 'required')); ?>
+                                <?php echo Form::select('obj_gestion', $obj_gestion, $poa->id_obj_gestion, array('class' => 'form', 'name' => 'obj_gestion', 'id' => 'obj_gestion', 'class' => 'required')); ?>
                             </td>
                         </tr>
                         <tr>
@@ -808,7 +808,7 @@ function dia_literal($n) {
 <b><?php echo Form::label('obj_esp', 'C&oacute;digo Objetivo Espec&iacute;fico:', array('class' => 'form')); ?></b>
                             </td>
                             <td>
-                    <?php echo Form::select('obj_esp', $obj_esp, $pvpoas->id_obj_esp, array('class' => 'form', 'class' => 'required', 'id' => 'obj_esp', 'name' => 'obj_esp')); ?>
+                    <?php echo Form::select('obj_esp', $obj_esp, $poa->id_obj_esp, array('class' => 'form', 'class' => 'required', 'id' => 'obj_esp', 'name' => 'obj_esp')); ?>
                             </td>
                         </tr>
                         <tr>
@@ -827,7 +827,7 @@ function dia_literal($n) {
 <b><?php echo Form::label('actividad', 'C&oacute;digo Actividad', array('class' => 'form')); ?></b>
                             </td>
                             <td>
-                    <?php echo Form::select('actividad', $actividad, $pvpoas->id_actividad, array('class' => 'form', 'class' => 'required', 'id' => 'actividad', 'name' => 'actividad')); ?>
+                    <?php echo Form::select('actividad', $actividad, $poa->id_actividad, array('class' => 'form', 'class' => 'required', 'id' => 'actividad', 'name' => 'actividad')); ?>
                             </td>
                         </tr>
                         <tr>
@@ -844,24 +844,24 @@ function dia_literal($n) {
         </div>
     </div>
     <div id="pre">
-        <div class="formulario">
+        <!-- <div class="formulario">
             <div style="border-bottom: 1px solid #ccc; background: #F2F7FC; display: block; padding: 10px 0;   width: 100%;  ">
                 <h2 style="text-align:center;">Presupuesto</h2><hr/>
                 <fieldset>
                 <table>
                     <tr>
                         <td>Unidad Ejecutora de Presupuesto:</td>
-                        <td><b> <?php echo $uejecutorappt->oficina?></b></td>
+                        <td><b> <?php // echo $uejecutorappt->oficina?></b></td>
                     </tr>
                     <tr>
                         <td>Fuentes de Financiamiento:</td>
-                        <td><?php echo Form::select('fuente', $fuente, $pvfucov->id_programatica, array('id' => 'fuente', 'class' => 'required')) ?></td>
+                        <td><?php // echo Form::select('fuente', $fuente, $pvfucov->id_programatica, array('id' => 'fuente', 'class' => 'required')) ?></td>
                     </tr>
                 </table>
-                <div id="saldoppt"><?php echo $partidasgasto?></div>
+                <div id="saldoppt"><?php // echo $partidasgasto?></div>
                 </fieldset>
             </div>
-        </div>
+        </div> -->
     </div>
 </form>
 

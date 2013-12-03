@@ -6,6 +6,11 @@
             <file>file:/var/www/codice_pv2/index.php</file>
             <file>file:/var/www/codice_pv2/application/classes/controller/documento.php</file>
             <file>file:/var/www/codice_pv2/modules/orm/classes/kohana/orm.php</file>
+            <file>file:/var/www/codice_pv2/application/classes/controller/hojaruta.php</file>
+            <file>file:/var/www/codice_pv2/application/classes/exceptionhandler.php</file>
+            <file>file:/var/www/codice_pv2/modules/database/classes/kohana/database/query.php</file>
+            <file>file:/var/www/codice_pv2/modules/database/classes/kohana/database/query/builder/select.php</file>
+            <file>file:/var/www/codice_pv2/modules/database/classes/kohana/database/mysql/result.php</file>
             <file>file:/var/www/codice_pv2/application/views/pvplanificacion/contenidopoa.php</file>
         </group>
     </open-files>

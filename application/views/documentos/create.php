@@ -160,11 +160,14 @@ $('#hora_inicio,#hora_fin').timeEntry({show24Hours: true, showSeconds: true});
             <legend>Proceso: <?php echo Form::select('proceso', $options, NULL);?>
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 <?php if ($documento->tipo == 'Memorandum'){?>FUCOV: <?php echo Form::checkbox('fucov',1,FALSE,array('id'=>'fucov','name'=>'fucov','title'=>'seleccione si quiere habilitar un memoramdum de viaje'))?><?php }?>    
+
+                <br><br>ASIGNAR NUR: <select id="asignar_nur" name="asignar_nur" ></select>
+                
+
             </legend>
             <hr/>
         <?php endif; ?>
-        ASIGNAR NUR: <select id="asignar_nur" name="asignar_nur" >                                    
-                </select>
+        
         <table width="100%">
             <tr>
                 <td style=" border-right:1px dashed #ccc; padding-left: 5px;">
