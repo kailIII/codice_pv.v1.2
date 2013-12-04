@@ -119,10 +119,9 @@ class Controller_Ajax extends Controller {
             $seguimiento->save();
 
             //Modificado por freddy
-             // if($seguimiento->id){
-             //     $sql = "UPDATE documentos SET estado=1, id_seguimiento= ".$seguimiento->id." WHERE nur = '".$nur."' AND original=1 AND id <> ".$id_doc;
-             //     $this->_db->query(Database::SELECT, $sql, TRUE);
-             // }
+            if($seguimiento->id){
+                DB::update(ORM::factory('documentos')->table_name())->set(array('id_seguimiento' => $seguimiento->id))->where('nur', '=', $nur)->and_where('original','=','0')->and_where('id_seguimiento','=','0')->and_where('estado','=','1')->execute();
+            }
             ////////////////////////
 
             $result = array(

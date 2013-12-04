@@ -146,8 +146,30 @@ class Model_Pvprogramaticas extends ORM{
         $result .= "</tbody></table>";
         return $result;
     }
+///modificado por rodrigo - 29-11-13 lista de prtidas de gatos por oficina
+    public function partidas($id){
+        $sql = "select a.id, a.codigo, a.partida
+                from pvprogramaticas p 
+                inner join pvejecuciones e on p.id = e.id_programatica
+                inner join pvpartidas a on e.id_partida = a.id
+                where p.id = $id
+                and p.estado = 1
+                and e.estado = 1
+                and a.estado = 1";
+        return $this->_db->query(Database::SELECT, $sql, TRUE);
+    }
 
-    
+    public function saldopartida($id_fuente, $id_partida){
+        $sql = "select a.id, a.codigo, a.partida
+                from pvprogramaticas p 
+                inner join pvejecuciones e on p.id = e.id_programatica
+                inner join pvpartidas a on e.id_partida = a.id
+                where p.id_oficina = 11
+                and p.estado = 1
+                and e.estado = 1
+                and a.estado = 1";
+        return $this->_db->query(Database::SELECT, $sql, TRUE);
+    }
     /*
 
     

@@ -271,4 +271,27 @@ public function action_adicionpasaje()
     }
 
 */
+    ///modificado por rodrigo - 29-11-13 - lista de partidas para una fuenta de financiamiento
+    public function action_partidas(){
+        $id = $_POST['id'];
+        $oPart = new Model_Pvprogramaticas();
+        $partidas = $oPart->partidas($id);
+        $part = '<option value = "" selected>Seleccione una Partida</option>';        
+        foreach($partidas as $p){
+                $part .= '<option value="'.$p->id.'">'.$p->codigo.' - '.$p->partida.'</option>';
+        }
+        echo json_encode($part);
+        //echo json_encode('<option value="">5879</option>');
+  }
+    
+    public function action_saldopartida(){
+        $id_programatica = $_POST['f'];
+        $id_partida = $_POST['p'];
+        $saldo = ORM::factory('pvejecuciones')->where('id_programatica','=',$id_programatica)->and_where('id_partida','=',$id_partida)->and_where('estado','=',1)->find();
+        //$s = $saldo->saldo_devengado;
+        //echo json_encode($s);
+        $result = array(
+        "saldo"=>$saldo->saldo_devengado);
+        echo json_encode($result);
+  }
 }
