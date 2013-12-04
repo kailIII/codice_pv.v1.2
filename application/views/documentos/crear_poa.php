@@ -95,6 +95,10 @@ function ajaxs(id, accion, control)
 $('#label_contenido').hide();
 $('#contenido2').hide();
 
+$('#id_tipocontratacion').change(function(){
+    alert($(this).val());
+});
+
 $("#asignar_nur").fcbkcomplete({
     json_url: "/ajax/documentos_nur",
     addontab: true,                   
@@ -236,13 +240,16 @@ $("#asignar_nur").fcbkcomplete({
             <tr>
                 <td><b><?php echo Form::label('tipo_contratacion', 'Tipo de Contrataci&oacute;n:', array('class' => 'form')); ?></b></td>
                 <td><?php echo Form::select('id_tipocontratacion', $tipocontratacion, '', array('class' => 'form', 'name' => 'id_tipocontratacion', 'id' => 'id_tipocontratacion', 'class' => 'required')); ?><br></td>
-                <td><b><?php echo Form::label('otro_tc', 'Otro:', array('class' => 'form')); ?></b></td>
-                <td><?php echo Form::input('otro_tipocontratacion','',array('id'=>'otro_tipocontratacion')); ?><br></td>
+                <td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td id="id_label_otro_tc"><b><?php echo Form::label('otro_tc', 'Otro:', array('class' => 'form')); ?></b></td>
+                <td id="id_otro_tipocontracion"><?php echo Form::input('otro_tipocontratacion','',array('id'=>'otro_tipocontratacion')); ?><br></td>
             </tr>
         </table>
     </td>
 </tr>
-
+<tr>
+    <td colspan="3"><hr /><br /></td>
+</tr>
 <tr>
     <br>
     <td colspan="3">
