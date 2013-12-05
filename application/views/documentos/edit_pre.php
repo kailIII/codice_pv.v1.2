@@ -364,7 +364,7 @@ function eliminarMetaFinal()
                 </tr>
                 <tr>
                     <td colspan="3">
-                        <table border="2">
+                        <table border="0">
                             <tr>
                                 <td colspan="2">
                                     <?php echo Form::label('referencia','Antecedentes')?>
@@ -421,7 +421,7 @@ function eliminarMetaFinal()
                                     <?php echo Form::input('x_partida[]',$x_partida[$f],array('id'=>'x_partida_'.$f,'readonly','size'=>35))?></td>
                                     <td><?php echo Form::input('x_disponible[]',$x_disponible[$f],array('id'=>'x_disponible_'.$f,'readonly','size'=>5))?></td>
                                     <td><?php echo Form::input('x_solicitado[]',$x_solicitado[$f],array('id'=>'x_solicitado_'.$f,'readonly','size'=>5))?></td>
-                                    <td><?php echo Form::input('x_solicitado[]',$x_disponible[$f] - $x_solicitado[$f],array('id'=>'x_solicitado_'.$f,'readonly','size'=>5))?></td>
+                                    <td><?php echo Form::input('x_saldo[]',$x_disponible[$f] - $x_solicitado[$f],array('id'=>'x_saldo_'.$f,'readonly','size'=>5))?></td>
                                 </tr>
                                 <?php endfor?>
                             </tbody>

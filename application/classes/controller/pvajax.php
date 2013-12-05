@@ -88,80 +88,51 @@ public function action_detactividad()
         
         $oDisp = new Model_Pvprogramaticas();
         $disp = $oDisp->saldopresupuesto($id);
-        $result = "<table class=\"classy\" border=\"1px\"><thead><th>C&oacute;digo</th><th>Partida</th><th>Saldo Disponible</th><th>Solicitado (Bs.)</th><th>Nuevo Saldo</th></thead><tbody>";
+        $result = "<table class='classy' border='1px'><thead><th>Partida</th><th>Disponible</th><th>Solicitado (Bs.)</th><th>Nuevo Saldo</th></thead><tbody>";
         $sw = 0;
         $resp = 0;
-        foreach($disp as $d)
-        {
-            if( $viaje == 1 || $viaje == 2){
+        $c=0;$cont=0;
+        foreach($disp as $d){
+            if( $viaje <= 2){
                 if( $d['codigo'] == '22110'){///pasaje al interio del pais
-                    $resp = $d['saldo_devengado'] - $pasaje;
-                    $result .= "<tr><td>".$d['codigo']."</td><td>".$d['partida']."</td><td>".$d['saldo_devengado']."</td><td>".$pasaje."</td><td>".($d['saldo_devengado'] - $pasaje)."</td></tr>";
+                    $resp = round($d['saldo_devengado'] - $pasaje,2);
+                    $solicitado = $pasaje;
+                    $result .= "<tr><td><input type='hidden' name='x_id_partida[]' readonly size='2' id='x_id_partida_".$c."' value='".$d['id_partida']."'/><input type='text' name='x_partida[]' readonly size='35' id='x_partida_".$c."' value='".$d['codigo']." - ".$d['partida']."'/></td><td>".$d['saldo_devengado']."</td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_".$c."' value='".$solicitado."' readonly/></td><td>".$resp."</td></tr>";
                 }
                 if( $d['codigo'] == '22210'){///viatico al interior
                     $resp = round($d['saldo_devengado'] - $viatico,2);
-                    $result .= "<tr><td>".$d['codigo']."</td><td>".$d['partida']."</td><td>".$d['saldo_devengado']."</td><td>".$viatico."</td><td>".($d['saldo_devengado'] - $viatico)."</td></tr>";
+                    $solicitado = $viatico;
+                    $result .= "<tr><td><input type='hidden' name='x_id_partida[]' readonly size='2' id='x_id_partida_".$c."' value='".$d['id_partida']."'/><input type='text' name='x_partida[]' readonly size='35' id='x_partida_".$c."' value='".$d['codigo']." - ".$d['partida']."'/></td><td>".$d['saldo_devengado']."</td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_".$c."' value='".$solicitado."' readonly/></td><td>".$resp."</td></tr>";
                 }
             }
             else
             {
                 if( $d['codigo'] == '22120'){///pasaje al exterior
                     $resp = round($d['saldo_devengado'] - $pasaje,2);
-                    $result .= "<tr><td>".$d['codigo']."</td><td>".$d['partida']."</td><td>".$d['saldo_devengado']."</td><td>".$pasaje."</td><td>".($d['saldo_devengado'] - $pasaje)."</td></tr>";
+                    $solicitado = $pasaje;
+                    $result .= "<tr><td><input type='hidden' name='x_id_partida[]' readonly size='2' id='x_id_partida_".$c."' value='".$d['id_partida']."'/><input type='text' name='x_partida[]' readonly size='35' id='x_partida_".$c."' value='".$d['codigo']." - ".$d['partida']."'/></td><td>".$d['saldo_devengado']."</td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_".$c."' value='".$solicitado."' readonly/></td><td>".$resp."</td></tr>";
                 }
                 if( $d['codigo'] == '22220'){///viaticos al exterior
                     $resp = round($d['saldo_devengado'] - $viatico,2);
-                    $result .= "<tr><td>".$d['codigo']."</td><td>".$d['partida']."</td><td>".$d['saldo_devengado']."</td><td>".$viatico."</td><td>".($d['saldo_devengado'] - $viatico)."</td></tr>";
+                    $solicitado = $viatico;
+                    $result .= "<tr><td><input type='hidden' name='x_id_partida[]' readonly size='2' id='x_id_partida_".$c."' value='".$d['id_partida']."'/><input type='text' name='x_partida[]' readonly size='35' id='x_partida_".$c."' value='".$d['codigo']." - ".$d['partida']."'/></td><td>".$d['saldo_devengado']."</td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_".$c."' value='".$solicitado."' readonly/></td><td>".$resp."</td></tr>";
                 }                    
                 if( $d['codigo'] == '26910'){///gastos de representacion
                     $resp = round($d['saldo_devengado'] - $gasto,2);
-                    $result .= "<tr><td>".$d['codigo']."</td><td>".$d['partida']."</td><td>".$d['saldo_devengado']."</td><td>".$gasto."</td><td>".($d['saldo_devengado'] - $gasto)."</td></tr>";
+                    $solicitado = $gasto;
+                    $result .= "<tr><td><input type='hidden' name='x_id_partida[]' readonly size='2' id='x_id_partida_".$c."' value='".$d['id_partida']."'/><input type='text' name='x_partida[]' readonly size='35' id='x_partida_".$c."' value='".$d['codigo']." - ".$d['partida']."'/></td><td>".$d['saldo_devengado']."</td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_".$c."' value='".$solicitado."' readonly/></td><td>".$resp."</td></tr>";
                 }
             }
             if($resp < 0)
                 $sw = 1;
+            $c++;            
         }
         $result .= "</tbody></table>";
         if($sw == 1)
             $result .="<br /><font color=\"red\" size=\"4\"><center>PRESUPUESTO INSUFICIENTE!!!</center></font>";
-        //else
-        //    $result .="<br /><font color=\"green\" size=\"4\"><center>PRESUPUESTO SUFICIENTE!!!</center></font>";
         echo json_encode($result);
   }
-/*
-public function action_pptdisponibleuser()
-    {
-        $id = $_POST['id'];
-        $pasaje = $_POST['pasaje'];
-        $viatico = $_POST['viatico'];
-        $viaje = $_POST['viaje'];
-        $gasto = $_POST['gasto'];
         
-        $oDisp = new Model_Pvprogramaticas();
-        $disp = $oDisp->saldopresupuesto($id);
-        $result = "<table class=\"classy\" border=\"1px\"><thead><th>C&oacute;digo</th><th>Partida</th><th>Saldo Disponible</th><th>Solicitado (Bs.)</th><th>Nuevo Saldo</th></thead><tbody>";
-        foreach($disp as $d)
-        {
-            if( $viaje == 1 || $viaje == 2){
-                if( $d['codigo'] == '22110')///pasaje al interio del pais
-                    $result .= "<tr><td>".$d['codigo']."</td><td>".$d['partida']."</td><td>".$d['saldo_devengado']."</td><td>".$pasaje."</td><td>".($d['saldo_devengado'] - $pasaje)."</td></tr>";
-                if( $d['codigo'] == '22210')///viatico al interior
-                    $result .= "<tr><td>".$d['codigo']."</td><td>".$d['partida']."</td><td>".$d['saldo_devengado']."</td><td>".$viatico."</td><td>".($d['saldo_devengado'] - $viatico)."</td></tr>";
-            }
-            else
-            {
-                if( $d['codigo'] == '22120')///pasaje al exterior
-                    $result .= "<tr><td>".$d['codigo']."</td><td>".$d['partida']."</td><td>".$d['saldo_devengado']."</td><td>".$pasaje."</td><td>".($d['saldo_devengado'] - $pasaje)."</td></tr>";
-                if( $d['codigo'] == '22220')///viaticos al exterior
-                    $result .= "<tr><td>".$d['codigo']."</td><td>".$d['partida']."</td><td>".$d['saldo_devengado']."</td><td>".$viatico."</td><td>".($d['saldo_devengado'] - $viatico)."</td></tr>";
-                if( $d['codigo'] == '26910')///gastos de representacion
-                    $result .= "<tr><td>".$d['codigo']."</td><td>".$d['partida']."</td><td>".$d['saldo_devengado']."</td><td>".$gasto."</td><td>".($d['saldo_devengado'] - $gasto)."</td></tr>";
-            }
-        }
-        $result .= "</tbody></table>";
-        echo json_encode($result);
-    }*/
-    
     public function action_feriados()
     {
         $f1 = $_POST['fecha1'];
@@ -281,15 +252,12 @@ public function action_adicionpasaje()
                 $part .= '<option value="'.$p->id.'">'.$p->codigo.' - '.$p->partida.'</option>';
         }
         echo json_encode($part);
-        //echo json_encode('<option value="">5879</option>');
   }
     
     public function action_saldopartida(){
         $id_programatica = $_POST['f'];
         $id_partida = $_POST['p'];
         $saldo = ORM::factory('pvejecuciones')->where('id_programatica','=',$id_programatica)->and_where('id_partida','=',$id_partida)->and_where('estado','=',1)->find();
-        //$s = $saldo->saldo_devengado;
-        //echo json_encode($s);
         $result = array(
         "saldo"=>$saldo->saldo_devengado);
         echo json_encode($result);

@@ -23,11 +23,13 @@ class Model_Pvprogramaticas extends ORM{
     }
 
     public function saldopresupuesto($id){
-        $sql = "select part.codigo, eje.id, part.partida, eje.inicial, eje.modificado, eje.vigente, eje.preventivo, eje.comprometido, eje.devengado, eje.saldo_devengado, eje.pagado, eje.saldo_pagar
+        $sql = "select part.codigo, eje.id, part.partida, eje.inicial, eje.modificado, eje.vigente, eje.preventivo, eje.comprometido, eje.devengado, eje.saldo_devengado, eje.pagado, eje.saldo_pagar, part.id id_partida
                 from pvprogramaticas pro 
                 inner join pvejecuciones eje on eje.id_programatica = pro.id
                 inner join pvpartidas part on eje.id_partida = part.id
                 where pro.id = $id
+                and eje.estado = 1
+		and part.estado = 1
                 ";
         //return $this->_db->query(Database::SELECT, $sql, TRUE);
         return DB::query(1, $sql)->execute();
@@ -65,7 +67,8 @@ class Model_Pvprogramaticas extends ORM{
                 inner join pvorganismos org on p.id_organismo = org.id
                 inner join pvprogramas prog on p.id_programa = prog.id
                 inner join pvproyectos proy on p.id_proyecto = proy.id
-                where p.id_oficina = $id";
+                where p.id_oficina = $id
+                and p.estado = 1";
         return $this->_db->query(Database::SELECT, $sql, TRUE);
     }
     
@@ -130,8 +133,6 @@ class Model_Pvprogramaticas extends ORM{
         $result .= "</tbody></table>";
         if($sw == 1)
             $result .="<br /><font color=\"red\" size=\"4\"><center>PRESUPUESTO INSUFICIENTE!!!</center></font>";
-        //else
-          //  $result .="<br /><font color=\"green\" size=\"4\"><center>PRESUPUESTO SUFICIENTE!!!</center></font>";
         return $result;
     }
     

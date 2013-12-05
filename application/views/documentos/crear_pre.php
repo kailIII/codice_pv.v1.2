@@ -156,7 +156,7 @@ function anadirMetaFinal()
         var disponible = $('#disponible').val();
         var solicitado = $('#solicitado').val();
         var saldo = $('#saldo').val();
-        x.append("<tr><td><input type='hidden' size='2' name='x_id_partida[] id='x_id_partida_"+y+"' value='"+id_partida+"' readonly/><input type='text' size='35' name='x_partida[]' id='x_partida_"+y+"' value='"+partida+"' readonly/></td><td><input type='text' size='5' name='x_disponible[]' id='x_disponible_"+y+"' value='"+disponible+"' readonly/></td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_"+y+"' value='"+solicitado+"' readonly/></td><td><input type='text' size='5' name='x_saldo[]' id='x_saldo_"+y+"' value='"+saldo+"' readonly/></td></tr>");
+        x.append("<tr><td><input type='hidden' size='2' name='x_id_partida[]' id='x_id_partida_"+y+"' value='"+id_partida+"' readonly/><input type='text' size='35' name='x_partida[]' id='x_partida_"+y+"' value='"+partida+"' readonly/></td><td><input type='text' size='5' name='x_disponible[]' id='x_disponible_"+y+"' value='"+disponible+"' readonly/></td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_"+y+"' value='"+solicitado+"' readonly/></td><td><input type='text' size='5' name='x_saldo[]' id='x_saldo_"+y+"' value='"+saldo+"' readonly/></td></tr>");
         $('#partida').val('');
         $('#disponible').val(0);
         $('#solicitado').val(0);
