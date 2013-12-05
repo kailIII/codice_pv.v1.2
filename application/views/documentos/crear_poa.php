@@ -95,8 +95,19 @@ function ajaxs(id, accion, control)
 $('#label_contenido').hide();
 $('#contenido2').hide();
 
+$('#id_label_otro_tc').hide();
+$('#id_otro_tipocontracion').hide();
+
 $('#id_tipocontratacion').change(function(){
-    alert($(this).val());
+     var valor = $('#id_tipocontratacion option:selected').html();
+     if(valor =='Otros'){
+        $('#id_label_otro_tc').show();
+        $('#id_otro_tipocontracion').show();
+     }else{
+        $('#id_label_otro_tc').hide();
+        $('#id_otro_tipocontracion').hide();        
+     }
+
 });
 
 $("#asignar_nur").fcbkcomplete({

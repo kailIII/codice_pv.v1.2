@@ -5,6 +5,8 @@
         <group>
             <file>file:/var/www/codice_pv2/index.php</file>
             <file>file:/var/www/codice_pv2/modules/database/classes/kohana/database.php</file>
+            <file>file:/var/www/codice_pv2/system/classes/kohana/session.php</file>
+            <file>file:/var/www/codice_pv2/application/classes/controller/ajax.php</file>
             <file>file:/var/www/codice_pv2/application/classes/controller/documento.php</file>
             <file>file:/var/www/codice_pv2/modules/orm/classes/kohana/orm.php</file>
             <file>file:/var/www/codice_pv2/application/classes/controller/hojaruta.php</file>
