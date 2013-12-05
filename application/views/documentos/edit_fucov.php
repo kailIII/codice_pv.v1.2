@@ -844,24 +844,56 @@ function dia_literal($n) {
         </div>
     </div>
     <div id="pre">
-        <!-- <div class="formulario">
+        <div class="formulario">
             <div style="border-bottom: 1px solid #ccc; background: #F2F7FC; display: block; padding: 10px 0;   width: 100%;  ">
                 <h2 style="text-align:center;">Presupuesto</h2><hr/>
                 <fieldset>
-                <table>
-                    <tr>
-                        <td>Unidad Ejecutora de Presupuesto:</td>
-                        <td><b> <?php // echo $uejecutorappt->oficina?></b></td>
-                    </tr>
-                    <tr>
-                        <td>Fuentes de Financiamiento:</td>
-                        <td><?php // echo Form::select('fuente', $fuente, $pvfucov->id_programatica, array('id' => 'fuente', 'class' => 'required')) ?></td>
-                    </tr>
-                </table>
-                <div id="saldoppt"><?php // echo $partidasgasto?></div>
+                <table border="0">
+                            <tr>
+                                <td colspan="2">
+                                    <?php 
+                                    $de = ' del Sr. ';
+                                    if($user->genero == 'mujer')
+                                        $de = ' de la Sra. ';
+                                    echo Form::label('referencia','Antecedentes');?>
+                                    <textarea name="antecedente" id="antecedente" style="width: 760px;" rows="5">
+Mediante Hoja de Seguimiento <?php echo $documento->nur?>, se remite el FOCOV <?php echo $documento->codigo.$de.$documento->nombre_remitente.', '.$documento->cargo_remitente?>, solicitando vi&aacute;ticos por viaje a realizar a la ciudad de <?php echo $pvfucov->destino?>, con el objeto de: <?php echo $documento->referencia?>
+                                    </textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><br />Unidad Ejecutora de Presupuesto:<br />&nbsp;</td>
+                                <td><br/><b> <?php echo $uejecutorapre->oficina?></b><br />&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td style=" width: 35%"><?php echo Form::label('fuente','Fuentes de Financiamiento')?></td>
+                                <td><?php echo Form::select('fuente', $fuente, $pre->id_programatica, array('id' => 'fuente', 'class' => 'required')) ?></td>
+                            </tr>
+                        </table>
+                <div id="saldoppt">
+                    <table id="x_tableMeta" border="1" class="classy">
+                            <thead>
+                                <th>Partida</th>
+                                <th>Disponible</th>
+                                <th>Solicitado(Bs.)</th>
+                                <th>Nuevo Saldo</th>
+                            </thead>
+                            <tbody>
+                                <?php for($f=0;$f<count($x_partida);$f++):?>
+                                <tr>
+                                    <td><?php echo Form::hidden('x_id_partida[]',$x_id_partida[$f],array('id'=>'x_id_partida_'.$f,'readonly','size'=>2))?>
+                                    <?php echo Form::input('x_partida[]',$x_partida[$f],array('id'=>'x_partida_'.$f,'readonly','size'=>35))?></td>
+                                    <td><?php echo Form::input('x_disponible[]',$x_disponible[$f],array('id'=>'x_disponible_'.$f,'readonly','size'=>5))?></td>
+                                    <td><?php echo Form::input('x_solicitado[]',$x_solicitado[$f],array('id'=>'x_solicitado_'.$f,'readonly','size'=>5))?></td>
+                                    <td><?php echo Form::input('x_saldo[]',$x_disponible[$f] - $x_solicitado[$f],array('id'=>'x_saldo_'.$f,'readonly','size'=>5))?></td>
+                                </tr>
+                                <?php endfor?>
+                            </tbody>
+                        </table>
+                </div>
                 </fieldset>
             </div>
-        </div> -->
+        </div>
     </div>
 </form>
 
