@@ -265,7 +265,7 @@ public function action_movimiento($id = ''){///saldo partidas
     }
 }
 
-public function action_editarfucov($id = '') {
+/*public function action_editarfucov($id = '') {
         $fucov = ORM::factory('pvfucovs')->where('id','=',$id)->find();
         if ($fucov->loaded()) {
             if ($fucov->etapa_proceso <= 3){
@@ -328,7 +328,7 @@ public function action_autorizarfucov($id = '') {
     }
     else
         $this->template->content = 'El documento no existe';
-}
+}*/
 
 public  function action_lista(){
         $ofi = ORM::factory('oficinas')->where('id_entidad','=',$this->user->id_entidad)->find_all();
@@ -389,6 +389,63 @@ public  function action_lista(){
                 ->bind('detalle', $detalle)
                 ->bind('pvliquidacion', $pvliquidacion)
                 ;
+    }
+    //Changed by Rodrigo
+    public function action_modificarpre($id = '') {
+        $pre = ORM::factory('presupuestos')->where('id','=',$id)->find();
+        if ($pre->loaded()) {
+            if($pre->auto_pre == 0){
+                    $pre->id_programatica = $_POST['fuente'];
+                    $pre->antecedente = $_POST['antecedente'];
+                    $pre->save();
+                    ///eliminar las partidas actuales
+                    $liq = ORM::factory('pvliquidaciones')->where('id_presupuesto','=',$pre->id)->and_where('estado','=',1)->find_all();
+                    foreach($liq as $l){
+                        $l->delete();
+                    }
+                    ///preguntar si hay partidas seleccionadas
+                    if(isset($_POST['x_id_partida'])){
+                        $id_partida=$_POST['x_id_partida'];
+                        $solicitado=$_POST['x_solicitado'];
+                        $partida=$_POST['x_partida'];
+                        for($f=0;$f<count($id_partida);$f++) 
+                        {
+                            $liq = ORM::factory('pvliquidaciones');
+                            $liq->fecha_creacion = date('Y-m-d H:i:s');
+                            $liq->importe_certificado = $solicitado[$f];
+                            $liq->estado = 1;
+                            $liq->id_partida = $id_partida[$f];
+                            $liq->id_presupuesto = $pre->id;
+                            $liq->partida = $partida[$f];
+                            $liq->save();
+                        }
+                    }
+                $poa = ORM::factory('poas')->where('id_documento','=',$pre->id_memo)->find();
+                if($poa->loaded())
+                    $id_doc = $poa->id_documento;
+                else
+                    $id_doc = $pre->id_documento;
+                $this->request->redirect('documento/detalle/'.$id_doc);
+                //$this->request->redirect('documento/detalle/'.$pre->id_documento);
+                }
+            else
+                $this->template->content = '<b>EL DOCUMENTO YA FUE AUTORIZADO Y NO SE PUEDE MODIFICAR.</b><div class="info" style="text-align:center;margin-top: 50px; width:800px">
+                                        <p><span style="float: left; margin-right: .3em;" class=""></span>    
+                                        &larr;<a onclick="javascript:history.back(); return false;" href="#" style="font-weight: bold; text-decoration: underline;  " > Regresar<a/></p></div>';
+        }
+        else
+                $this->template->content = 'El documento no existe.';
+    }
+
+    public function action_aprobarpre($id = '') {
+        $pre = ORM::factory('presupuestos')->where('id','=',$id)->find();
+        if ($pre->loaded()) {
+            $pre->fecha_aprobacion = date('Y-m-d H:i:s');
+            $pre->id_userauto = $this->user->id;
+            $pre->auto_pre = 1;
+            $pre->save();
+            $this->request->redirect('documento/detalle/'.$pre->id_documento);
+        }
     }
 }
 
