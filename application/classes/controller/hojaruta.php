@@ -203,18 +203,8 @@ class Controller_Hojaruta extends Controller_DefaultTemplate {
                         $documento->add('nurs', $nur);
                         $_POST = array();
                         }
-                        if($documento->id && $id_tipo==15){///modificado por Rodrigo
-                            $pre = ORM::factory('presupuestos');
-                            $pre->id_documento = $documento->id;
-                            $pre->fecha_creacion = date('Y-m-d H:i:s');
-                            $pre->fecha_modificacion = date('Y-m-d H:i:s');
-                            $pre->id_memo = $id_memo;
-                            $pre->save();
-                        /////////end////////////
-                        //cazamos al documento con el nur asignado
-                        $rs = $documento->has('nurs', $nur);
-                        $documento->add('nurs', $nur);
-                        $_POST = array();
+                        if($documento->id && $id_tipo==15){
+                            // guardar registro en la tabla presupuesto
                         }
 
                 }
@@ -365,8 +355,7 @@ public function action_generar_doc() {
     //nueva function para derivar
     public function action_derivar() {
         $id = Arr::get($_GET, 'id_doc', 0);
-        $documento = ORM::factory('documentos')
-        ->where('id', '=', $id)
+        $documento = ORM::factory('documentos')->where('id', '=', $id)
                 //->and_where('original','=',1)
         ->find();
 

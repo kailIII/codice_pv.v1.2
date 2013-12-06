@@ -159,12 +159,23 @@ class Controller_documento extends Controller_DefaultTemplate {
                         $poa->save();
                     }
                     if($tipo->id==15){
+                        
                         $pre = ORM::factory('presupuestos');
                         $pre->fecha_creacion = date('Y-m-d H:i:s');
                         $pre->id_documento = $documento->id;
                         $pre->estado = 1;
                         $pre->id_programatica = $_POST['fuente'];
                         $pre->antecedente = $_POST['antecedente'];
+
+                        //Modificado por Freddy Velasco
+                        if (isset($_POST['asignar_nur'])) {
+                        $documento_nur = ORM::factory('documentos')->where('id_user','=',$this->user->id)->and_where('id_tipo','=','14')->and_where('nur','=',$_POST['asignar_nur'])->find();
+                            if ($documento_nur->loaded()) {
+                                $pre->id_memo = $documento_nur->id;
+                            }
+
+                        }
+                        ////////////end////////////////                        
                         $pre->save();
                         if($pre->id){///adicionar todas las partidas de gasto
                             $id_partida=$_POST['x_id_partida'];
@@ -1026,7 +1037,9 @@ class Controller_documento extends Controller_DefaultTemplate {
                         ->bind('ue_poa', $uejecutorapoa);
         }
         }
-        
+        if ($nivel == 9) {
+            
+        }
         return $contenido;
 
     }
