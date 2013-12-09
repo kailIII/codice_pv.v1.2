@@ -144,6 +144,9 @@ class Controller_Hojaruta extends Controller_DefaultTemplate {
                         if ($fucov == 1 && $tipo->id=='13') {
                             $documento->referencia = $memo->referencia;
                         }
+                        if ($fucov == 1 && $tipo->id=='15') {
+                            $documento->referencia = 'CERT. PRESUPUESTARIA PASAJES y VIATICOS '.$nur;
+                        }
                         $documento->fecha_creacion = date('Y-m-d H:i:s');
                         $documento->nur = $nur;
                         $documento->id_seguimiento = $id_seg;
@@ -203,8 +206,18 @@ class Controller_Hojaruta extends Controller_DefaultTemplate {
                         $documento->add('nurs', $nur);
                         $_POST = array();
                         }
-                        if($documento->id && $id_tipo==15){
-                            // guardar registro en la tabla presupuesto
+                        if($documento->id && $id_tipo==15){///modificado por Rodrigo
+                            $pre = ORM::factory('presupuestos');
+                            $pre->id_documento = $documento->id;
+                            $pre->fecha_creacion = date('Y-m-d H:i:s');
+                            $pre->fecha_modificacion = date('Y-m-d H:i:s');
+                            $pre->id_memo = $id_memo;
+                            $pre->save();
+                        /////////end////////////
+                        //cazamos al documento con el nur asignado
+                        $rs = $documento->has('nurs', $nur);
+                        $documento->add('nurs', $nur);
+                        $_POST = array();
                         }
 
                 }

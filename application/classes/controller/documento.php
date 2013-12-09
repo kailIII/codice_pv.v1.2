@@ -177,7 +177,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                         }
                         ////////////end////////////////                        
                         $pre->save();
-                        if($pre->id){///adicionar todas las partidas de gasto
+                        if($pre->id && isset($_POST['x_id_partida'])){///adicionar todas las partidas de gasto
                             $id_partida=$_POST['x_id_partida'];
                             $solicitado=$_POST['x_solicitado'];
                             $partida=$_POST['x_partida'];
@@ -623,7 +623,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                 }
                 //Modificado por rodrigo
                 $pre=ORM::factory('presupuestos')->where('id_documento','=',$id)->find();
-                if($pre->loaded()){
+                 if($pre->loaded()){
                     $pre->id_programatica = $_POST['fuente'];
                     $pre->antecedente = $_POST['antecedente'];
                     $pre->save();
@@ -632,23 +632,24 @@ class Controller_documento extends Controller_DefaultTemplate {
                     foreach($liq as $l){
                         $l->estado = 0;
                         $l->delete();
-                    }   
-                    $id_partida=$_POST['x_id_partida'];
-                    $solicitado=$_POST['x_solicitado'];
-                    $partida=$_POST['x_partida'];
-                    for($f=0;$f<count($id_partida);$f++) 
-                    {
-                        $liq = ORM::factory('pvliquidaciones');
-                        $liq->fecha_creacion = date('Y-m-d H:i:s');
-                        $liq->importe_certificado = $solicitado[$f];
-                        $liq->estado = 1;
-                        $liq->id_partida = $id_partida[$f];
-                        $liq->id_presupuesto = $pre->id;
-                        $liq->partida = $partida[$f];
-                        $liq->save();
                     }
-                        
-                    
+                    if(isset($_POST['x_id_partida'])){
+                        $id_partida=$_POST['x_id_partida'];
+                        $solicitado=$_POST['x_solicitado'];
+                        $partida=$_POST['x_partida'];
+                        for($f=0;$f<count($id_partida);$f++) 
+                        {
+                            $liq = ORM::factory('pvliquidaciones');
+                            $liq->fecha_creacion = date('Y-m-d H:i:s');
+                            $liq->importe_certificado = $solicitado[$f];
+                            $liq->estado = 1;
+                            $liq->id_partida = $id_partida[$f];
+                            $liq->id_presupuesto = $pre->id;
+                            $liq->partida = $partida[$f];
+                            $liq->save();
+                        }
+
+                    }
                 }
                 ///////////end//////////////////
                 
@@ -1037,9 +1038,62 @@ class Controller_documento extends Controller_DefaultTemplate {
                         ->bind('ue_poa', $uejecutorapoa);
         }
         }
-        if ($nivel == 9) {
-            
+        if ($nivel == 7) {
+            $memo = ORM::factory('documentos')->where('id','=',$id)->find();
+            $pvfucov = ORM::factory('pvfucovs')->where('id_memo','=',$id)->find();
+            if($memo->fucov == '1'){
+                $pre = ORM::factory('presupuestos')->where('id_memo','=',$id)->find();
+            }else{
+                $poa = ORM::factory('poas')->where('id_documento','=',$id)->find();
+                if($poa->loaded())
+                    $pre = ORM::factory('presupuestos')->where('id_memo','=',$id)->find();
+                else
+                    $pre = ORM::factory('presupuestos')->where('id_documento','=',$id)->find();
+            }
+            if($estado == '2' && $pre->loaded()){
+                $uEjeppt = New Model_oficinas();
+                $uejecutorapre = $uEjeppt->uejecutorappt($this->user->id_oficina);
+                $oFuente = New Model_Pvprogramaticas(); ///fuentes de financiamiento
+                $fte = $oFuente->listafuentesuser($uejecutorapre->id);
+                $fuente[''] = 'Seleccione Una Fuente de Financiamiento';
+                foreach ($fte as $f){$fuente[$f->id] = $f->actividad;}
+                $liq = ORM::factory('pvliquidaciones')->where('id_presupuesto','=',$pre->id)->and_where('estado','=',1)->find_all();
+                foreach($liq as $l){
+                    $x_id_partida[] = $l->id_partida;
+                    $x_partida[] = $l->partida;
+                    $disp = ORM::factory('pvejecuciones')->where('id_programatica','=',$pre->id_programatica)->and_where('id_partida','=',$l->id_partida)->find();
+                    $x_disponible[] = $disp->saldo_devengado;///saldo actual disponible
+                    $x_solicitado[] = $l->importe_certificado;
+                }
+                $oPart = new Model_Pvprogramaticas();
+                $part = $oPart->partidas($pre->id_programatica);
+                $partidas['']='Seleccione una Partida';
+                foreach($part as $p){
+                    $partidas[$p->id] = $p->codigo.' - '.$p->partida;
+                }
+                ///detalle de la fuente presupuestaria
+                $det = $oFuente->detallesaldopresupuesto($pre->id_programatica);
+                foreach ($det as $d)
+                    $detallefuente = $d;
+                $cambio = ORM::factory('pvtipocambios')->find_all();
+                foreach($cambio as $c)
+                $tipo_cambio = $c;
+                $contenido = View::factory('pvpresupuesto/contenidoppt')
+                         ->bind('pre', $pre)
+                         ->bind('uejecutorapre',$uejecutorapre)
+                         ->bind('fuente', $fuente)
+                         ->bind('partidas',$partidas)
+                         ->bind('x_id_partida', $x_id_partida)
+                         ->bind('x_partida', $x_partida)
+                         ->bind('x_disponible', $x_disponible)
+                         ->bind('x_solicitado', $x_solicitado)
+                         ->bind('detallefuente', $detallefuente)
+                         ->bind('pvfucov', $pvfucov)
+                         ->bind('tipo_cambio', $tipo_cambio)
+                        ;
+            }
         }
+        
         return $contenido;
 
     }
