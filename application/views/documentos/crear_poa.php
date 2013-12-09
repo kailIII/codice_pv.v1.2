@@ -3,6 +3,8 @@
 
 $(function(){
     $("#frmCreate").validate();
+
+
     var config={
         toolbar : [ ['Maximize','Preview','SelectAll','Cut', 'Copy','Paste', 'Pagebreak','PasteFromWord','PasteText','-','Bold','Italic','Underline','FontSize','Font','TextColor','BGColor',,'NumberedList','BulletedList'],
         ['Undo','Redo','-','SpellChecker','Scayt','-','Find','Replace','-','Table','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock']],
@@ -103,12 +105,14 @@ $('#id_tipocontratacion').change(function(){
      if(valor =='Otros'){
         $('#id_label_otro_tc').show();
         $('#id_otro_tipocontracion').show();
+        $('#otro_tipocontratacion').attr('class','required');
      }else{
         $('#id_label_otro_tc').hide();
-        $('#id_otro_tipocontracion').hide();        
+        $('#id_otro_tipocontracion').hide();
+        $('#otro_tipocontratacion').removeAttr('class');
      }
-
 });
+//////////end//////////////
 
 $("#asignar_nur").fcbkcomplete({
     json_url: "/ajax/documentos_nur",
@@ -300,12 +304,12 @@ $("#asignar_nur").fcbkcomplete({
                             <tr>  
                                 <td>Internos</td>
                                 <td><?php echo Form::input('ri_financiador','',array('id'=>'ri_financiador')); ?></td>
-                                <td><?php echo Form::input('ri_porcentaje','',array('id' => 'ri_porcentaje','size'=>'6')); ?> %</td>
+                                <td><?php echo Form::input('ri_porcentaje','',array('id' => 'ri_porcentaje','size'=>'6','class'=>'number','max'=>100, 'min'=>0)); ?> %</td>
                             </tr>
                             <tr>
                                 <td>Externos</td>
                                 <td><?php echo Form::input('re_financiador','',array('id'=>'re_financiador')); ?></td>
-                                <td><?php echo Form::input('re_porcentaje','',array('id' => 're_porcentaje','size'=>'6')); ?> %</td>
+                                <td><?php echo Form::input('re_porcentaje','',array('id' => 're_porcentaje','size'=>'6','class'=>'number','max'=>100, 'min'=>0)); ?> %</td>
                             </tr>
                         </TBODY>
                     </table>
@@ -335,8 +339,8 @@ $("#asignar_nur").fcbkcomplete({
                         <tbody>
                             <tr>
                                 <td><textarea name="referencia" id="referencia" style="width: 380px;" ></textarea></td>
-                                <td><?php echo Form::input('cantidad','',array('id'=>'cantidad','size'=>'4')); ?></td>
-                                <td><?php echo Form::input('monto_total','',array('id'=>'monto_total','size'=>'8')); ?></td>
+                                <td><?php echo Form::input('cantidad','',array('id'=>'cantidad','size'=>'4','class'=>'number')); ?></td>
+                                <td><?php echo Form::input('monto_total','',array('id'=>'monto_total','size'=>'8','class'=>'number')); ?></td>
                                 <td><?php echo Form::input('plazo_ejecucion','',array('id'=>'plazo_ejecucion','size'=>'15')); ?></td>
                             </tr>
                         </tbody>

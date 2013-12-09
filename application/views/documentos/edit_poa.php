@@ -112,6 +112,32 @@ function ajaxs(id, accion, control)
     });
 }
 
+
+// Modificado por Freddy Velasco
+var valor = $('#id_tipocontratacion option:selected').html();
+     if(valor =='Otros'){
+        $('#id_label_otro_tc').show();
+        $('#id_otro_tipocontracion').show();
+        $('#otro_tipocontratacion').attr('class','required');
+     }else{
+        $('#id_label_otro_tc').hide();
+        $('#id_otro_tipocontracion').hide();
+        $('#otro_tipocontratacion').removeAttr('class');
+     }
+
+$('#id_tipocontratacion').change(function(){
+     var valor = $('#id_tipocontratacion option:selected').html();
+     if(valor =='Otros'){
+        $('#id_label_otro_tc').show();
+        $('#id_otro_tipocontracion').show();
+        $('#otro_tipocontratacion').attr('class','required');
+     }else{
+        $('#id_label_otro_tc').hide();
+        $('#id_otro_tipocontracion').hide();
+        $('#otro_tipocontratacion').removeAttr('class');
+     }
+});
+//////////end//////////////  
         ///Fin
 
 
@@ -134,6 +160,9 @@ function ajaxs(id, accion, control)
             return false;
         });        
         $("input.file").si();
+
+
+
 
     });
 </script>
@@ -350,8 +379,8 @@ function ajaxs(id, accion, control)
                             <tr>
                                 <td><b><?php echo Form::label('tipo_contratacion', 'Tipo de Contrataci&oacute;n:', array('class' => 'form')); ?></b></td>
                                 <td><?php echo Form::select('id_tipocontratacion', $tipocontratacion, $poa->id_tipocontratacion, array('class' => 'form', 'name' => 'id_tipocontratacion', 'id' => 'id_tipocontratacion', 'class' => 'required')); ?><br></td>
-                                <td><b><?php echo Form::label('otro_tc', 'Otro:', array('class' => 'form')); ?></b></td>
-                                <td><?php echo Form::input('otro_tipocontratacion',$poa->otro_tipocontratacion,array('id'=>'otro_tipocontratacion')); ?><br></td>
+                                <td id="id_label_otro_tc"><b><?php echo Form::label('otro_tc', 'Otro:', array('class' => 'form')); ?></b></td>
+                                <td id="id_otro_tipocontracion"><?php echo Form::input('otro_tipocontratacion',$poa->otro_tipocontratacion,array('id'=>'otro_tipocontratacion')); ?><br></td>
                             </tr>
                         </table>
                     </td>
@@ -396,12 +425,12 @@ function ajaxs(id, accion, control)
                                             <tr>  
                                                 <td>Internos</td>
                                                 <td><?php echo Form::input('ri_financiador',$poa->ri_financiador,array('id'=>'ri_financiador')); ?></td>
-                                                <td><?php echo Form::input('ri_porcentaje',$poa->ri_porcentaje,array('id' => 'ri_porcentaje','size'=>'6')); ?> %</td>
+                                                <td><?php echo Form::input('ri_porcentaje',$poa->ri_porcentaje,array('id' => 'ri_porcentaje','size'=>'6','class'=>'number','max'=>100, 'min'=>0)); ?> %</td>
                                             </tr>
                                             <tr>
                                                 <td>Externos</td>
                                                 <td><?php echo Form::input('re_financiador',$poa->re_financiador,array('id'=>'re_financiador')); ?></td>
-                                                <td><?php echo Form::input('re_porcentaje',$poa->re_porcentaje,array('id' => 're_porcentaje','size'=>'6')); ?> %</td>
+                                                <td><?php echo Form::input('re_porcentaje',$poa->re_porcentaje,array('id' => 're_porcentaje','size'=>'6','class'=>'number','max'=>100, 'min'=>0)); ?> %</td>
                                             </tr>
                                         </TBODY>
                                     </table>
@@ -431,8 +460,8 @@ function ajaxs(id, accion, control)
                                         <tbody>
                                             <tr>
                                                 <td><textarea name="referencia" id="referencia" style="width: 380px;" ><?php echo $poa->proceso_con; ?></textarea></td>
-                                                <td><?php echo Form::input('cantidad',$poa->cantidad,array('id'=>'cantidad','size'=>'4')); ?></td>
-                                                <td><?php echo Form::input('monto_total',$poa->monto_total,array('id'=>'monto_total','size'=>'8')); ?></td>
+                                                <td><?php echo Form::input('cantidad',$poa->cantidad,array('id'=>'cantidad','size'=>'4','class'=>'number')); ?></td>
+                                                <td><?php echo Form::input('monto_total',$poa->monto_total,array('id'=>'monto_total','size'=>'8','class'=>'number')); ?></td>
                                                 <td><?php echo Form::input('plazo_ejecucion',$poa->plazo_ejecucion,array('id'=>'plazo_ejecucion','size'=>'15')); ?></td>
                                             </tr>
                                         </tbody>
