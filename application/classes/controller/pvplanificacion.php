@@ -134,7 +134,7 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
                                         &larr;<a onclick="javascript:history.back(); return false;" href="#" style="font-weight: bold; text-decoration: underline;  " > Regresar<a/></p></div>';
         }
         else
-                $this->template->content = 'El FUCOV no existe';
+                $this->template->content = 'El FOCOV no existe';
     }
     
     public function action_autorizarfucov($id = '') {

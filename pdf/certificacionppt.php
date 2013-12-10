@@ -148,7 +148,7 @@ where ofi.id = '$doc->id_oficina'");
         $pdf->Ln(10);
 
         $pdf->SetFont('Helvetica', '', 10);
-        $antecedentes = "<p style=\"text-align: justify;\">Mediante Hoja de Seguimiento $doc->nur, se remite el FUCOV $doc->codigo, del Sr(a). $doc->nombre_remitente,  $doc->cargo_remitente, solicitando viaticos por viaje a realizar a la ciudad de $fucov->destino, con el objeto de: $doc->referencia.</p>";
+        $antecedentes = "<p style=\"text-align: justify;\">Mediante Hoja de Seguimiento $doc->nur, se remite el FOCOV $doc->codigo, del Sr(a). $doc->nombre_remitente,  $doc->cargo_remitente, solicitando viaticos por viaje a realizar a la ciudad de $fucov->destino, con el objeto de: $doc->referencia.</p>";
         //$pdf->write(0, $antecedentes, '', 0, 'L');
         $pdf->writeHTML(utf8_encode($antecedentes), false, false, false);
         $pdf->Ln(10);

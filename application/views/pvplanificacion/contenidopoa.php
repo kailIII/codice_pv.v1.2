@@ -128,12 +128,17 @@ $('#id_tipocontratacion').change(function(){
                         </td>
                     </tr>
                     <tr>
+                    <td colspan="4"><hr /><br /></td>
+                    </tr>
+                    <tr>
                         <td><b><?php echo Form::label('id_tipocontratacion', 'Tipo de Contratacion:', array('class' => 'form')); ?></b></td>
                         <td><?php echo Form::select('id_tipocontratacion', $tipocontratacion, $poa->id_tipocontratacion, array('class' => 'form', 'class' => 'required', 'id' => 'id_tipocontratacion', 'name' => 'id_tipocontratacion')); ?></td>
                         <td id="id_label_otro_tc"><b><?php echo Form::label('otro_tipocontratacion', 'Otro:', array('class' => 'form')); ?></b></td>
                         <td id="id_otro_tipocontracion"><?php echo Form::input('otro_tipocontratacion',$poa->otro_tipocontratacion,array('class'=>'form','id'=>'otro_tipocontratacion')); ?></td>
                     </tr>
+                    <tr>
                     <td colspan="4"><hr /><br /></td>
+                    </tr>
                     <tr>
                         <td colspan="4" align="center">
                             <table>

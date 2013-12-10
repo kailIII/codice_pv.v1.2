@@ -52,7 +52,7 @@ $('#obj_gestion').change(function(){
         }
 $('#frmEditarpoa').validate();
 $('.autorizar').live('click', function() {
-        var answer = confirm("Esta seguro de Autorizar el FUCOV? ")
+        var answer = confirm("Esta seguro de Autorizar el FOCOV? ")
         if (answer)
             return true;
         return false;
@@ -108,10 +108,10 @@ $('.autorizar').live('click', function() {
     <center>
         <a href="/pdf/certificacionpoa.php?id=<?php echo $pvfucov->id_documento;?>&f=<?php echo $pvfucov->id?>" class="link pdf" target="_blank" title="Imprimir PDF" >imprimir Certificado</a>
         <?php if($pvfucov->etapa_proceso == 1):?>
-             <div id="msg4" class="info2"><b>!!!EL FUCOV NO FUE AUTORIZADO POR PASAJES Y VIATICOS.</b></div>
+             <div id="msg4" class="info2"><b>!!!EL FOCOV NO FUE AUTORIZADO POR PASAJES Y VIATICOS.</b></div>
         <?php endif;?>
                 <?php if($pvfucov->etapa_proceso == 2):?>
-        <a href="/pvplanificacion/autorizarfucov/<?php echo $pvfucov->id; ?>" class="autorizar" title="Autorizar FUCOV" ><img src="/media/images/tick.png"/>Autorizar FUCOV</a>
+        <a href="/pvplanificacion/autorizarfucov/<?php echo $pvfucov->id; ?>" class="autorizar" title="Autorizar FOCOV" ><img src="/media/images/tick.png"/>Autorizar FOCOV</a>
         <?php endif;?>
         <?php if($pvfucov->etapa_proceso == 3):?>
             <a href="/hojaruta/derivar/?id_doc=<?php echo $pvfucov->id_memo; ?>" class="link derivar" title="Derivar a partir del documento, si ya esta derivado muestra el seguimiento" >Derivar</a>

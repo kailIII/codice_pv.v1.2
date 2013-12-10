@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
-    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
-        <file>file:/var/www/codice_pv2/application/views/documentos/edit_fucov.php</file>
-        <file>file:/var/www/codice_pv2/application/views/documentos/edit_pre.php</file>
-    </open-files>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/var/www/codice_pv2/index.php</file>
             <file>file:/var/www/codice_pv2/modules/database/classes/kohana/database.php</file>
+            <file>file:/var/www/codice_pv2/system/classes/kohana/session.php</file>
+            <file>file:/var/www/codice_pv2/application/classes/controller/ajax.php</file>
             <file>file:/var/www/codice_pv2/application/classes/controller/documento.php</file>
             <file>file:/var/www/codice_pv2/modules/orm/classes/kohana/orm.php</file>
             <file>file:/var/www/codice_pv2/application/classes/controller/hojaruta.php</file>

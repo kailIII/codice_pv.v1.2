@@ -393,12 +393,15 @@ class Controller_documento extends Controller_DefaultTemplate {
                 if ($documento->fucov == 1) {
                     $pvcomision = ORM::factory('pvcomisiones')->where('id_documento','=',$id)->find();
                 }
+                // $poa = array();
+                // if($documento->id_tipo == 14){
+                //     $poa = ORM::factory('poas')->where('id_documento','=',$id);
+                // }
                 /////////////////
 
                 // Modifica Freddy Velasco
                 $contenido_doc = $this->contenido_documento($id,$documento->id_tipo,$documento->id_oficina,$estado,$this->user->nivel);
                 ////////end//////////////
-
 
                 ///rodrigo detallepasajes, 210813
                 //$detallepv = $this->pvmodificar($id, $estado);
@@ -413,7 +416,8 @@ class Controller_documento extends Controller_DefaultTemplate {
                         ->bind('errors', $errors)
                         ->bind('mensajes', $mensajes)
                         ->bind('pvcomision', $pvcomision)
-                        ->bind('detallepv', $contenido_doc);
+                        ->bind('detallepv', $contenido_doc)
+                        ->bind('poa', $poa);
             } else {
                 $this->template->content = View::factory('no_access');
             }
@@ -716,7 +720,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                         ->bind('tipo', $tipo)
                         ->bind('archivos', $archivos)
                         ->bind('destinatarios', $destinatarios);
-            } else if ($tipo->tipo == 'FUCOV') {
+            } else if ($tipo->tipo == 'FOCOV') {
                 $pvcomision = ORM::factory('pvcomisiones')->where('id_documento', '=', $documento->id)->find();
                 $pvfucov = ORM::factory('pvfucovs')->where('id_documento', '=', $documento->id)->find();
                 $pvtipoviaje = ORM::factory('pvtipoviajes')->where('estado', '=', '1')->find_all();

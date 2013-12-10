@@ -3,7 +3,7 @@
     $(function(){
         calculo_dias();
         var id_tipoviaje = $('#id_tipoviaje').val();
-        if(id_tipoviaje==1 || id_tipoviaje==2){
+        if(id_tipoviaje==1 || id_tipoviaje==2 || id_tipoviaje==3){
             $("#representacion_si").attr("disabled",true);
             $("#representacion_no").attr("checked",true);
         }
@@ -72,7 +72,7 @@
             var id_tipoviaje = $('#id_tipoviaje').val();
             var id_categoria = $('#id_categoria').val();
             //viaje al exterio habilitamos gastos de representacion
-            if(id_tipoviaje==3 || id_tipoviaje==4){
+            if(id_tipoviaje==4 || id_tipoviaje==5){
                 $("#representacion_si").removeAttr("disabled");
                 
             }else{
@@ -137,13 +137,43 @@
             var viatico_dia = $('#viatico_dia').val();
             var nro_dias = $('#nro_dias').val();
             var tipo_moneda = $('#tipo_moneda').val();
+            var h_arribo = $('#hora_arribo').val();
+
             if(tipo_moneda==0)
                 tipo_moneda=' Bs.'
             else
                 tipo_moneda=' $us.'
 
+            var porcentaje_pv=0;
+            if(nro_dias==1){
+                //porcentaje_pv = 100;  // Porcentaje segun reglamento
+                var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*1;
+            } else if(nro_dias>10){
+                var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*10;
+                nro_dias = nro_dias-10;
+                //calculo de dias luego de los 10 dias
+                nro_dias--;
+                var viatico_dia2=parseFloat(viatico_dia)*parseFloat(0.7);
+                
+                monto_parcial += (parseFloat(porcentaje)*parseFloat(viatico_dia2)/100)*parseFloat(nro_dias);
+                if(h_arribo>'12:00:00' && h_arribo<'18:30:01'){
+                     monto_parcial+= (((parseFloat(porcentaje)*parseFloat(viatico_dia2))/100)*70)/100; 
+                }
+                if(h_arribo>'18:30:00'){
+                   monto_parcial+= (parseFloat(porcentaje)*parseFloat(viatico_dia2))/100;  
+                }
+            }else{
+                nro_dias--;
+                var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*parseFloat(nro_dias);
+                 if(h_arribo>'12:00:00' && h_arribo<'18:30:01'){
+                     monto_parcial+= (((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*70)/100; 
+                 }
+                 if(h_arribo>'18:30:00'){
+                     monto_parcial+= (parseFloat(porcentaje)*parseFloat(viatico_dia))/100;  
+                 }
+            }
             //calculo
-            var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*parseFloat(nro_dias);
+            //var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*parseFloat(nro_dias);
             var desc_iva=0;
             if(impuesto == 'Si'){
                 desc_iva = (13*parseFloat(monto_parcial))/100;
@@ -217,9 +247,7 @@
                     if(diferencia == 0){
                         diferencia = 1;
                     } else {
-                        if($("#hora_arribo").val()>'12:00:00'){
                             diferencia +=1;
-                        }
                     }
                     $('#nro_dias').val(diferencia);
                     $('#id_nro_dias').text(diferencia);
@@ -327,7 +355,7 @@
                 var viaje = $('#id_tipoviaje').val();
                 var gasto = $('#gasto_representacion').val();
                 
-                if(viaje > 2){
+                if(viaje > 3){
                     var cambio = $('#tipo_cambio').val();
                     viatico = (viatico * cambio).toFixed(2);
                     pasaje = (pasaje * cambio).toFixed(2);

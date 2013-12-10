@@ -22,7 +22,9 @@ function calculo_viaticos(){
             $('#total_viatico').val(total_viatico.toFixed(2));
             //$("#porcentaje_viatico").val(porcentaje);
     }
-    
+  
+
+            
     
     
 function calculo_dias(){

@@ -203,7 +203,7 @@ $(function(){
     
     $('#frmEditarPre').validate();
     $('.autorizar').live('click', function() {
-        var answer = confirm("Esta seguro de Autorizar el FUCOV? ")
+        var answer = confirm("Esta seguro de Autorizar el FOCOV? ")
         if (answer)
             return true;
         return false;

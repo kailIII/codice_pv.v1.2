@@ -87,7 +87,7 @@ class Controller_Pvpasajes extends Controller_DefaultTemplate {
             $this->request->redirect('documento/detalle/'.$fucov->id_memo);
         }
         else
-            $this->template->content = 'El FUCOV no existe';
+            $this->template->content = 'El FOCOV no existe';
     }
     
     public function action_eliminarpasaje($id = '') {
@@ -124,7 +124,7 @@ class Controller_Pvpasajes extends Controller_DefaultTemplate {
             
         }
         else
-            $this->template->content = 'El FUCOV no existe';
+            $this->template->content = 'El FOCOV no existe';
     }
     
     public function action_autorizarfucov($id = '') {

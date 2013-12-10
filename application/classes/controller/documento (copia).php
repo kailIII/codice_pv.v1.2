@@ -601,7 +601,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                         ->bind('tipo', $tipo)
                         ->bind('archivos', $archivos)
                         ->bind('destinatarios', $destinatarios);
-            } else if ($tipo->tipo == 'FUCOV') {
+            } else if ($tipo->tipo == 'FOCOV') {
                 $pvcomision = ORM::factory('pvcomisiones')->where('id_documento', '=', $documento->id)->find();
                 $pvfucov = ORM::factory('pvfucovs')->where('id_documento', '=', $documento->id)->find();
                 $pvtipoviaje = ORM::factory('pvtipoviajes')->where('estado', '=', '1')->find_all();
