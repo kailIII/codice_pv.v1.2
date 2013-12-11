@@ -163,7 +163,7 @@ $.datepicker.setDefaults($.datepicker.regional['es']);
     $('#frmAutorizar').validate();
     
     $('.autorizar').live('click', function() {
-        var answer = confirm("Esta seguro de Autorizar el FUCOV? ")
+        var answer = confirm("Esta seguro de Autorizar el FOCOV? ")
         if (answer)
             return true;
         return false;
@@ -354,7 +354,7 @@ else{
                 <br />
                 <?php endif?>
     <center>
-        <a href="/pdf/fucov.php?id=<?php echo $pvfucov->id_documento; ?>" class="link pdf" target="_blank" title="Imprimir PDF" >PDF</a>
+        <a href="/pdf/focov.php?id=<?php echo $pvfucov->id_documento; ?>" class="link pdf" target="_blank" title="Imprimir PDF" >PDF</a>
         <?php if($pvfucov->etapa_proceso == 0):?>
              <div id="msg4" class="info2"><b>!!!EL FOCOV NO FUE LLENADO POR EL FUNCIONARIO EN COMISION.</b></div>
         <?php endif;?>

@@ -144,6 +144,9 @@ class Controller_Hojaruta extends Controller_DefaultTemplate {
                         if ($fucov == 1 && $tipo->id=='13') {
                             $documento->referencia = $memo->referencia;
                         }
+                        if ($fucov == 1 && $tipo->id=='14') {
+                            $documento->referencia = 'CERT. POA PASAJES y VIATICOS '.$nur;
+                        }
                         if ($fucov == 1 && $tipo->id=='15') {
                             $documento->referencia = 'CERT. PRESUPUESTARIA PASAJES y VIATICOS '.$nur;
                         }
@@ -196,6 +199,7 @@ class Controller_Hojaruta extends Controller_DefaultTemplate {
                                 $poa->fecha_creacion = date('Y-m-d H:i:s');
                                 $poa->id_documento = $documento->id;
                                 $poa->fecha_modificacion = date('Y-m-d H:i:s');
+                                $poa->tipo_actividad = 'FUNCIONAMIENTO';
                                 $poa->id_tipocontratacion = 6;
                                 $poa->otro_tipocontratacion = 'Pago de Viaticos';
                                 $poa->id_memo = $id_memo;

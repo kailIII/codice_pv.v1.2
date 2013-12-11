@@ -231,10 +231,10 @@ $('#id_tipocontratacion').change(function(){
     </div>
     <center>
         <a href="/pdf/certificacionpoa.php?id=<?php echo $poa->id_documento;?>" class="link pdf" target="_blank" title="Imprimir PDF" >imprimir Certificado</a>
-        <?php if($poa->estado == 0):?>
+        <?php if($poa->auto_poa == 0):?>
             <a href="/pvplanificacion/aprobarpoa/<?php echo $poa->id; ?>" class="autorizar" title="Aprobar POA" ><img src="/media/images/tick.png"/>Aprobar POA</a>
         <?php endif;?>
-        <?php if($poa->estado == 1):?>
+        <?php if($poa->auto_poa == 1):?>
             <a href="/hojaruta/derivar/?id_doc=<?php echo $poa->id_documento; ?>" class="link derivar" title="Derivar a partir del documento, si ya esta derivado muestra el seguimiento" >Derivar</a>
         <?php endif;?>
         <br />
