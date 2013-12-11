@@ -1,18 +1,78 @@
 <script type="text/javascript">
 
-function calculo_viaticos(){
-    var porcentaje = $("#porcentaje_viatico").val();
-    var impuesto = $("#impuesto").val(); //impuesto iva
-    var representacion = $("#representacion").val(); 
-    var viatico_dia = $('#viatico_dia').val();
-    var nro_dias = $('#nro_dias').val();
-//calculo
-    var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*parseFloat(nro_dias);
-    var desc_iva=0;
-    if(impuesto == 'Si'){
-        desc_iva = (13*parseFloat(monto_parcial))/100;
-    }
-    var gastos_rep=0;
+// function calculo_viaticos(){
+//     var porcentaje = $("#porcentaje_viatico").val();
+//     var impuesto = $("#impuesto").val(); //impuesto iva
+//     var representacion = $("#representacion").val(); 
+//     var viatico_dia = $('#viatico_dia').val();
+//     var nro_dias = $('#nro_dias').val();
+// //calculo
+//     var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*parseFloat(nro_dias);
+//     var desc_iva=0;
+//     if(impuesto == 'Si'){
+//         desc_iva = (13*parseFloat(monto_parcial))/100;
+//     }
+//     var gastos_rep=0;
+//             if(representacion == 'Si'){
+//                 gastos_rep = (25*parseFloat(monto_parcial))/100;
+//             }
+//             var total_viatico=parseFloat(monto_parcial)-parseFloat(desc_iva);
+//             $('#gasto_imp').val(desc_iva.toFixed(2));
+//             $('#gasto_representacion').val(gastos_rep.toFixed(2));
+//             $('#total_viatico').val(total_viatico.toFixed(2));
+//             //$("#porcentaje_viatico").val(porcentaje);
+//     }
+  
+ function calculo_viaticos(){
+
+            var porcentaje = $("#porcentaje_viatico").val();
+            var impuesto = $("#impuesto").val(); //impuesto iva
+            var representacion =  $("#representacion").val(); 
+            var viatico_dia = $('#viatico_dia').val();
+            var nro_dias = $('#nro_dias').val();
+            var tipo_moneda = $('#tipo_moneda').val();
+            var h_arribo = $('#hora_arribo').val();
+
+            if(tipo_moneda==0)
+                tipo_moneda=' Bs.'
+            else
+                tipo_moneda=' $us.'
+
+            var porcentaje_pv=0;
+            if(nro_dias==1){
+                //porcentaje_pv = 100;  // Porcentaje segun reglamento
+                var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*1;
+            } else if(nro_dias>10){
+                var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*10;
+                nro_dias = nro_dias-10;
+                //calculo de dias luego de los 10 dias
+                if (h_arribo>'12:00:00') {nro_dias--;}
+                var viatico_dia2=parseFloat(viatico_dia)*parseFloat(0.7);
+                
+                monto_parcial += (parseFloat(porcentaje)*parseFloat(viatico_dia2)/100)*parseFloat(nro_dias);
+                if(h_arribo>'12:00:00' && h_arribo<'18:30:01'){
+                     monto_parcial+= (((parseFloat(porcentaje)*parseFloat(viatico_dia2))/100)*70)/100; 
+                }
+                if(h_arribo>'18:30:00'){
+                   monto_parcial+= (parseFloat(porcentaje)*parseFloat(viatico_dia2))/100;  
+                }
+            }else{
+                if (h_arribo>'12:00:00') {nro_dias--;}
+                var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*parseFloat(nro_dias);
+                 if(h_arribo>'12:00:00' && h_arribo<'18:30:01'){
+                     monto_parcial+= (((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*70)/100; 
+                 }
+                 if(h_arribo>'18:30:00'){
+                     monto_parcial+= (parseFloat(porcentaje)*parseFloat(viatico_dia))/100;  
+                 }
+            }
+            //calculo
+            //var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*parseFloat(nro_dias);
+            var desc_iva=0;
+            if(impuesto == 'Si'){
+                desc_iva = (13*parseFloat(monto_parcial))/100;
+            }
+            var gastos_rep=0;
             if(representacion == 'Si'){
                 gastos_rep = (25*parseFloat(monto_parcial))/100;
             }
@@ -20,11 +80,8 @@ function calculo_viaticos(){
             $('#gasto_imp').val(desc_iva.toFixed(2));
             $('#gasto_representacion').val(gastos_rep.toFixed(2));
             $('#total_viatico').val(total_viatico.toFixed(2));
-            //$("#porcentaje_viatico").val(porcentaje);
-    }
-  
+        }
 
-            
     
     
 function calculo_dias(){
@@ -299,10 +356,10 @@ else{
     <center>
         <a href="/pdf/fucov.php?id=<?php echo $pvfucov->id_documento; ?>" class="link pdf" target="_blank" title="Imprimir PDF" >PDF</a>
         <?php if($pvfucov->etapa_proceso == 0):?>
-             <div id="msg4" class="info2"><b>!!!EL FUCOV NO FUE LLENADO POR EL FUNCIONARIO EN COMISION.</b></div>
+             <div id="msg4" class="info2"><b>!!!EL FOCOV NO FUE LLENADO POR EL FUNCIONARIO EN COMISION.</b></div>
         <?php endif;?>
         <?php if($pvfucov->etapa_proceso == 1):?>
-        <a href="/pvpasajes/autorizarfucov/<?php echo $pvfucov->id; ?>" class="autorizar"  title="Autorizar FUCOV" ><img src="/media/images/tick.png"/>Autorizar FUCOV</a>
+        <a href="/pvpasajes/autorizarfucov/<?php echo $pvfucov->id; ?>" class="autorizar"  title="Autorizar FOCOV" ><img src="/media/images/tick.png"/>Autorizar FOCOV</a>
         <?php endif;?>
         <?php if($pvfucov->etapa_proceso == 2):?>
             <a href="/hojaruta/derivar/?id_doc=<?php echo $pvfucov->id_memo; ?>" class="link derivar" title="Derivar a partir del documento, si ya esta derivado muestra el seguimiento" >Derivar</a>

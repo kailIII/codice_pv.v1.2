@@ -102,7 +102,7 @@ GASTO REP: <?php echo Form::input('gasto_representacion', $pvfucov->gasto_repres
                 <table border ="0">
                     <tr>
                         <td colspan="4"><b>Fuentes de Financiamiento:</b><?php echo Form::select('fuente', $fuente, $pvfucov->id_programatica, array('id' => 'fuente', 'class' => 'required')) ?></td> 
-                        <td><input type="submit" value="Actualizar Fucov" class="uibutton" name="submit" id="crear" title="Actualizar"/></td>
+                        <td><input type="submit" value="Actualizar Focov" class="uibutton" name="submit" id="crear" title="Actualizar"/></td>
                     </tr>
                     <tr>
                         <td colspan="5"><b>Estructura Program&aacute;tica:</b></td>

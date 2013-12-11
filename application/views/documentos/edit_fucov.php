@@ -154,7 +154,6 @@
                 //calculo de dias luego de los 10 dias
                 nro_dias--;
                 var viatico_dia2=parseFloat(viatico_dia)*parseFloat(0.7);
-                
                 monto_parcial += (parseFloat(porcentaje)*parseFloat(viatico_dia2)/100)*parseFloat(nro_dias);
                 if(h_arribo>'12:00:00' && h_arribo<'18:30:01'){
                      monto_parcial+= (((parseFloat(porcentaje)*parseFloat(viatico_dia2))/100)*70)/100; 
@@ -163,7 +162,7 @@
                    monto_parcial+= (parseFloat(porcentaje)*parseFloat(viatico_dia2))/100;  
                 }
             }else{
-                nro_dias--;
+                if (h_arribo>'12:00:00') {nro_dias--;}
                 var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*parseFloat(nro_dias);
                  if(h_arribo>'12:00:00' && h_arribo<'18:30:01'){
                      monto_parcial+= (((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*70)/100; 
@@ -195,6 +194,8 @@
             ajaxppt();
             ///fin 060813
         }
+
+
 
         function calculo_dias(){
             $("#justificacion_finsem").removeAttr("class");
@@ -247,7 +248,9 @@
                     if(diferencia == 0){
                         diferencia = 1;
                     } else {
-                            diferencia +=1;
+                            if($("#hora_arribo").val()>'12:00:00'){
+                                diferencia +=1;
+                            }
                     }
                     $('#nro_dias').val(diferencia);
                     $('#id_nro_dias').text(diferencia);
@@ -261,9 +264,6 @@
             }
         }
 
-
-    
-  
         $.datepicker.regional['es'] = {
             closeText: 'Cerrar',
             prevText: '&#x3c;Ant',
