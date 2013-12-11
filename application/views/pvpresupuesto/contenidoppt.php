@@ -377,7 +377,7 @@ GASTO REP: <?php echo Form::input('gasto_representacion', $pvfucov->gasto_repres
     </form>
     
     <center>
-        <a href="/pdf/certificacionpoa.php?id=<?php echo $pre->id_documento;?>&f=<?php echo $pre->id?>" class="link pdf" target="_blank" title="Imprimir PDF" >imprimir Certificado</a>
+        <a href="/pdf/certificacionppt.php?id=<?php echo $pre->id_documento;?>" class="link pdf" target="_blank" title="Imprimir PDF" >imprimir Certificado</a>
         <?php if($pre->auto_pre == 0):?>
             <a href="/pvpresupuesto/aprobarpre/<?php echo $pre->id?>" class="autorizar" title="Aprobar Presupuesto" ><img src="/media/images/tick.png"/>Aprobar Presupuesto</a>
         <?php endif;?>

@@ -181,6 +181,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                             $id_partida=$_POST['x_id_partida'];
                             $solicitado=$_POST['x_solicitado'];
                             $partida=$_POST['x_partida'];
+                            $codigo = $_POST['x_codigo'];
                             for($f=0;$f<count($id_partida);$f++) 
                             {
                                 $liq = ORM::factory('pvliquidaciones');
@@ -190,6 +191,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                                 $liq->id_partida = $id_partida[$f];
                                 $liq->id_presupuesto = $pre->id;
                                 $liq->partida = $partida[$f];
+                                $liq->cod_partida = $codigo[$f];
                                 $liq->save();
                             }
                         }
@@ -393,15 +395,12 @@ class Controller_documento extends Controller_DefaultTemplate {
                 if ($documento->fucov == 1) {
                     $pvcomision = ORM::factory('pvcomisiones')->where('id_documento','=',$id)->find();
                 }
-                // $poa = array();
-                // if($documento->id_tipo == 14){
-                //     $poa = ORM::factory('poas')->where('id_documento','=',$id);
-                // }
                 /////////////////
 
                 // Modifica Freddy Velasco
                 $contenido_doc = $this->contenido_documento($id,$documento->id_tipo,$documento->id_oficina,$estado,$this->user->nivel);
                 ////////end//////////////
+
 
                 ///rodrigo detallepasajes, 210813
                 //$detallepv = $this->pvmodificar($id, $estado);
@@ -612,6 +611,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                         $id_partida=$_POST['x_id_partida'];
                         $solicitado=$_POST['x_solicitado'];
                         $partida=$_POST['x_partida'];
+                        $codigo=$_POST['x_codigo'];
                         for($f=0;$f<count($id_partida);$f++) 
                         {
                             $liq = ORM::factory('pvliquidaciones');
@@ -621,6 +621,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                             $liq->id_partida = $id_partida[$f];
                             $liq->id_presupuesto = $pre->id;
                             $liq->partida = $partida[$f];
+                            $liq->cod_partida = $codigo[$f];
                             $liq->save();
                         }
                     }
@@ -641,6 +642,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                         $id_partida=$_POST['x_id_partida'];
                         $solicitado=$_POST['x_solicitado'];
                         $partida=$_POST['x_partida'];
+                        $codigo=$_POST['x_codigo'];
                         for($f=0;$f<count($id_partida);$f++) 
                         {
                             $liq = ORM::factory('pvliquidaciones');
@@ -650,6 +652,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                             $liq->id_partida = $id_partida[$f];
                             $liq->id_presupuesto = $pre->id;
                             $liq->partida = $partida[$f];
+                            $liq->cod_partida = $codigo[$f];
                             $liq->save();
                         }
 
@@ -774,6 +777,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                 foreach($liq as $l){
                     $x_id_partida[] = $l->id_partida;
                     $x_partida[] = $l->partida;
+                    $x_codigo[] = $l->cod_partida;
                     $disp = ORM::factory('pvejecuciones')->where('id_programatica','=',$pre->id_programatica)->and_where('id_partida','=',$l->id_partida)->find();
                     $x_disponible[] = $disp->saldo_devengado;///saldo actual disponible
                     $x_solicitado[] = $l->importe_certificado;
@@ -808,6 +812,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                         ->bind('fuente', $fuente)///lista de fuentes de financiamiento
                         ->bind('x_id_partida', $x_id_partida)
                         ->bind('x_partida', $x_partida)
+                        ->bind('x_codigo', $x_codigo)
                         ->bind('x_disponible', $x_disponible)
                         ->bind('x_solicitado', $x_solicitado)
                         ;
@@ -877,6 +882,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                 foreach($liq as $l){
                     $x_id_partida[] = $l->id_partida;
                     $x_partida[] = $l->partida;
+                    $x_codigo[] = $l->cod_partida;
                     $disp = ORM::factory('pvejecuciones')->where('id_programatica','=',$pre->id_programatica)->and_where('id_partida','=',$l->id_partida)->find();
                     $x_disponible[] = $disp->saldo_devengado;///saldo actual disponible
                     $x_solicitado[] = $l->importe_certificado;
@@ -905,6 +911,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                          ->bind('partidas',$partidas)
                          ->bind('x_id_partida', $x_id_partida)
                          ->bind('x_partida', $x_partida)
+                         ->bind('x_codigo', $x_codigo)
                          ->bind('x_disponible', $x_disponible)
                          ->bind('x_solicitado', $x_solicitado)
                         ;
@@ -975,7 +982,6 @@ class Controller_documento extends Controller_DefaultTemplate {
         $cambio = ORM::factory('pvtipocambios')->find_all();
             foreach($cambio as $c)
                  $tipo_cambio = $c;
-
         if ($nivel == 6) {
             $memo = ORM::factory('documentos')->where('id','=',$id)->find();
             if($estado =='2' && $memo->fucov == '1' && $memo->loaded()){
@@ -1028,7 +1034,6 @@ class Controller_documento extends Controller_DefaultTemplate {
                 $tipocontratacion[''] = 'Seleccionar Tipo Contratacion';
                 foreach ($tipoc as $tc){$tipocontratacion[$tc->id] = $tc->nombre;}
                 $mensajes = '';
-                
                 $contenido = View::factory('pvplanificacion/contenidopoa')
                         ->bind('mensajes', $mensajes)
                         ->bind('poa', $poa)
@@ -1039,7 +1044,8 @@ class Controller_documento extends Controller_DefaultTemplate {
                         ->bind('det_obj_esp', $detalleespecifico)
                         ->bind('det_act', $detalleactividad)
                         ->bind('tipocontratacion', $tipocontratacion)
-                        ->bind('ue_poa', $uejecutorapoa);
+                        ->bind('ue_poa', $uejecutorapoa)
+                ;
         }
         }
         if ($nivel == 7) {

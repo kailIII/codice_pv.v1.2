@@ -49,6 +49,7 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
     
     public  function action_lista(){
         $mensajes=array();
+        $userpoa = $this->user;
         $ofi = ORM::factory('oficinas')->where('id_entidad','=',$this->user->id_entidad)->find_all();
         $oficinas[''] = 'TODAS LAS OFICINAS';
         foreach($ofi as $o)
@@ -62,7 +63,7 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
                 $fecha1=$_POST['fecha2'].' 23:59:00';
                 $fecha2=$_POST['fecha1'].' 00:00:00';
             }
-            $o_poas=New Model_Pvpoas();
+            $o_poas=New Model_Poas();
             $results=$o_poas->avanzada($this->user->id, $this->user->id_entidad, $_POST['funcionario'],$_POST['oficina'],$fecha1,$fecha2);
             if(!sizeof($results)>0)
                 $mensajes['No Encontrado!'] = 'La búsqueda no produjo resultados.';
@@ -72,23 +73,25 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
                                         ->bind('autorizados',$results)
                                         ->bind('oficinas', $oficinas)
                     ->bind('mensajes', $mensajes)
+                    ->bind('userpoa', $userpoa)
                      ;
         }
         else{
-            $oAut = new Model_Pvpoas();
+            $oAut = new Model_Poas();
             $autorizados = $oAut->listaautorizados($this->user->id, $this->user->id_entidad);//lista de solicitudes autorizadas
             $this->template->styles = array('media/css/jquery-ui-1.8.16.custom.css' => 'screen', 'media/css/tablas.css' => 'screen');
             $this->template->scripts = array('tinymce/tinymce.min.js', 'media/js/jquery-ui-1.8.16.custom.min.js', 'media/js/jquery.timeentry.js','media/js/jquery.tablesorter.min.js'); ///
             $this->template->content = View::factory('pvplanificacion/lista')
-                ->bind('autorizados', $autorizados)
-                ->bind('oficinas', $oficinas)
+                    ->bind('autorizados', $autorizados)
+                    ->bind('oficinas', $oficinas)
                     ->bind('mensajes', $mensajes)
+                    ->bind('userpoa', $userpoa)
                 ;
         }
     }
     
     public function action_detalleautorizados($id = ''){
-        $memo = ORM::factory('documentos',$id);
+        /*$memo = ORM::factory('documentos',$id);
         $pvfucov = ORM::factory('pvfucovs')->where('id_memo','=',$id)->find();
         $pvpoas = ORM::factory('pvpoas')->where('id_fucov','=',$pvfucov->id)->find();
         $pvgestion = ORM::factory('pvogestiones',$pvpoas->id_obj_gestion);
@@ -103,6 +106,29 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
                 ->bind('pvgestion',$pvgestion)
                 ->bind('pvespecifico',$pvespecifico)
                 ->bind('pvactividad',$pvactividad)
+                ;*/
+        
+        $poas = ORM::factory('poas')->where('id_documento','=',$id)->find();
+        $documento = ORM::factory('documentos',$id);
+        $of_solicita = ORM::factory('oficinas',$documento->id_oficina);
+        $gestion = ORM::factory('pvogestiones',$poas->id_obj_gestion);
+        $especifico = ORM::factory('pvoespecificos',$poas->id_obj_esp);
+        $actividad = ORM::factory('pvactividades',$poas->id_actividad);
+        ///tipo de contratacion
+        $tipo_con = ORM::factory('poatipocontrataciones',$poas->id_tipocontratacion);
+        ///verificar si es de pasajes y viaticos
+        $pvfucov = ORM::factory('pvfucovs')->where('id_memo', '=', $poas->id_memo)->find();
+        $this->template->styles = array('media/css/jquery-ui-1.8.16.custom.css' => 'screen', 'media/css/tablas.css' => 'screen');
+        $this->template->scripts = array('tinymce/tinymce.min.js', 'media/js/jquery-ui-1.8.16.custom.min.js', 'media/js/jquery.timeentry.js','media/js/jquery.tablesorter.min.js'); ///
+        $this->template->content = View::factory('pvplanificacion/detalleautorizados')
+                ->bind('poa', $poas)
+                ->bind('gestion',$gestion)
+                ->bind('especifico',$especifico)
+                ->bind('actividad',$actividad)
+                ->bind('documento',$documento)
+                ->bind('of_solicita',$of_solicita)
+                ->bind('pvfucov',$pvfucov)
+                ->bind('tipo_con',$tipo_con)
                 ;
     }
     
@@ -134,7 +160,7 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
                                         &larr;<a onclick="javascript:history.back(); return false;" href="#" style="font-weight: bold; text-decoration: underline;  " > Regresar<a/></p></div>';
         }
         else
-                $this->template->content = 'El FOCOV no existe';
+                $this->template->content = 'El FUCOV no existe';
     }
     
     public function action_autorizarfucov($id = '') {
@@ -431,7 +457,7 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
             $poa->fecha_aprobacion = date('Y-m-d H:i:s');
             $poa->id_user_auto = $this->user->id;
             $poa->nro_poa = $nur;
-            $poa->estado = 1;
+            $poa->auto_poa = 1;
             $poa->save();
             $this->request->redirect('documento/detalle/'.$poa->id_documento);
         }

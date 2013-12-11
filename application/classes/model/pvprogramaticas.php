@@ -147,7 +147,7 @@ class Model_Pvprogramaticas extends ORM{
         $result .= "</tbody></table>";
         return $result;
     }
-///modificado por rodrigo - 29-11-13 lista de prtidas de gatos por oficina
+///modificado por rodrigo - 29-11-13 lista de prtidas de gastos por oficina
     public function partidas($id){
         $sql = "select a.id, a.codigo, a.partida
                 from pvprogramaticas p 
@@ -171,26 +171,5 @@ class Model_Pvprogramaticas extends ORM{
                 and a.estado = 1";
         return $this->_db->query(Database::SELECT, $sql, TRUE);
     }
-    /*
-
-    
-
-       
-
-    
-    public function listadetallefuentes($id){
-        $sql = "select p.id, concat(p.codigo_entidad,'-',da.codigo_da,'-',ue.codigo_ue,'-' , prog.codigo,'-', proy.codigo,'-', act.codigo,'-',fte.codigo,'-', org.codigo,' : ', act.actividad) actividad
-                from pyvprogramatica p 
-                inner join pyvunidadfuncional da on p.id_da = da.id
-                inner join pyvunidadfuncional ue on p.id_ue = ue.id
-                inner join pyvactividadppt act on p.id_actividadppt = act.id 
-                inner join pyvfuente fte on p.id_fuente = fte.id
-                inner join pyvorganismo org on p.id_organismo = org.id
-                inner join pyvprograma prog on p.id_programa = prog.id
-                inner join pyvproyecto proy on p.id_proyecto = proy.id
-                where p.id = $id";
-        return $this->_db->query(Database::SELECT, $sql, TRUE);
-    }
-    */    
 }
 ?>

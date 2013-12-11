@@ -151,12 +151,6 @@ public function action_addejecucionppt(){
         foreach($dadmin as $d)
             $da[$d->id] = $d->ppt_cod_da.' &nbsp;&nbsp;-&nbsp;&nbsp; '.$d->oficina;
         
-        //Unidad Ejecutora
-        /*$uEjec = new Model_Oficinas();
-        $uejec = $uEjec->ueppt($this->user->id_oficina);
-        foreach($uejec as $d)
-            $ue[$d->id] = $d->ppt_cod_ue.' &nbsp;&nbsp;-&nbsp;&nbsp; '.$d->oficina;*/
-        
         //Programa
         $programa = ORM::factory('pvprogramas')->where('estado','=',1)->find_all();
         $prog[''] = 'Seleccione un Programa';
@@ -265,71 +259,6 @@ public function action_movimiento($id = ''){///saldo partidas
     }
 }
 
-/*public function action_editarfucov($id = '') {
-        $fucov = ORM::factory('pvfucovs')->where('id','=',$id)->find();
-        if ($fucov->loaded()) {
-            if ($fucov->etapa_proceso <= 3){
-            $fucov->id_programatica = $_POST['fuente'];
-            $fucov->save();
-            $this->request->redirect('documento/detalle/'.$fucov->id_memo);
-            }
-            else
-            $this->template->content = '<b>EL DOCUMENTO YA FUE AUTORIZADO Y NO SE PUEDE MODIFICAR.</b><div class="info" style="text-align:center;margin-top: 50px; width:800px">
-                                        <p><span style="float: left; margin-right: .3em;" class=""></span>    
-                                        &larr;<a onclick="javascript:history.back(); return false;" href="#" style="font-weight: bold; text-decoration: underline;  " > Regresar<a/></p></div>';    
-        }
-        else
-            $this->template->content = 'El FUCOV no existe';
-    }
-
-public function action_autorizarfucov($id = '') {
-        $pvfucov = ORM::factory('pvfucovs')->where('id','=',$id)->find();
-        if ($pvfucov->loaded()) {
-            if($pvfucov->id_tipoviaje == 1 || $pvfucov->id_tipoviaje == 2){
-                $partidas = array("22110" => $pvfucov->total_pasaje, "22210" => $pvfucov->total_viatico);
-            }
-            else{
-                //$tipo_cambio = ORM::factory('pvtipocambios')->select(array(DB::expr('MAX(id)'), 'cambio_venta'))->find();
-                ///rodrigo-PPT
-                $cambio = ORM::factory('pvtipocambios')->find_all();
-                foreach($cambio as $c)
-                    $tipo_cambio = $c;
-                $pasaje = round($pvfucov->total_pasaje * $tipo_cambio->cambio_venta,2);
-                $viatico = round($pvfucov->total_viatico * $tipo_cambio->cambio_venta,2);
-                $gasto = round($pvfucov->gasto_representacion * $tipo_cambio->cambio_venta,2);
-                $partidas = array("22120" => $pasaje, "22220" => $viatico, "26910" => $gasto );
-            }
-            foreach($partidas as $key=>$value){
-                $partida = ORM::factory('pvpartidas')->where('codigo','=',$key)->find();
-                $ejecucion = ORM::factory('pvejecuciones')->where('id_partida','=',$partida->id)->and_where('id_programatica','=',$pvfucov->id_programatica)->find();
-                $liquidacion = ORM::factory('pvliquidaciones');
-                $liquidacion->fecha_creacion = date("Y-m-d H:i:s");
-                $liquidacion->importe_certificado = $value;
-                $liquidacion->cs_vigente = $ejecucion->vigente;
-                $liquidacion->cs_preventivo = $ejecucion->preventivo;
-                $liquidacion->cs_comprometido = $ejecucion->comprometido;
-                $liquidacion->cs_devengado = $ejecucion->devengado;
-                $liquidacion->cs_saldo_devengado = $ejecucion->saldo_devengado;
-                $liquidacion->cs_pagado = $ejecucion->pagado;
-                $liquidacion->cs_saldo_pagar = $ejecucion->saldo_pagar;
-                $liquidacion->estado = 1;
-                $liquidacion->cod_partida= $partida->codigo;
-                $liquidacion->partida = $partida->partida;
-                $liquidacion->id_partida = $partida->id;
-                $liquidacion->id_fucov = $pvfucov->id;
-                $liquidacion->save();
-                $ejecucion->preventivo = $ejecucion->preventivo + $value;
-                $ejecucion->saldo_devengado = $ejecucion->saldo_devengado - $value;
-                $ejecucion->save();
-            }
-            $pvfucov->etapa_proceso = 4;
-            $pvfucov->save();
-            $this->request->redirect('documento/detalle/'.$pvfucov->id_memo);
-    }
-    else
-        $this->template->content = 'El documento no existe';
-}*/
-
 public  function action_lista(){
         $ofi = ORM::factory('oficinas')->where('id_entidad','=',$this->user->id_entidad)->find_all();
         $oficinas[''] = 'TODAS LAS OFICINAS';
@@ -345,20 +274,12 @@ public  function action_lista(){
                 $fecha2=$_POST['fecha1'].' 00:00:00';
             }
             $o_liquidados=New Model_Pvliquidaciones();
-            //$ofi = ORM::factory('oficinas')->where('id_entidad','=',$this->user->id_entidad)->find_all();
-            //$oficinas[''] = 'TODAS LAS OFICINAS';
-            //foreach($ofi as $o)
-            //$oficinas [$o->id] = $o->oficina;
-            //$res = 'RESULTADOSasdasdasd';            
             $results=$o_liquidados->avanzada($this->user->id_entidad, $_POST['funcionario'],$_POST['oficina'],$fecha1,$fecha2);
-            ///$res=$o_pasajes->consulta($this->user->id_entidad, $_POST['funcionario'],$_POST['boleto'],$_POST['oficina'],$fecha1,$fecha2);
-            //$this->template->styles=array('media/css/tablas.css'=>'screen');
             $this->template->styles = array('media/css/jquery-ui-1.8.16.custom.css' => 'screen', 'media/css/tablas.css' => 'screen');
             $this->template->scripts = array('tinymce/tinymce.min.js', 'media/js/jquery-ui-1.8.16.custom.min.js', 'media/js/jquery.timeentry.js','media/js/jquery.tablesorter.min.js'); ///
             $this->template->content=View::factory('pvpresupuesto/lista')
                                         ->bind('autorizados',$results)
                                         ->bind('oficinas', $oficinas)
-                                        ///->bind('sql', $res)
                      ;
         }
         else{
@@ -373,21 +294,33 @@ public  function action_lista(){
         }
     }
     public function action_detalleautorizados($id = ''){
-        $memo = ORM::factory('documentos',$id);
-        $pvfucov = ORM::factory('pvfucovs')->where('id_memo','=',$id)->find();
+        $documento = ORM::factory('documentos',$id);
+        $pre = ORM::factory('presupuestos')->where('id_documento','=',$documento->id)->find();
+        $uEjeppt = New Model_oficinas();
+        $uejecutorapre = $uEjeppt->uejecutorappt($this->user->id_oficina);
+        $liq = ORM::factory('pvliquidaciones')->where('id_presupuesto','=',$pre->id)->and_where('estado','=',1)->find_all();
+        foreach($liq as $l){
+            $x_partida[] = $l->partida;
+            $x_codigo[] = $l->cod_partida;
+            //$disp = ORM::factory('pvejecuciones')->where('id_programatica','=',$pre->id_programatica)->and_where('id_partida','=',$l->id_partida)->find();
+            $x_disponible[] = $l->cs_saldo_devengado;///saldo actual disponible
+            $x_solicitado[] = $l->importe_certificado;
+        }
         $oPpt = new Model_Pvprogramaticas();
-        $det = $oPpt->detallesaldopresupuesto($pvfucov->id_programatica);///detalle de la estructura programatica
+        $det = $oPpt->detallesaldopresupuesto($pre->id_programatica);///detalle de la estructura programatica
         foreach ($det as $d)
             $detalle = $d;
-        $oPart = New Model_Pvprogramaticas();
-            $pvliquidacion = $oPart->pptliquidado($pvfucov->id,0,0,0,0,0);
         $this->template->styles = array('media/css/jquery-ui-1.8.16.custom.css' => 'screen', 'media/css/tablas.css' => 'screen');
         $this->template->scripts = array('tinymce/tinymce.min.js', 'media/js/jquery-ui-1.8.16.custom.min.js', 'media/js/jquery.timeentry.js','media/js/jquery.tablesorter.min.js'); ///
         $this->template->content = View::factory('pvpresupuesto/detalleautorizados')
-                ->bind('memo',$memo)
-                ->bind('pvfucov', $pvfucov)
+                ->bind('pre', $pre)         ///presupuesto
+                ->bind('documento', $documento)
+                ->bind('uejecutorapre',$uejecutorapre)
+                ->bind('x_partida', $x_partida)
+                ->bind('x_codigo', $x_codigo)
+                ->bind('x_disponible', $x_disponible)
+                ->bind('x_solicitado', $x_solicitado)
                 ->bind('detalle', $detalle)
-                ->bind('pvliquidacion', $pvliquidacion)
                 ;
     }
     //Changed by Rodrigo
@@ -426,7 +359,6 @@ public  function action_lista(){
                 else
                     $id_doc = $pre->id_documento;
                 $this->request->redirect('documento/detalle/'.$id_doc);
-                //$this->request->redirect('documento/detalle/'.$pre->id_documento);
                 }
             else
                 $this->template->content = '<b>EL DOCUMENTO YA FUE AUTORIZADO Y NO SE PUEDE MODIFICAR.</b><div class="info" style="text-align:center;margin-top: 50px; width:800px">
@@ -439,11 +371,31 @@ public  function action_lista(){
 
     public function action_aprobarpre($id = '') {
         $pre = ORM::factory('presupuestos')->where('id','=',$id)->find();
+        ///en el caso del fucov, los montos pueden encontrarse en dolares
+        //$pvfucov = ORM::factory('pvfucovs')->where('id','=',$id)->find();
         if ($pre->loaded()) {
             $pre->fecha_aprobacion = date('Y-m-d H:i:s');
             $pre->id_userauto = $this->user->id;
             $pre->auto_pre = 1;
             $pre->save();
+            ///actualizar tabla ejecuciones con los nuevos saldos
+            $liq=ORM::factory('pvliquidaciones')->where('id_presupuesto','=',$id)->find_all();
+            foreach($liq as $l){
+                $ejecucion = ORM::factory('pvejecuciones')->where('id_partida','=',$l->id_partida)->and_where('id_programatica','=',$pre->id_programatica)->find();
+                ///guardar el estado actual del la tabla pvejecuciones en liquidaciones
+                $l->cs_vigente = $ejecucion->vigente;
+                $l->cs_preventivo = $ejecucion->preventivo;
+                $l->cs_comprometido = $ejecucion->comprometido;
+                $l->cs_devengado = $ejecucion->devengado;
+                $l->cs_saldo_devengado = $ejecucion->saldo_devengado;
+                $l->cs_pagado = $ejecucion->pagado;
+                $l->cs_saldo_pagar = $ejecucion->saldo_pagar;
+                $l->save();
+                ///restar lo solicitado en la tabla ejecuciones
+                $ejecucion->preventivo = $ejecucion->preventivo + $l->importe_certificado;
+                $ejecucion->saldo_devengado = $ejecucion->saldo_devengado - $l->importe_certificado;
+                $ejecucion->save();
+            }
             $this->request->redirect('documento/detalle/'.$pre->id_documento);
         }
     }

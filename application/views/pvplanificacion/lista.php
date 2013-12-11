@@ -104,7 +104,8 @@ B&uacute;squeda Avanzada
         <tr>
             <th>Hoja de Ruta</th>
             <th>Detalle</th>
-            <th>Fecha Solicitud</th>
+            <th>Fecha Creacion</th>
+            <th>Fecha Aprobacion</th>
             <th>Unidad Funcional</th>
             <th>Nombre Funcionario</th>
             <th>Acci&oacute;n</th>
@@ -114,14 +115,15 @@ B&uacute;squeda Avanzada
     <?php    
     foreach( $autorizados as $aut): ?>
         <tr>
-            <!--<td ><a href="/documento/detalle/<?php echo $aut->id_memo;?>"><?php echo $aut->codigo;?></a></td>
+            <!--<td ><a href="/documento/detalle/<?php //echo $aut->id_memo;?>"><?php //echo $aut->codigo;?></a></td>
             <td ><?php echo $aut->nur;?></td>-->
             <td ><a href="/seguimiento/?nur=<?php echo $aut->nur?>"><?php echo $aut->nur?></a></td>
-            <td ><a href="/pvplanificacion/detalleautorizados/<?php echo $aut->id_memo?>"><?php echo $aut->codigo?></a></td>
-            <td ><?php echo $aut->fecha_certificacion;?></td>
+            <td ><a href="/pvplanificacion/detalleautorizados/<?php echo $aut->id?>"><?php echo $aut->codigo?></a></td>
+            <td ><?php echo $aut->fecha_creacion;?></td>
+            <td ><?php echo $aut->fecha_aprobacion;?></td>
             <td ><?php echo $aut->oficina;?></td>
             <td ><?php echo $aut->nombre;?><br /><b><?php echo $aut->cargo;?></b></td>
-            <td><a href="../../pdf/certificacionpoa.php?id=<?php echo $aut->id_documento.'&f='.$aut->id_fucov;?>" class="uibutton" target="_blank" title="Imprimir Certificado" ><img src="/media/images/print.png"/> Imprimir </a></td>
+            <td><a href="../../pdf/certificacionpoa.php?id=<?php echo $aut->id.'&u='.$userpoa->id;?>" class="uibutton" target="_blank" title="Imprimir Certificado" ><img src="/media/images/print.png"/> Imprimir </a></td>
         </tr>        
     <?php endforeach; ?>
    </tbody>   

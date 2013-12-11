@@ -129,24 +129,29 @@ function eliminarIndicadorFinal()
 //metas
 function anadirMetaFinal()
 {
-    if($('#fuente').val()!='' && $('#partida').val()!='' && $('#solicitado').val()!='' && $('#solicitado').val()!=0){
-        var x,y;
-        x=$("#x_tableMeta");
-        y=$("#x_tableMeta tr");
-        y=y.length;
-        var id_partida = $('#partida').val();
-        var partida = $("#partida option:selected").html();
-        var disponible = $('#disponible').val();
-        var solicitado = $('#solicitado').val();
-        var saldo = $('#saldo').val();
-        x.append("<tr><td><input type='hidden' size='2' name='x_id_partida[] id='x_id_partida_"+y+"' value='"+id_partida+"' readonly/><input type='text' size='35' name='x_partida[]' id='x_partida_"+y+"' value='"+partida+"' readonly/></td><td><input type='text' size='5' name='x_disponible[]' id='x_disponible_"+y+"' value='"+disponible+"' readonly/></td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_"+y+"' value='"+solicitado+"' readonly/></td><td><input type='text' size='5' name='x_saldo[]' id='x_saldo_"+y+"' value='"+saldo+"' readonly/></td></tr>");
-        $('#partida').val('');
-        $('#disponible').val(0);
-        $('#solicitado').val(0);
-        $('#saldo').val(0);
+    var m = $('#solicitado').val();
+        var expreg = /[0-9]$/;
+    if(expreg.test(m)){
+        if($('#fuente').val()!='' && $('#partida').val()!='' && $('#solicitado').val()!='' && $('#solicitado').val()!=0){
+            var x,y;
+            x=$("#x_tableMeta");
+            y=$("#x_tableMeta tr");
+            y=y.length;
+            var id_partida = $('#partida').val();
+            var partida = $("#partida option:selected").html();
+            var part = partida.split(' - ');
+            var disponible = $('#disponible').val();
+            var solicitado = parseFloat($('#solicitado').val());
+            var saldo = $('#saldo').val();
+            x.append("<tr><td><input type='hidden' size='2' name='x_id_partida[]' id='x_id_partida_"+y+"' value='"+id_partida+"' readonly/><input type='text' size='5' name='x_codigo[]' id='x_codigo_"+y+"' value='"+part[0]+"' readonly/> <input type='text' size='35' name='x_partida[]' id='x_partida_"+y+"' value='"+part[1]+"' readonly/></td><td><input type='text' size='5' name='x_disponible[]' id='x_disponible_"+y+"' value='"+disponible+"' readonly/></td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_"+y+"' value='"+solicitado+"' readonly/></td><td><input type='text' size='5' name='x_saldo[]' id='x_saldo_"+y+"' value='"+saldo+"' readonly/></td></tr>");
+            $('#partida').val('');
+            $('#disponible').val(0);
+            $('#solicitado').val(0);
+            $('#saldo').val(0);
+        }
+        else
+            alert('Seleccione Fuente, Partida y Cantidad Solicitada');
     }
-    else
-        alert('Seleccione Fuente, Partida y Cantidad Solicitada');
 }
 function eliminarMetaFinal()
 {
@@ -397,7 +402,7 @@ function eliminarMetaFinal()
                             </tr>
                             <tr>
                                 <td></td>
-                                <td><div><img src="/media/images/mail_ham2.png" style="border: none; cursor: pointer" id="metaAdd" title="Adicionar Partida"/></div></td>
+                                <td><div style=" text-align: center" id="metaAdd" ><img src="/media/images/mail_ham2.png" style="border: none; cursor: pointer" />Adicionar Partida</div></td>
                             </tr>
                         </table>
                     </td>
@@ -418,6 +423,7 @@ function eliminarMetaFinal()
                                 <?php for($f=0;$f<count($x_partida);$f++):?>
                                 <tr>
                                     <td><?php echo Form::hidden('x_id_partida[]',$x_id_partida[$f],array('id'=>'x_id_partida_'.$f,'readonly','size'=>2))?>
+                                        <?php echo Form::input('x_codigo[]',$x_codigo[$f],array('id'=>'x_codigo_'.$f,'readonly','size'=>5))?>
                                     <?php echo Form::input('x_partida[]',$x_partida[$f],array('id'=>'x_partida_'.$f,'readonly','size'=>35))?></td>
                                     <td><?php echo Form::input('x_disponible[]',$x_disponible[$f],array('id'=>'x_disponible_'.$f,'readonly','size'=>5))?></td>
                                     <td><?php echo Form::input('x_solicitado[]',$x_solicitado[$f],array('id'=>'x_solicitado_'.$f,'readonly','size'=>5))?></td>
@@ -426,7 +432,7 @@ function eliminarMetaFinal()
                                 <?php endfor?>
                             </tbody>
                         </table>
-                        <div style="text-align: center;"><img src="/media/images/delete.png" style="border: none; cursor: pointer" id="metaDelete" title="Eliminar Ultima Partida"/></div>
+                        <div style="text-align: center;"><div style="text-align: center;" id="metaDelete" ><img src="/media/images/delete.png" style="border: none; cursor: pointer"/>Eliminar Partida</div></div>
                     </td>
                 </tr>
             </table>

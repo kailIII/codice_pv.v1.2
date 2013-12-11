@@ -908,7 +908,9 @@ function dia_literal($n) {
                                 <?php for($f=0;$f<count($x_partida);$f++):?>
                                 <tr>
                                     <td><?php echo Form::hidden('x_id_partida[]',$x_id_partida[$f],array('id'=>'x_id_partida_'.$f,'readonly','size'=>2))?>
-                                    <?php echo Form::input('x_partida[]',$x_partida[$f],array('id'=>'x_partida_'.$f,'readonly','size'=>35))?></td>
+                                        <?php echo Form::input('x_codigo[]',$x_codigo[$f],array('id'=>'x_codigo_'.$f,'readonly','size'=>5))?>
+                                        <?php echo Form::input('x_partida[]',$x_partida[$f],array('id'=>'x_partida_'.$f,'readonly','size'=>35))?>
+                                    </td>
                                     <td><?php echo Form::input('x_disponible[]',$x_disponible[$f],array('id'=>'x_disponible_'.$f,'readonly','size'=>5))?></td>
                                     <td><?php echo Form::input('x_solicitado[]',$x_solicitado[$f],array('id'=>'x_solicitado_'.$f,'readonly','size'=>5))?></td>
                                     <td><?php echo Form::input('x_saldo[]',$x_disponible[$f] - $x_solicitado[$f],array('id'=>'x_saldo_'.$f,'readonly','size'=>5))?></td>

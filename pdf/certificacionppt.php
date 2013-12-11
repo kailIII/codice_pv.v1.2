@@ -4,7 +4,6 @@ require_once('../libs/tcpdf/config/lang/eng.php');
 require_once('../libs/tcpdf/tcpdf.php');
 require_once('../db/dbclass.php');
 $id = $_GET['id'];
-$id_fucov = $_GET['f'];
 // Extend the TCPDF class to create custom Header and Footer
 class MYPDF extends TCPDF {
     
@@ -86,8 +85,8 @@ $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
 //set margins
-$pdf->SetMargins(20, 33, 20);
-//$pdf->SetMargins(20, PDF_MARGIN_TOP, 20);
+//$pdf->SetMargins(20, 33, 20);
+$pdf->SetMargins(20, PDF_MARGIN_TOP, 20);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
@@ -107,18 +106,27 @@ $pdf->AddPage();
 $nombre = 'cert_ppto';
 try {
     $dbh = New db();
-    //FUCOV
-    $stmt = $dbh->prepare("select * from pvfucovs where id = '$id_fucov'");
-    $stmt->execute();    
-    $fucov = $stmt->fetch(PDO::FETCH_OBJ) ;
-    
-    $stmt = $dbh->prepare("SELECT * FROM documentos WHERE id='$fucov->id_documento'");
+    $stmt = $dbh->prepare("SELECT * FROM documentos d 
+                               INNER JOIN tipos t ON d.id_tipo=t.id
+                               WHERE d.id='$id'");
     $stmt->execute();
-    $doc = $stmt->fetch(PDO::FETCH_OBJ);
-
+    $rs = $stmt->fetch(PDO::FETCH_OBJ);
+    $mes = (int) date('m', strtotime($rs->fecha_creacion));
+    $meses = array(1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre');
+    
+    ///presupuesto
+    $stmt = $dbh->prepare("SELECT * FROM presupuestos WHERE id_documento=$id");
+    $stmt->execute();
+    $pre = $stmt->fetch(PDO::FETCH_OBJ);
+    
+    ///usuario de presupuesto
+    $stmt = $dbh->prepare("SELECT * FROM users WHERE id=$pre->id_userauto");
+    $stmt->execute();
+    $userppt = $stmt->fetch(PDO::FETCH_OBJ);
+    
     $stmt = $dbh->prepare("select ofi.id id_oficina, ofi.oficina, ofi.sigla sigla_oficina, ofi.ppt_unid_ejecutora ue, ofi.ppt_da da, ent.id id_entidad, ent.entidad, ent.sigla sigla_entidad
 from oficinas ofi inner join entidades ent on ofi.id_entidad = ent.id
-where ofi.id = '$doc->id_oficina'");
+where ofi.id = '$rs->id_oficina'");
     $stmt->execute();
     $ofi = $stmt->fetch(PDO::FETCH_OBJ);///oficina y entidad solicitante
     
@@ -136,11 +144,11 @@ where ofi.id = '$doc->id_oficina'");
     }
     $color = "#CBCBCB";
         $pdf->SetFont('Helvetica', 'B', 15);
-        $pdf->write(0,'CERTIFICACIÓN PRESUPUESTARIA '.date("Y", strtotime($doc->fecha_creacion)),'',0,'C');
+        $pdf->write(0,'CERTIFICACIÓN PRESUPUESTARIA '.date("Y", strtotime($rs->fecha_creacion)),'',0,'C');
         
         $pdf->Ln();
         $pdf->SetFont('Helvetica', '', 13);
-        $pdf->write(0,$doc->nur,'',0,'C');
+        $pdf->write(0,$rs->nur,'',0,'C');
         
         $pdf->Ln(10);
         $pdf->SetFont('Helvetica', 'U', 12);
@@ -148,20 +156,20 @@ where ofi.id = '$doc->id_oficina'");
         $pdf->Ln(10);
 
         $pdf->SetFont('Helvetica', '', 10);
-        $antecedentes = "<p style=\"text-align: justify;\">Mediante Hoja de Seguimiento $doc->nur, se remite el FOCOV $doc->codigo, del Sr(a). $doc->nombre_remitente,  $doc->cargo_remitente, solicitando viaticos por viaje a realizar a la ciudad de $fucov->destino, con el objeto de: $doc->referencia.</p>";
+        //$antecedentes = "<p style=\"text-align: justify;\">Mediante Hoja de Seguimiento $doc->nur, se remite el FUCOV $doc->codigo, del Sr(a). $doc->nombre_remitente,  $doc->cargo_remitente, solicitando viaticos por viaje a realizar a la ciudad de $fucov->destino, con el objeto de: $doc->referencia.</p>";
         //$pdf->write(0, $antecedentes, '', 0, 'L');
-        $pdf->writeHTML(utf8_encode($antecedentes), false, false, false);
+        $pdf->writeHTML(utf8_encode($pre->antecedente), false, false, false);
         $pdf->Ln(10);
-        
+
         $pdf->SetFont('Helvetica', 'U', 12);
         $pdf->write(0, 'ANALISIS Y/O VERIFICACION:', '', 0, 'L');
         $pdf->Ln(10);
-        
+
         $pdf->SetFont('Helvetica', '', 10);
-        $antecedentes = "<p style=\"text-align: justify;\">Analizada la Presente Solicitud se CERTIFICA que existe el requerimiento de inscripción en el Presupuesto de la Gestión ".date("Y", strtotime($doc->fecha_creacion))." para llevar adelante esta actividad, con cargo a:</p>";
+        $antecedentes = "<p style=\"text-align: justify;\">Analizada la Presente Solicitud se CERTIFICA que existe el requerimiento de inscripción en el Presupuesto de la Gestión ".date("Y", strtotime($rs->fecha_creacion))." para llevar adelante esta actividad, con cargo a:</p>";
         $pdf->writeHTML($antecedentes, false, false, false);
         $pdf->Ln(10);
-        
+
         $pdf->SetFont('Helvetica', 'U', 12);
         $pdf->write(0, 'ESTRUCTURA PROGRAMATICA', '', 0, 'L');
         $pdf->Ln(10);
@@ -173,7 +181,7 @@ inner join pvproyectos proy on p.id_proyecto = proy.id
 inner join pvpptactividades act on p.id_actividadppt = act.id
 inner join pvorganismos org on p.id_organismo = org.id
 inner join pvfuentes fte on p.id_fuente = fte.id
-where p.id = $fucov->id_programatica");
+where p.id = $pre->id_programatica");
     $stmt->execute();
     $ppt = $stmt->fetch(PDO::FETCH_OBJ) ;
     ///se imprime proyecto o actividad pero no ambos
@@ -227,21 +235,21 @@ where p.id = $fucov->id_programatica");
         </table>";
         $pdf->writeHTML(utf8_encode($html), false, false, false);
         $pdf->Ln(5);
-        $stmt = $dbh->prepare("select * from pvliquidaciones where id_fucov = $fucov->id");
+        $stmt = $dbh->prepare("select * from pvliquidaciones where id_presupuesto = $pre->id");
         $stmt->execute();
         $html = "<table border=\"1px\" cellpadding=\"3\">
-                    <tr>
-                        <td style = \" width: 10%;\" bgcolor=\"$color\">Partida</td>
-                        <td style = \" width: 40%;\" bgcolor=\"$color\">Descripci&oacute;n</td>
-                        <td style = \" width: 20%;\" bgcolor=\"$color\">Saldo Disponible</td>
-                        <td style = \" width: 20%;\" bgcolor=\"$color\">Importe Certificado</td>
-                        <td style = \" width: 10%;\" bgcolor=\"$color\">Saldo Actual</td>
+                    <tr bgcolor=\"$color\">
+                        <td style = \" width: 10%;\">Partida</td>
+                        <td style = \" width: 40%;\">Descripci&oacute;n</td>
+                        <td style = \" width: 20%;\">Saldo Disponible</td>
+                        <td style = \" width: 20%;\">Importe Certificado</td>
+                        <td style = \" width: 10%;\">Saldo Actual</td>
                     </tr>";
         $c = 0;
-        while ($ppt = $stmt->fetch(PDO::FETCH_OBJ)) {
-                $total = $ppt->cs_saldo_devengado - $ppt->importe_certificado;
-                $html = $html."<tr><td>$ppt->cod_partida</td><td>$ppt->partida</td><td>$ppt->cs_saldo_devengado</td>
-                        <td>$ppt->importe_certificado</td><td>$total</td>
+        while ($partidas = $stmt->fetch(PDO::FETCH_OBJ)) {
+                $total = $partidas->cs_saldo_devengado - $partidas->importe_certificado;
+                $html = $html."<tr><td>$partidas->cod_partida</td><td>$partidas->partida</td><td>$partidas->cs_saldo_devengado</td>
+                        <td>$partidas->importe_certificado</td><td>$total</td>
                         </tr>";
                 $c++;
         }
@@ -261,11 +269,15 @@ where p.id = $fucov->id_programatica");
         $meses = array(1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre');
         $fecha_certificacion = date('d', strtotime(date("d-m-Y"))) . ' de ' . $meses[$mes] . ' de ' . date('Y', strtotime(date("d-m-Y")));
         $html = "<p style=\"text-align: justify;\">&Eacute;ste certificado s&oacute;lo refrenda y verifica la existencia de saldos presupuestarios. En este sentido, se hace notar que la verificaci&oacute;n
-        de dicha actividad est&eacute; incorporada en el Programa Operativo Anual Gesti&oacute;n ".date("Y", strtotime($doc->fecha_creacion)).", es de plena responsabilidad de la 
+        de dicha actividad est&eacute; incorporada en el Programa Operativo Anual Gesti&oacute;n ".date("Y", strtotime($rs->fecha_creacion)).", es de plena responsabilidad de la 
         Unidad Solicitante, as&iacute; como la tramitaci&oacute;n de la cuota de devengamiento correspondiente.
         <br />Es Cuanto se certifica para fines consiguientes.</p>
         <br /><br />La Paz, ".$fecha_certificacion.".";
         $pdf->Ln(10);
+        $pdf->writeHTML($html, false, false, false);
+        
+        $html="<div style=\"text-align: center;\">$userppt->nombre <br /><b>$userppt->cargo</b></div>";
+        $pdf->Ln(20);
         $pdf->writeHTML($html, false, false, false);
     
 } catch (PDOException $e) {
