@@ -203,7 +203,7 @@ $(function(){
     
     $('#frmEditarPre').validate();
     $('.autorizar').live('click', function() {
-        var answer = confirm("Esta seguro de Autorizar el FOCOV? ")
+        var answer = confirm("Esta seguro de aprobar el documento? ")
         if (answer)
             return true;
         return false;
@@ -226,6 +226,17 @@ TOTAL VIATICOS: <?php echo Form::input('total_viatico', $pvfucov->total_viatico,
 GASTO REP: <?php echo Form::input('gasto_representacion', $pvfucov->gasto_representacion, array('id' => 'gasto_representacion', 'size' => 8,'readonly')); echo $moneda?>
 <?php echo Form::hidden('id_tipoviaje', $pvfucov->id_tipoviaje, array('id' => 'id_tipoviaje'))?>
 <?php echo Form::hidden('tipo_cambio', $tipo_cambio->cambio_venta, array('id' => 'tipo_cambio'))?>
+    <table border="0" style=" width: 100%">
+            <tr>
+                <td colspan="2">
+                <?php echo Form::label('referencia','Antecedentes')?>
+                <textarea name="antecedente" id="antecedente" style="width: 98%;" readonly>
+<?php echo 'Mediante Hoja de Seguimiento '.$documento->nur.' se remite el '.$documento->codigo.', '; 
+if($user->genero == 'mujer') echo ' de la Sra. '; else echo ' del Sr. '; echo $documento->nombre_remitente.', '.$documento->cargo_remitente;
+echo ' solicitando vi&aacute;ticos por viaje a realizar a la ciudad de: '.$pvfucov->destino.' con el objeto de: '.$documento->referencia;?></textarea>
+            </td>
+        </tr>
+    </table>
 <?php else:?>
     <table border="0" style=" width: 100%">
             <tr>
@@ -377,7 +388,7 @@ GASTO REP: <?php echo Form::input('gasto_representacion', $pvfucov->gasto_repres
     </form>
     
     <center>
-        <a href="/pdf/certificacionppt.php?id=<?php echo $pre->id_documento;?>" class="link pdf" target="_blank" title="Imprimir PDF" >imprimir Certificado</a>
+        <a href="/pdf/pre.php?id=<?php echo $pre->id_documento;?>" class="link pdf" target="_blank" title="Imprimir Certificacion Presupuestaria" >Imprimir Presupuesto</a>
         <?php if($pre->auto_pre == 0):?>
             <a href="/pvpresupuesto/aprobarpre/<?php echo $pre->id?>" class="autorizar" title="Aprobar Presupuesto" ><img src="/media/images/tick.png"/>Aprobar Presupuesto</a>
         <?php endif;?>

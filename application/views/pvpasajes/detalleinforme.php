@@ -5,7 +5,7 @@ $(function(){
         $('#file-word').hide();       
     });
     $('.autorizar').live('click', function() {
-        var answer = confirm("Esta seguro de Autorizar el INFORME? ")
+        var answer = confirm("Esta seguro de Aprobar el Informe de viaje? ");
         if (answer)
             return true;
         return false;
@@ -17,10 +17,8 @@ $(function(){
 td{padding:5px;}    
 </style>
 
-<a href="../../pdf/<?php echo strtolower($tipo->tipo)?>.php?id=<?php echo $d->id; ?>" class="uibutton" target="_blank" title="Imprimir informe" ><img src="/media/images/print.png"/> Imprimir PDF</a>&nbsp;&nbsp;&nbsp;
-<b>D&iacute;as desde el arribo: <?php echo $descargo->dias?></b>
 <div  style="width: 800px;   border: 1px solid #eee; height: 800px;">
-    <table style=" width: 100%;">
+    <table style=" width: 100%;" border ="0">
         <tbody>
             <tr>
                 <td colspan="2" align="center">
@@ -68,9 +66,13 @@ td{padding:5px;}
     </table>
     <hr />
     <br />
+    <b>D&iacute;as desde el retorno del viaje: </b><?php if($descargo->dias <0) echo "A&uacute;n no retorna"; else echo $descargo->dias?>
+    <hr />
+    <br />
     <center>
+    <a href="../../pdf/<?php echo strtolower($tipo->tipo)?>.php?id=<?php echo $d->id; ?>" class="link pdf" target="_blank" title="Imprimir informe" >Imprimir Informe</a>&nbsp;&nbsp;&nbsp;
     <?php if($memo->auto_informe == 0):?>
-        <a href="/pvpasajes/autorizarinforme/<?php echo $memo->id; ?>" class="autorizar"  title="Autorizar" ><img src="/media/images/tick.png"/>Autorizar INFORME</a>
+        <a href="/pvpasajes/aprobarinforme/<?php echo $memo->id; ?>" class="autorizar"  title="Aprobar" ><img src="/media/images/tick.png"/>Aprobar Informe</a>
     <?php else:?>
         <a href="/hojaruta/derivar/?id_doc=<?php echo $memo->id; ?>" class="link derivar" title="Derivar a partir del documento, si ya esta derivado muestra el seguimiento" >Derivar</a>
     <?php endif;?>

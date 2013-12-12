@@ -884,7 +884,7 @@ function dia_literal($n) {
                                     if($user->genero == 'mujer')
                                         $de = ' de la Sra. ';
                                     echo Form::label('referencia','Antecedentes');?>
-                                    <textarea name="antecedente" id="antecedente" style="width: 760px;" rows="5">Mediante Hoja de Seguimiento <?php echo $documento->nur?>, se remite el FOCOV <?php echo $documento->codigo.$de.$documento->nombre_remitente.', '.$documento->cargo_remitente?>, solicitando vi&aacute;ticos por viaje a realizar a la ciudad de <?php echo $pvfucov->destino?>, con el objeto de: <?php echo $documento->referencia?></textarea>
+                                    <textarea name="antecedente" id="antecedente" style="width: 760px;" rows="5" readonly>Mediante Hoja de Seguimiento <?php echo $documento->nur?>, se remite el FOCOV <?php echo $documento->codigo.$de.$documento->nombre_remitente.', '.$documento->cargo_remitente?>, solicitando vi&aacute;ticos por viaje a realizar a la ciudad de <?php echo $pvfucov->destino?>, con el objeto de: <?php echo $documento->referencia?></textarea>
                                 </td>
                             </tr>
                             <tr>

@@ -240,7 +240,7 @@ class Controller_Pvpasajes extends Controller_DefaultTemplate {
         }
     }
     
-    public function action_autorizarinforme($id = ''){
+    public function action_aprobarinforme($id = ''){
         $memo = ORM::factory('documentos',$id);
         if($memo->loaded()){
             $memo->auto_informe = 1;

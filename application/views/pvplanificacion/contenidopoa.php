@@ -230,7 +230,7 @@ $('#id_tipocontratacion').change(function(){
         </form>
     </div>
     <center>
-        <a href="/pdf/certificacionpoa.php?id=<?php echo $poa->id_documento;?>" class="link pdf" target="_blank" title="Imprimir PDF" >imprimir Certificado</a>
+        <a href="/pdf/poa.php?id=<?php echo $poa->id_documento;?>" class="link pdf" target="_blank" title="Imprimir Certificacion POA">Imprimir POA</a>
         <?php if($poa->auto_poa == 0):?>
             <a href="/pvplanificacion/aprobarpoa/<?php echo $poa->id; ?>" class="autorizar" title="Aprobar POA" ><img src="/media/images/tick.png"/>Aprobar POA</a>
         <?php endif;?>

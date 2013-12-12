@@ -235,6 +235,7 @@ where p.id = $pre->id_programatica");
         </table>";
         $pdf->writeHTML(utf8_encode($html), false, false, false);
         $pdf->Ln(5);
+        if($pre->auto_pre == 1){
         $stmt = $dbh->prepare("select * from pvliquidaciones where id_presupuesto = $pre->id");
         $stmt->execute();
         $html = "<table border=\"1px\" cellpadding=\"3\">
@@ -245,20 +246,19 @@ where p.id = $pre->id_programatica");
                         <td style = \" width: 20%;\">Importe Certificado</td>
                         <td style = \" width: 10%;\">Saldo Actual</td>
                     </tr>";
-        $c = 0;
         while ($partidas = $stmt->fetch(PDO::FETCH_OBJ)) {
                 $total = $partidas->cs_saldo_devengado - $partidas->importe_certificado;
                 $html = $html."<tr><td>$partidas->cod_partida</td><td>$partidas->partida</td><td>$partidas->cs_saldo_devengado</td>
                         <td>$partidas->importe_certificado</td><td>$total</td>
                         </tr>";
-                $c++;
         }
         $html = $html."</table>";
         $pdf->writeHTML($html, false, false, false);
-        if ($c == 0){
+        }
+        else{
             $pdf->Ln(3);
             $pdf->SetFont('Helvetica', 'B', 12);        
-            $pdf->Write(0, 'El Presupuesto No Fue Autorizado', '', 0, 'C');
+            $pdf->Write(0, 'El documento no fue aprobado', '', 0, 'C');
             $pdf->Ln(10);
         }
         $pdf->Ln(5);
@@ -277,7 +277,7 @@ where p.id = $pre->id_programatica");
         $pdf->writeHTML($html, false, false, false);
         
         $html="<div style=\"text-align: center;\">$userppt->nombre <br /><b>$userppt->cargo</b></div>";
-        $pdf->Ln(20);
+        $pdf->Ln(25);
         $pdf->writeHTML($html, false, false, false);
     
 } catch (PDOException $e) {

@@ -163,7 +163,7 @@ $.datepicker.setDefaults($.datepicker.regional['es']);
     $('#frmAutorizar').validate();
     
     $('.autorizar').live('click', function() {
-        var answer = confirm("Esta seguro de Autorizar el FOCOV? ")
+        var answer = confirm("Esta seguro de aprobar el FOCOV? ")
         if (answer)
             return true;
         return false;
@@ -354,12 +354,12 @@ else{
                 <br />
                 <?php endif?>
     <center>
-        <a href="/pdf/focov.php?id=<?php echo $pvfucov->id_documento; ?>" class="link pdf" target="_blank" title="Imprimir PDF" >PDF</a>
+        <a href="/pdf/focov.php?id=<?php echo $pvfucov->id_documento; ?>" class="link pdf" target="_blank" title="Imprimir PDF" >Imprimir FOCOV</a>
         <?php if($pvfucov->etapa_proceso == 0):?>
              <div id="msg4" class="info2"><b>!!!EL FOCOV NO FUE LLENADO POR EL FUNCIONARIO EN COMISION.</b></div>
         <?php endif;?>
         <?php if($pvfucov->etapa_proceso == 1):?>
-        <a href="/pvpasajes/autorizarfucov/<?php echo $pvfucov->id; ?>" class="autorizar"  title="Autorizar FOCOV" ><img src="/media/images/tick.png"/>Autorizar FOCOV</a>
+        <a href="/pvpasajes/autorizarfucov/<?php echo $pvfucov->id; ?>" class="autorizar"  title="Aprobar FOCOV" ><img src="/media/images/tick.png"/>Aprobar FOCOV</a>
         <?php endif;?>
         <?php if($pvfucov->etapa_proceso == 2):?>
             <a href="/hojaruta/derivar/?id_doc=<?php echo $pvfucov->id_memo; ?>" class="link derivar" title="Derivar a partir del documento, si ya esta derivado muestra el seguimiento" >Derivar</a>

@@ -115,7 +115,7 @@ B&uacute;squeda Avanzada
             <td ><?php echo $aut->fecha_creacion;?></td>
             <td ><?php echo $aut->oficina;?></td>
             <td ><?php echo $aut->nombre;?><br /><b><?php echo $aut->cargo;?></b></td>
-            <td><a href="../../pdf/certificacionppt.php?id=<?php echo $aut->id?>" class="uibutton" target="_blank" title="Imprimir Certificado" ><img src="/media/images/print.png"/> Imprimir </a></td>
+            <td><a href="../../pdf/pre.php?id=<?php echo $aut->id?>" class="uibutton" target="_blank" title="Imprimir Certificacion Presupuestaria" ><img src="/media/images/print.png"/> Imprimir </a></td>
         </tr>        
     <?php endforeach; ?>
    </tbody>   

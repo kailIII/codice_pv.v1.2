@@ -600,7 +600,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                     $pre=ORM::factory('presupuestos')->where('id_memo','=',$pvfucov->id_memo)->find();
                     if($pre->loaded()){
                         $pre->id_programatica = $_POST['fuente'];
-                        //$pre->antecedente = $_POST['antecedente'];
+                        $pre->antecedente = $_POST['antecedente'];
                         $pre->fecha_modificacion = date('Y-m-d H:i:s');
                         $pre->save();
                         ///eliminar las partidas actuales
@@ -1088,6 +1088,9 @@ class Controller_documento extends Controller_DefaultTemplate {
                 $cambio = ORM::factory('pvtipocambios')->find_all();
                 foreach($cambio as $c)
                 $tipo_cambio = $c;
+                ///documento para presupuesto
+                $documento = ORM::factory('documentos',$pvfucov->id_documento);
+                $user = ORM::factory('users',$documento->id_user);
                 $contenido = View::factory('pvpresupuesto/contenidoppt')
                          ->bind('pre', $pre)
                          ->bind('uejecutorapre',$uejecutorapre)
@@ -1100,7 +1103,35 @@ class Controller_documento extends Controller_DefaultTemplate {
                          ->bind('detallefuente', $detallefuente)
                          ->bind('pvfucov', $pvfucov)
                          ->bind('tipo_cambio', $tipo_cambio)
+                        ->bind('documento', $documento)
+                        ->bind('user',$user)
                         ;
+            }
+        }
+        ///aprobar informe de viaje
+        $memo = ORM::factory('documentos')->where('id','=',$id)->and_where('fucov','=',1)->find();
+        if($this->user->id == $memo->id_user){///preguntar si este usuario creó el memorandum
+            $oDesc = new Model_Pvpasajes();
+            $desc = $oDesc->descargo($id, $this->user->id_entidad);
+            $descargo = array();
+            foreach ($desc as $d)
+                $descargo = $d;
+            if($descargo){
+                $informe = ORM::factory('documentos')
+                        ->where('id_entidad','=',$this->user->id_entidad)
+                        ->and_where('id_proceso','=',18)
+                        ->and_where('id_tipo','=',3)
+                        ->and_where('nur','=',$descargo->nur)
+                        ->find_all();
+                foreach ($informe as $i)
+                        $documento = $i;
+                $tipo = ORM::factory('tipos',$documento->id_tipo);
+                $contenido = View::factory('pvpasajes/detalleinforme')
+                        ->bind('d', $documento)
+                        ->bind('tipo', $tipo)
+                        ->bind('memo', $memo)
+                        ->bind('descargo', $descargo)
+                            ;
             }
         }
         

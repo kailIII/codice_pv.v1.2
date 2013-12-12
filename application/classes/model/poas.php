@@ -47,7 +47,8 @@ class Model_Poas extends ORM{
                 inner join poas poa on doc.id = poa.id_documento
                 inner join oficinas ofi on doc.id_oficina = ofi.id
                 where doc.id_entidad = $id_entidad
-                and doc.id_tipo = 14";
+                and doc.id_tipo = 14
+                and poa.auto_poa = 1";
         if($oficina != '')
             $sql .= " and doc.id_oficina = '$oficina' ";
         if($f1 != '' && $f2 != '')

@@ -121,7 +121,7 @@ $pdf->SetFont('Helvetica', 'B', 18);
 
 // add a page
 $pdf->AddPage();
-$nombre = 'fucov';
+$nombre = 'focov';
 try {
     $dbh = New db();
     $stmtp = $dbh->prepare("SELECT *,t.tipo,t.via FROM documentos d, pvfucovs p, tipos t WHERE d.id='$id' AND d.id=p.id_documento AND d.id_tipo=t.id");

@@ -9,7 +9,7 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
 
     public function before() {
         $auth = Auth::instance();
-        //si el usuario esta logeado entocnes mostramos el menu
+        //si el usuario esta logeado entonces mostramos el menu
         if ($auth->logged_in()) {
             //menu top de acuerdo al nivel
             $session = Session::instance();
@@ -419,7 +419,7 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
     public function action_modificarpoa($id = '') {
         $poa = ORM::factory('poas')->where('id','=',$id)->find();
         if ($poa->loaded()) {
-            if($poa->estado == 0){
+            if($poa->auto_poa == 0){
                     $poa->id_obj_gestion = $_POST['obj_gestion'];
                     $poa->id_obj_esp = $_POST['obj_esp'];
                     $poa->id_actividad = $_POST['actividad'];
@@ -436,7 +436,10 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
                     $poa->monto_total = $_POST['monto_total'];
                     $poa->plazo_ejecucion = $_POST['plazo_ejecucion'];
                     $poa->save();
-                $this->request->redirect('documento/detalle/'.$poa->id_documento);
+                if($poa->id_memo)
+                    $this->request->redirect('documento/detalle/'.$poa->id_memo);
+                else
+                    $this->request->redirect('documento/detalle/'.$poa->id_documento);
                 }
             else
                 $this->template->content = '<b>EL DOCUMENTO YA FUE AUTORIZADO Y NO SE PUEDE MODIFICAR.</b><div class="info" style="text-align:center;margin-top: 50px; width:800px">

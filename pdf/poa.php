@@ -150,12 +150,18 @@ try {
     $stmt->execute();
     $pvobjetivos = $stmt->fetch(PDO::FETCH_OBJ);
     
-    ///usuario ppt que autorizo
-    $stmt = $dbh->prepare("SELECT * FROM users WHERE id = $pvobjetivos->id_user_auto");
-    $stmt->execute();
-    $userppt = $stmt->fetch(PDO::FETCH_OBJ);
-    
     if($pvobjetivos){
+    ///verificar si esta aprobado
+    if($pvobjetivos->auto_poa == 1){
+        $stmt = $dbh->prepare("SELECT * FROM users WHERE id = $pvobjetivos->id_user_auto");
+        $stmt->execute();
+        $userppt = $stmt->fetch(PDO::FETCH_OBJ);
+        $autoriza = $userppt->nombre;
+        $fecha_aprobado = $pvobjetivos->fecha_aprobacion;
+    }else{
+        $autoriza = 'Certificacion no aprobada';
+        $fecha_aprobado = "";
+    }
     //$pdf->Ln(0);
     $pdf->SetFont('Helvetica', 'B', 14);
     $pdf->write(0,'CERTIFICACIÓN POA '.$pvobjetivos->gestion,'',0,'C');
@@ -192,6 +198,29 @@ try {
     }
     $tipo_con = array();
     $tipo_con[$pvobjetivos->id_tipocontratacion]='<b>X</b>';
+    ///verificar si es pasajes y viaticos
+    $proceso_con="";
+    if($pvobjetivos->memo == 0)
+    {
+        $proceso_con ="<tr>
+                            <td colspan = \"3\">
+                                <table border = \"1px\" style=\" width:100%;\">
+                                    <tr bgcolor=\"$color\">
+                                        <td style=\"width: 51%;\"  height =\"$altura\">PROCESO DE CONTRATACION / ADQUISICION:</td>
+                                        <td style=\"width: 10%;\">Cantidad</td>
+                                        <td style=\"width: 18%;\">Monto Total(Bs)</td>
+                                        <td style=\"width: 20%;\">Plazo de ejecucion</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$pvobjetivos->proceso_con</td>
+                                        <td>$pvobjetivos->cantidad</td>
+                                        <td>$pvobjetivos->monto_total</td>
+                                        <td>$pvobjetivos->plazo_ejecucion</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>";
+    }
     $tabla1 = "
         <table style=\" width: 600px;\" border=\"0px\" frame=\"border\">
             <tr>
@@ -319,24 +348,7 @@ try {
             <tr>
                 <td style = \" width: 100%;\" colspan = \"3\">&nbsp;</td>
             </tr>
-            <tr>
-                <td colspan = \"3\">
-                    <table border = \"1px\" style=\" width:100%;\">
-                        <tr bgcolor=\"$color\">
-                            <td style=\"width: 51%;\"  height =\"$altura\">PROCESO DE CONTRATACION / ADQUISICION:</td>
-                            <td style=\"width: 10%;\">Cantidad</td>
-                            <td style=\"width: 18%;\">Monto Total(Bs)</td>
-                            <td style=\"width: 20%;\">Plazo de ejecucion</td>
-                        </tr>
-                        <tr>
-                            <td>$pvobjetivos->proceso_con</td>
-                            <td>$pvobjetivos->cantidad</td>
-                            <td>$pvobjetivos->monto_total</td>
-                            <td>$pvobjetivos->palzo_ejecucion</td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
+                $proceso_con
             <tr>
                 <td style = \" width: 100%;\" colspan = \"3\">Responsable de Solicitud:</td>
             </tr>            
@@ -367,7 +379,6 @@ try {
     //$pdf->Ln(1);
     $pdf->writeHTML( $tabla1, false, false, false);
     
-    $fecha = date("d / m / Y");
     $tabla2 = "
     <table style=\"width: 600px;\"  border=\"1px\" >
             <tr bgcolor = \"$color\">
@@ -396,15 +407,15 @@ try {
                     <table border = \"1px\" style=\" width:580px;\" >
                         <tr>
                             <td style=\"width: 90px;\" bgcolor = \"$color\">Responsable Verificación POA</td>
-                            <td style=\"width: 200px;\"><span style=\"color:#DADADA; text-align:center; font-size: 60%;\"><br /><br /><br /><br /><span style=\"color:#000000; text-align:center; font-size: 120%;\">$userppt->nombre</span><br />FIRMA</span></td>
+                            <td style=\"width: 200px;\"><span style=\"color:#DADADA; text-align:center; font-size: 60%;\"><br /><br /><br /><br /><span style=\"color:#000000; text-align:center; font-size: 120%;\">$autoriza</span><br />FIRMA</span></td>
                             <td style=\"width: 200px;\"><span style=\"color:#DADADA; text-align:center; font-size: 60%;\"><br /><br /><br /><br /><br />SELLO</span></td>
-                            <td style=\"width: 90px;\">FECHA</td>
+                            <td style=\"width: 90px;\" bgcolor = \"$color\">FECHA $fecha_aprobado</td>
                         </tr>
                         <tr>
                             <td bgcolor = \"$color\">Dirección General de Planificación</td>
                             <td><span style=\"color:#DADADA; text-align:center; font-size: 60%;\"><br /><br /><br /><br /><br />FIRMA</span></td>
                             <td><span style=\"color:#DADADA; text-align:center; font-size: 60%;\"><br /><br /><br /><br /><br />SELLO</span></td>
-                            <td><span style=\"text-align:center;\"><br />$fecha</span></td>
+                            <td><span style=\"text-align:center;\"><br /></span></td>
                         </tr>
                     </table>                
                     </p>

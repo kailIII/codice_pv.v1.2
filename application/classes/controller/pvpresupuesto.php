@@ -353,12 +353,10 @@ public  function action_lista(){
                             $liq->save();
                         }
                     }
-                $poa = ORM::factory('poas')->where('id_documento','=',$pre->id_memo)->find();
-                if($poa->loaded())
-                    $id_doc = $poa->id_documento;
+                if($pre->id_memo)
+                    $this->request->redirect('documento/detalle/'.$pre->id_memo);
                 else
-                    $id_doc = $pre->id_documento;
-                $this->request->redirect('documento/detalle/'.$id_doc);
+                    $this->request->redirect('documento/detalle/'.$pre->id_documento);
                 }
             else
                 $this->template->content = '<b>EL DOCUMENTO YA FUE AUTORIZADO Y NO SE PUEDE MODIFICAR.</b><div class="info" style="text-align:center;margin-top: 50px; width:800px">
@@ -390,6 +388,7 @@ public  function action_lista(){
                 $l->cs_saldo_devengado = $ejecucion->saldo_devengado;
                 $l->cs_pagado = $ejecucion->pagado;
                 $l->cs_saldo_pagar = $ejecucion->saldo_pagar;
+                $l->id_ejecucion = $ejecucion->id;
                 $l->save();
                 ///restar lo solicitado en la tabla ejecuciones
                 $ejecucion->preventivo = $ejecucion->preventivo + $l->importe_certificado;

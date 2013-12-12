@@ -76,17 +76,18 @@ class Model_Pvpasajes extends ORM{
     }
     
     public function descargo($id, $entidad){
-        $sql = "select distinct d.id id_memo, d.id_user, d.nur, DATEDIFF( CURDATE(),f.fecha_arribo) dias
-            from pvfucovs f
-            inner join pvpoas p on f.id = p.id_fucov
-            inner join pvliquidaciones l on f.id = l.id_fucov
-            inner join documentos d on f.id_memo = d.id
-            where f.auto_pasaje = 1
-		and l.estado = 1
-		and p.auto_poa = 1
-                and d.id_entidad = $entidad
-		and d.id = $id
-                #and DATEDIFF( CURDATE(),f.fecha_arribo)<=8";
+        $sql = "select doc.id id_memo, doc.id_user, doc.nur, DATEDIFF( CURDATE(),fcv.fecha_arribo) dias
+                from documentos doc
+                inner join poas poa on doc.id = poa.id_memo
+                inner join presupuestos pre on doc.id = pre.id_memo
+                inner join pvfucovs fcv on doc.id = fcv.id_memo
+                where poa.auto_poa = 1
+                and pre.auto_pre = 1
+                and fcv.auto_pasaje
+                and doc.fucov = 1
+                and doc.id = $id
+                and doc.id_entidad = $entidad
+                #and DATEDIFF( CURDATE(),fcv.fecha_arribo)<=8";
         return $this->_db->query(Database::SELECT, $sql, TRUE);
     }
             
