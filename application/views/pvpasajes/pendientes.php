@@ -116,7 +116,6 @@ B&uacute;squeda Avanzada
             <th>Oficina</th>
             <th>Nombre Funcionario</th>
             <th>Retraso<br />(dias)</th>
-            <!--<th>Imprimir</th>-->
         </tr>
     </thead>    
     <tbody>
@@ -132,7 +131,6 @@ B&uacute;squeda Avanzada
             <td ><?php echo $aut->oficina?></td>
             <td ><?php echo $aut->nombre?><br /><b><?php echo $aut->cargo;?></b></td>
             <td style="text-align: center" ><?php echo $aut->dias?></td>
-            <!--<td><a href="/pdf/fucov.php?id=<?php echo $aut->id_documento; ?>" class="link pdf" target="_blank" title="Imprimir PDF" >PDF</a></td>-->
         </tr>        
     <?php endforeach;?>
    </tbody>   
