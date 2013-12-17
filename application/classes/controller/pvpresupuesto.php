@@ -372,9 +372,14 @@ public  function action_lista(){
         ///en el caso del fucov, los montos pueden encontrarse en dolares
         //$pvfucov = ORM::factory('pvfucovs')->where('id','=',$id)->find();
         if ($pre->loaded()) {
+
+            $oNur = New Model_nurs();
+            $nur=$oNur->correlativo(-5, '',$this->user->id_entidad);
+
             $pre->fecha_aprobacion = date('Y-m-d H:i:s');
             $pre->id_userauto = $this->user->id;
             $pre->auto_pre = 1;
+            $pre->nro_pre = $nur;
             $pre->save();
             ///actualizar tabla ejecuciones con los nuevos saldos
             $liq=ORM::factory('pvliquidaciones')->where('id_presupuesto','=',$id)->find_all();
@@ -398,6 +403,7 @@ public  function action_lista(){
             $this->request->redirect('documento/detalle/'.$pre->id_documento);
         }
     }
+
 }
 
 ?>

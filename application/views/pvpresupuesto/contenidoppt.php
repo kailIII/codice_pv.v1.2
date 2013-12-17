@@ -252,7 +252,8 @@ echo ' solicitando vi&aacute;ticos por viaje a realizar a la ciudad de: '.$pvfuc
             <fieldset>
                 <table border ="0" style="width:100%">
                     <tr>
-                        <td colspan="5"><b>Unidad Ejecutora de Presupuesto:&nbsp;</b><?php echo $uejecutorapre->oficina?></td>
+                        <td colspan="4"><b>Unidad Ejecutora de Presupuesto:&nbsp;</b><?php echo $uejecutorapre->oficina?></td>
+                        <td>Nro.: <?php echo Form::input('nro_pre',$pre->nro_pre,array('size'=>'10')); ?></td>
                     </tr>
                     <tr>
                         <td colspan="5"><b>Fuentes de Financiamiento:</b><?php echo Form::select('fuente', $fuente, $pre->id_programatica, array('id' => 'fuente', 'class' => 'required')) ?></td> 
