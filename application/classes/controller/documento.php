@@ -1006,11 +1006,15 @@ class Controller_documento extends Controller_DefaultTemplate {
                 foreach($cambio as $c)
                     $tipo_cambio = $c->cambio_venta;
 
+<<<<<<< HEAD
                 
+=======
+>>>>>>> 88b835add4695d90282b1ed7da71cb3eaaa297a1
                 $poa = ORM::factory('poas')->where('id_memo', '=', $documento->id)->find();
                 $uEjepoa = New Model_oficinas();
                 $uejecutorapoa = $uEjepoa->uejecutorapoa($this->user->id_oficina); ///buscar la unidad ejecutora POA y PPT para la oficina de este usuario
 
+<<<<<<< HEAD
                 $oestrategico = ORM::factory('pvoestrategicos')->where('estado','=',1)->find_all();
                 $objest[''] = '(Seleccione)';
                 foreach ($oestrategico as $oes){$objest[$oes->id] = $oes->codigo;}
@@ -1034,6 +1038,17 @@ class Controller_documento extends Controller_DefaultTemplate {
                             $detalleestrategico = $og->objetivo;
                     }
 
+=======
+                $ogestion = ORM::factory('pvogestiones')->where('id_oficina','=',$uejecutorapoa->id)->and_where('estado','=',1)->find_all();///objetivos de gestion
+                $objgestion[''] = 'Seleccione Objetivo de Gestion';
+                foreach ($ogestion as $og){$objgestion[$og->id] = $og->codigo;}
+                
+                $objespecifico[''] = 'Seleccione Objetivo Especifico';
+                $actividad[''] = 'Seleccione la Actividad';
+                if($poa->id_obj_gestion){
+                    $det = ORM::factory('pvogestiones')->where('id', '=', $poa->id_obj_gestion)->find(); ///Detalle Objetivo de Gestion
+                    $detallegestion = $det->objetivo;
+>>>>>>> 88b835add4695d90282b1ed7da71cb3eaaa297a1
                     $oesp = ORM::factory('pvoespecificos')->where('id_obj_gestion', '=', $poa->id_obj_gestion)->find_all(); ///objetivo especifico
                     foreach ($oesp as $oe) {
                         $objespecifico[$oe->id] = $oe->codigo;
@@ -1070,12 +1085,19 @@ class Controller_documento extends Controller_DefaultTemplate {
                         // POA
                         ->bind('uejecutorapoa', $uejecutorapoa)
                         ->bind('poa', $poa)
+<<<<<<< HEAD
                         ->bind('obj_est', $objest)
                         ->bind('obj_gestion', $objgestion)
                         ->bind('obj_esp', $objespecifico)
                         ->bind('actividad', $actividad)
                         ->bind('det_obj_est', $detalleestrategico)
                         ->bind('det_obj_gestion', $detallegestion)
+=======
+                        ->bind('obj_gestion', $objgestion)
+                        ->bind('obj_esp', $objespecifico)
+                        ->bind('actividad', $actividad)
+                        ->bind('det_obj_gestion', $detallegestion)//detalle del objetivo de gestion
+>>>>>>> 88b835add4695d90282b1ed7da71cb3eaaa297a1
                         ->bind('det_obj_esp', $detalleespecifico)
                         ->bind('det_act', $detalleactividad)
                         //PRE

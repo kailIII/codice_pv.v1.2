@@ -183,6 +183,7 @@ $('#hora_inicio,#hora_fin').timeEntry({show24Hours: true, showSeconds: true});
 
 /////////////////////POA////////////////////
 ///Modificado Freddy Velasco
+<<<<<<< HEAD
 $('#obj_est').change(function(){
     var id = $('#obj_est').val();
     $('#det_obj_est').html('');
@@ -201,6 +202,8 @@ $('#obj_est').change(function(){
             ajaxs(id, act, ctr);
 });
 
+=======
+>>>>>>> 88b835add4695d90282b1ed7da71cb3eaaa297a1
 $('#obj_gestion').change(function(){
     var id = $('#obj_gestion').val();
     $('#det_obj_gestion').html('');
@@ -245,7 +248,10 @@ function ajaxs(id, accion, control)
         dataType: "json",
         success: function(item)
         {
+<<<<<<< HEAD
             //alert(item);
+=======
+>>>>>>> 88b835add4695d90282b1ed7da71cb3eaaa297a1
             $(control).html(item);
         },
         error: $(control).html('')
@@ -605,6 +611,7 @@ function dia_literal($n) {
                 </tr>
                 <tr>
                     <td colspan="3">
+<<<<<<< HEAD
                      <div><b><?php echo Form::label('label_plansectorial', 'PLAN SECTORIAL - POLITICA', array('id' => 'label_plansectorial', 'class' => 'form')); ?> </b></div>   
                         <table class="classy" border="1">
                                         <thead>
@@ -644,6 +651,10 @@ function dia_literal($n) {
                                 <td><br><textarea name="det_obj_est" id="det_obj_est" style="width: 600px;" readonly ><?php echo $det_obj_est; ?></textarea></td>
                             </tr>
                             <tr>
+=======
+                        <table>
+                            <tr>
+>>>>>>> 88b835add4695d90282b1ed7da71cb3eaaa297a1
                                 <td><b><?php echo Form::label('obj_gestion', 'Objetivo de Gesti&oacute;n:', array('class' => 'form')); ?></b></td>
                                 <td><?php echo Form::select('obj_gestion', $obj_gestion, $poa->id_obj_gestion, array('class' => 'form', 'name' => 'obj_gestion', 'id' => 'obj_gestion', 'class' => 'required')); ?></td>
                             </tr>
