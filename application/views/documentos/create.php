@@ -147,6 +147,16 @@ var pickerOpts  = { changeMonth: true, minDate: 0, changeYear: true, yearRange: 
 $('#fecha_inicio,#fecha_fin').datepicker(pickerOpts,$.datepicker.regional['es']);
 $('#hora_inicio,#hora_fin').timeEntry({show24Hours: true, showSeconds: true});
 ///////////////////end//////////////////////////
+///Modificado por rodrigo
+    $('#nota').click(function(){
+        if($('#nota').is(':checked')) {
+            $('#destinatario').html('');
+            $('#asignar_nur').html('');
+            $('#otro_nur').hide();
+        }else{
+            $('#otro_nur').show();
+        }
+});
 });
 </script>
 <h2 class="subtitulo">Crear <?php echo $documento->tipo;?> <br/><span>LLENE CORRECTAMENTE LOS DATOS EN EL FORMULARIO</span></h2>
@@ -160,10 +170,10 @@ $('#hora_inicio,#hora_fin').timeEntry({show24Hours: true, showSeconds: true});
             <legend>Proceso: <?php echo Form::select('proceso', $options, NULL);?>
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 <?php if ($documento->tipo == 'Memorandum'){?>FOCOV: <?php echo Form::checkbox('fucov',1,FALSE,array('id'=>'fucov','name'=>'fucov','title'=>'seleccione si quiere habilitar un memoramdum de viaje'))?><?php }?>    
+                <?php if ($documento->tipo == 'Nota Interna'){?>Certificaci&oacute;n POA-PRE: <?php echo Form::checkbox('nota',1,FALSE,array('id'=>'nota','name'=>'nota','title'=>'seleccione si quiere habilitar certificacón POA y Presupuestaria'))?><?php }?>    
+                <div id="otro_nur"><br><br>ASIGNAR NUR: <select id="asignar_nur" name="asignar_nur" ></select></div>
 
-                <br><br>ASIGNAR NUR: <select id="asignar_nur" name="asignar_nur" ></select>
                 
-
             </legend>
             <hr/>
         <?php endif; ?>
@@ -283,7 +293,7 @@ $('#hora_inicio,#hora_fin').timeEntry({show24Hours: true, showSeconds: true});
             <?php echo Form::label('contenido', 'Contenido:',array('id'=>'label_contenido','class'=>'form'));?> 
             <div id='contenido1'>
              <?php
-            echo Form::textarea('descripcion','',array('id'=>'descripcion','cols'=>50,'rows'=>10));
+            echo Form::textarea('descripcion','',array('id'=>'descripcion','cols'=>50,'rows'=>10,'name'=>'descripcion'));
             ?>
             </div>
             <div id='contenido2' style="width: 780px;">

@@ -179,8 +179,106 @@ $('#hora_inicio,#hora_fin').timeEntry({show24Hours: true, showSeconds: true});
             alert(r);
             return false;
         });        
-        $("input.file").si();
+        //$("input.file").si();
 
+/////////////////////POA////////////////////
+///Modificado Freddy Velasco
+$('#obj_est').change(function(){
+    var id = $('#obj_est').val();
+    $('#det_obj_est').html('');
+    
+    $('#obj_gestion').html('');
+    $('#det_obj_gestion').html('');
+    $('#obj_esp').html('');
+    $('#det_obj_esp').html('');
+    $('#actividad').html('');
+    $('#det_act').html('');
+            var act = 'detobjestrategico';///detalle del Objetivo estrategico
+            var ctr = $('#det_obj_est');
+            ajaxs(id, act, ctr);
+            act = 'objgestion';
+            ctr = $('#obj_gestion');
+            ajaxs(id, act, ctr);
+});
+
+$('#obj_gestion').change(function(){
+    var id = $('#obj_gestion').val();
+    $('#det_obj_gestion').html('');
+    $('#obj_esp').html('');
+    $('#det_obj_esp').html('');
+    $('#actividad').html('');
+    $('#det_act').html('');
+            var act = 'detobjgestion';///detalle del Objetivo de Gestion 
+            var ctr = $('#det_obj_gestion');
+            ajaxs(id, act, ctr);
+            act = 'objespecifico';
+            ctr = $('#obj_esp');
+            ajaxs(id, act, ctr);
+        });
+$('#obj_esp').change(function(){
+    var id = $('#obj_esp').val();
+    $('#det_obj_esp').html('');
+    $('#actividad').html('');
+    $('#det_act').html('');
+            var act = 'detobjespecifico';///detalle del Objetivo Especifico 
+            var ctr = $('#det_obj_esp');
+            ajaxs(id, act, ctr);
+            act = 'actividad';///actividades 
+            ctr = $('#actividad');
+            ajaxs(id, act, ctr);
+        });
+$('#actividad').change(function(){
+    var id = $('#actividad').val();
+    $('#det_act').html('');
+            var act = 'detactividad';///detalle del Objetivo Especifico 
+            var ctr = $('#det_act');
+            ajaxs(id, act, ctr);
+            
+        });
+
+function ajaxs(id, accion, control)
+{        
+    $.ajax({
+        type: "POST",
+        data: { id: id},
+        url: "/pvajax/"+accion,
+        dataType: "json",
+        success: function(item)
+        {
+            //alert(item);
+            $(control).html(item);
+        },
+        error: $(control).html('')
+    });
+}
+
+
+// Modificado por Freddy Velasco
+var valor = $('#id_tipocontratacion option:selected').html();
+     if(valor =='Otros'){
+        $('#id_label_otro_tc').show();
+        $('#id_otro_tipocontracion').show();
+        $('#otro_tipocontratacion').attr('class','required');
+     }else{
+        $('#id_label_otro_tc').hide();
+        $('#id_otro_tipocontracion').hide();
+        $('#otro_tipocontratacion').removeAttr('class');
+     }
+
+$('#id_tipocontratacion').change(function(){
+     var valor = $('#id_tipocontratacion option:selected').html();
+     if(valor =='Otros'){
+        $('#id_label_otro_tc').show();
+        $('#id_otro_tipocontracion').show();
+        $('#otro_tipocontratacion').attr('class','required');
+     }else{
+        $('#id_label_otro_tc').hide();
+        $('#id_otro_tipocontracion').hide();
+        $('#otro_tipocontratacion').removeAttr('class');
+     }
+});
+//////////end//////////////  
+        ///Fin
     });
 </script>
 <style type="text/css">
@@ -272,6 +370,10 @@ function dia_literal($n) {
 <div class="tabs">
     <ul class="tabNavigation">
         <li><a href="#editar">Edición</a></li>
+        <?php if($documento->fucov == 2):?>
+        <li><a href="#poa">POA</a></li>
+        <li><a href="#pre">PRE</a></li>
+        <?php endif;?>
         <li><a href="#adjuntos">Adjuntos</a></li>        
     </ul>
     <div id="editar"> 
@@ -490,6 +592,206 @@ function dia_literal($n) {
             </form>
         </div>
     </div>
+    <?php if($documento->fucov == 2):?>
+    <div id="poa">
+        <div class="formulario"  >  
+            
+        <!--<form action="/documento/editar/<?php echo $documento->id; ?>" method="post" id="frmEditar" >  -->
+                
+            <table width="100%">
+                
+                <tr>
+                    <td colspan="3"><hr /><br/></td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                     <div><b><?php echo Form::label('label_plansectorial', 'PLAN SECTORIAL - POLITICA', array('id' => 'label_plansectorial', 'class' => 'form')); ?> </b></div>   
+                        <table class="classy" border="1">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th style="text-align:center;">Politica Sectorial</th>
+                                                <th style="text-align:center;">Estrategia Sectorial</th>
+                                                <th style="text-align:center;">Programa Sectorial</th>
+                                            </tr>
+                                        </thead>
+                                        <TBODY>
+                                            <tr> 
+                                                <th>CODIGO</th>
+                                                <td><?php echo Form::input('cod_pol_sec','',array('id'=>'cod_pol_sec')) ?></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <th>DESC.</th>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </TBODY>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <table>
+                            <tr>
+                                <td><b><?php echo Form::label('obj_est', 'Objetivo de Estrategico:', array('class' => 'form')); ?></b></td>
+                                <td><?php echo Form::select('obj_est', $obj_est, $poa->id_obj_est, array('class' => 'form', 'name' => 'obj_est', 'id' => 'obj_est', 'class' => 'required')); ?></td>
+                            </tr>
+                            <tr>
+                                <td><b><?php echo Form::label('detalle_obj_est', 'Detalle:', array('class' => 'form')); ?></b>    </td>
+                                <td><br><textarea name="det_obj_est" id="det_obj_est" style="width: 600px;" readonly ><?php echo $det_obj_est; ?></textarea></td>
+                            </tr>
+                            <tr>
+                                <td><b><?php echo Form::label('obj_gestion', 'Objetivo de Gesti&oacute;n:', array('class' => 'form')); ?></b></td>
+                                <td><?php echo Form::select('obj_gestion', $obj_gestion, $poa->id_obj_gestion, array('class' => 'form', 'name' => 'obj_gestion', 'id' => 'obj_gestion', 'class' => 'required')); ?></td>
+                            </tr>
+                            <tr>
+                                <td><b><?php echo Form::label('detalle_obj_gestion', 'Detalle:', array('class' => 'form')); ?></b>    </td>
+                                <td><br><textarea name="det_obj_gestion" id="det_obj_gestion" style="width: 600px;" readonly ><?php echo $det_obj_gestion; ?></textarea></td>
+                            </tr>
+                            <tr>
+                                <td><b><?php echo Form::label('obj_esp', 'Objetivo Espec&iacute;fico:', array('class' => 'form')); ?></b></td>
+                                <td><?php echo Form::select('obj_esp', $obj_esp,$poa->id_obj_esp, array('class' => 'form', 'class' => 'required', 'id' => 'obj_esp', 'name' => 'obj_esp')); ?></td>
+                            </tr>
+                            <tr>
+                                <td><b><?php echo Form::label('det_obj_esp', 'Detalle:', array('class' => 'form')); ?></b></td>
+                                <td><br /><textarea name="det_obj_esp" id="det_obj_esp" style="width: 600px;" readonly ><?php echo $det_obj_esp; ?></textarea></td>
+                            </tr>
+                            <tr>
+                                <td><b><?php echo Form::label('actividad', 'Actividad', array('class' => 'form')); ?></b></td>
+                                <td><?php echo Form::select('actividad', $actividad, $poa->id_actividad, array('class' => 'form', 'class' => 'required', 'id' => 'actividad', 'name' => 'actividad')); ?></td>
+                            </tr>
+                            <tr>
+                                <td><b><?php echo Form::label('det_act', 'Detalle:', array('class' => 'form')); ?></b></td>
+                                <td><br><textarea name="det_act" id="det_act" style="width: 600px;" readonly ><?php echo $det_act; ?></textarea></td>
+                            </tr>
+
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3"><hr /><br /></td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <table>
+                            <tr>
+                                <td><b><?php echo Form::label('tipo_contratacion', 'Tipo de Contrataci&oacute;n:', array('class' => 'form')); ?></b></td>
+                                <td><?php //echo Form::select('id_tipocontratacion', $tipocontratacion, $poa->id_tipocontratacion, array('class' => 'form', 'name' => 'id_tipocontratacion', 'id' => 'id_tipocontratacion', 'class' => 'required')); ?><br></td>
+                                <td id="id_label_otro_tc"><b><?php echo Form::label('otro_tc', 'Otro:', array('class' => 'form')); ?></b></td>
+                                <td id="id_otro_tipocontracion"><?php echo Form::input('otro_tipocontratacion',$poa->otro_tipocontratacion,array('id'=>'otro_tipocontratacion')); ?><br></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr>
+                    <br>
+                    <td colspan="3">
+                        <table>
+                            <tr>
+                                <td>
+                                    <table class="classy" border="1">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align:center;" colspan="2">TIPO DE ACTIVIDAD</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>INVERSION</td>
+                                                <td><input type="radio" name="tipo_actividad" value="INVERSION" <?php if($poa->tipo_actividad == "INVERSION") { echo 'checked';} ?> ></td>
+
+                                            </tr>
+                                            <tr>
+                                                <td>FUNCIONAMIENTO</td>
+                                                <td><input type="radio" name="tipo_actividad" value="FUNCIONAMIENTO" <?php if($poa->tipo_actividad == "FUNCIONAMIENTO") { echo 'checked';} ?>></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td>
+                                    <table class="classy" border="1">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align:center;">RECURSOS</th>
+                                                <th style="text-align:center;">Organismo Financiador</th>
+                                                <th style="text-align:center;">%</th>
+                                            </tr>
+                                        </thead>
+                                        <TBODY>
+                                            <tr>  
+                                                <td>Internos</td>
+                                                <td><?php echo Form::input('ri_financiador',$poa->ri_financiador,array('id'=>'ri_financiador')); ?></td>
+                                                <td><?php echo Form::input('ri_porcentaje',$poa->ri_porcentaje,array('id' => 'ri_porcentaje','size'=>'6','class'=>'number','max'=>100, 'min'=>0)); ?> %</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Externos</td>
+                                                <td><?php echo Form::input('re_financiador',$poa->re_financiador,array('id'=>'re_financiador')); ?></td>
+                                                <td><?php echo Form::input('re_porcentaje',$poa->re_porcentaje,array('id' => 're_porcentaje','size'=>'6','class'=>'number','max'=>100, 'min'=>0)); ?> %</td>
+                                            </tr>
+                                        </TBODY>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3"><hr /><br /></td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <table>
+                            <tr>
+                                <td>
+                                    <table class="classy" border="1">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align:center;">PROCESO DE CONTRATACI&Oacute;N / ADQUISICI&Oacute;N (descripci&oacute;n especifica)</th>
+                                                <th style="text-align:center;">Cantidad</th>
+                                                <th style="text-align:center;">Monto Total (Bs)</th>
+                                                <th style="text-align:center;">Plazo de Ejecuci&oacute;n</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td><textarea name="referencia" id="referencia" style="width: 380px;" ><?php echo $poa->proceso_con; ?></textarea></td>
+                                                <td><?php echo Form::input('cantidad',$poa->cantidad,array('id'=>'cantidad','size'=>'4','class'=>'number')); ?></td>
+                                                <td><?php echo Form::input('monto_total',$poa->monto_total,array('id'=>'monto_total','size'=>'8','class'=>'number')); ?></td>
+                                                <td><?php echo Form::input('plazo_ejecucion',$poa->plazo_ejecucion,array('id'=>'plazo_ejecucion','size'=>'15')); ?></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                </tr>
+
+
+            </table>
+
+
+            <div style="clear:both; display: block;"></div>
+            <input type="hidden" id="con" value="<?php echo strlen($documento->contenido . $documento->referencia); ?> "/>
+            <!--<p>
+                <hr/>
+                <input type="submit" name="documento" value="Modificar documento" class="uibutton" />   
+            </p>-->
+        </fieldset>
+
+    <!--</form>-->
+</div>
+    </div>
+    <div id="pre">
+    </div>
+    <?php endif;?>
     <div id="adjuntos">
         <div class="formulario">        
             <form method="post" enctype="multipart/form-data" action="" >

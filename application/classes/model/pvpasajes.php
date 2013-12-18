@@ -36,36 +36,36 @@ class Model_Pvpasajes extends ORM{
     }
     
     public function informependiente($entidad){
-        $sql = "select distinct f.id, f.id_memo, f.id_documento,  f.fecha_salida, f.fecha_arribo, o.oficina, d.nombre_remitente nombre, d.cargo_remitente cargo, d.nur, d.codigo, DATEDIFF( CURDATE(),f.fecha_arribo) dias
-                from pvfucovs f
-                inner join pvpoas p on f.id = p.id_fucov
-		inner join pvliquidaciones l on f.id = l.id_fucov
-                inner join documentos d on f.id_documento = d.id
-                inner join oficinas o on d.id_oficina = o.id
-		inner join documentos memo on f.id_memo = memo.id
-                where memo.auto_informe = 0
-		and f.auto_pasaje = 1
-		and l.estado = 1
-		and p.auto_poa = 1
-                and d.id_entidad = $entidad
-                and DATEDIFF( CURDATE(),f.fecha_arribo)>8";
+        $sql = "select doc.id, fcv.id_memo, fcv.fecha_salida, fcv.fecha_arribo, o.oficina, doc.nombre_destinatario nombre, doc.cargo_destinatario cargo, doc.nur, doc.codigo, DATEDIFF( CURDATE(),fcv.fecha_arribo) dias
+                from documentos doc
+                inner join poas poa on doc.id = poa.id_memo
+                inner join presupuestos pre on doc.id = pre.id_memo
+                inner join pvfucovs fcv on doc.id = fcv.id_memo
+		inner join oficinas o on doc.id_oficina = o.id
+                where poa.auto_poa = 1
+                and pre.auto_pre = 1
+                and fcv.auto_pasaje =1
+                and doc.fucov = 1
+                and doc.id_entidad = $entidad
+        	and doc.auto_informe = 0
+                and DATEDIFF( CURDATE(),fcv.fecha_arribo)>8";
         return $this->_db->query(Database::SELECT, $sql, TRUE);
     }
     
     public function pendienteavanzado($entidad, $nombre, $oficina, $f1, $f2){
-        $sql = "select distinct f.id, f.id_memo, f.id_documento,  f.fecha_salida, f.fecha_arribo, o.oficina, d.nombre_remitente nombre, d.cargo_remitente cargo, d.nur, d.codigo, DATEDIFF( CURDATE(),f.fecha_arribo) dias
-                from pvfucovs f
-                inner join pvpoas p on f.id = p.id_fucov
-		inner join pvliquidaciones l on f.id = l.id_fucov
-                inner join documentos d on f.id_documento = d.id
-                inner join oficinas o on d.id_oficina = o.id
-		inner join documentos memo on f.id_memo = memo.id
-                where memo.auto_informe = 0
-		and f.auto_pasaje = 1
-		and l.estado = 1
-		and p.auto_poa = 1
-                and d.id_entidad = $entidad
-                and DATEDIFF( CURDATE(),f.fecha_arribo)>8 ";
+        $sql = "select doc.id, fcv.id_memo, fcv.fecha_salida, fcv.fecha_arribo, o.oficina, doc.nombre_destinatario nombre, doc.cargo_destinatario cargo, doc.nur, doc.codigo, DATEDIFF( CURDATE(),fcv.fecha_arribo) dias
+                from documentos doc
+                inner join poas poa on doc.id = poa.id_memo
+                inner join presupuestos pre on doc.id = pre.id_memo
+                inner join pvfucovs fcv on doc.id = fcv.id_memo
+		inner join oficinas o on doc.id_oficina = o.id
+                where poa.auto_poa = 1
+                and pre.auto_pre = 1
+                and fcv.auto_pasaje =1
+                and doc.fucov = 1
+                and doc.id_entidad = $entidad
+        	and doc.auto_informe = 0
+                and DATEDIFF( CURDATE(),fcv.fecha_arribo)>8";
         if($oficina != '')
             $sql .= " and d.id_oficina = $oficina ";
         if($f1 != '' && $f2 != '')

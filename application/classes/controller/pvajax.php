@@ -34,10 +34,30 @@ class Controller_Pvajax extends Controller {
         echo json_encode($obj);
     }
 
+
+public function action_detobjestrategico()
+    {       
+        $id = $_POST['id'];
+        $objetivo = ORM::factory('pvoestrategicos')->where('id','=',$id)->find();
+        $desc = $objetivo->objetivo;
+        echo json_encode($desc);
+    }
+
+
+public function action_objgestion()
+    {       
+        $id = $_POST['id'];
+        $objetivo = ORM::factory('pvogestiones')->where('id_obj_est','=',$id)->find_all();
+        $obj = '<option value = "" selected>(Seleccione)</option>';
+        foreach($objetivo as $o){
+            $obj = $obj.'<option value="'.$o->id.'">'.$o->codigo.'</option>';
+        }        
+        echo json_encode($obj);
+    }
 public function action_detobjgestion()
     {       
         $id = $_POST['id'];
-        $objetivo = ORM::factory('pvogestiones')->where('id','=',$id)->find();
+        $objetivo = ORM::factory('pvogestiones')->where('id_obj_est','=',$id)->find();
         $desc = $objetivo->objetivo;
         echo json_encode($desc);
     }
@@ -46,7 +66,7 @@ public function action_objespecifico()
     {       
         $id = $_POST['id'];
         $objetivo = ORM::factory('pvoespecificos')->where('id_obj_gestion','=',$id)->find_all();
-        $obj = '<option value = "" selected>Seleccione Objetivo Especifico</option>';
+        $obj = '<option value = "" selected>(Seleccione)</option>';
         foreach($objetivo as $o){
             $obj = $obj.'<option value="'.$o->id.'">'.$o->codigo.'</option>';
         }        
@@ -65,7 +85,7 @@ public function action_actividad()
     {       
         $id = $_POST['id'];
         $actividades = ORM::factory('pvactividades')->where('id_objespecifico','=',$id)->find_all();
-        $obj = '<option value = "" selected>Seleccione la Actividad</option>';
+        $obj = '<option value = "" selected>(Seleccione)</option>';
         foreach($actividades as $a){
             $obj = $obj.'<option value="'.$a->id.'">'.$a->codigo.'</option>';
         }        
