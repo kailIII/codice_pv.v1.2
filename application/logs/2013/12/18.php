@@ -4,3 +4,4 @@
     INNER JOIN seguimiento s ON s.derivado_a=u.id
     WHERE s.estado='2'
     AND s.derivado_a IN  ) GROUP BY u.id ) ~ MODPATH/database/classes/kohana/database/mysql.php [ 181 ]
+2013-12-18 11:17:06 --- ERROR: ErrorException [ 8 ]: Undefined variable: obj_est ~ APPPATH/views/documentos/edit.php [ 644 ]
