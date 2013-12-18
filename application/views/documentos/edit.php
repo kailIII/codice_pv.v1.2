@@ -183,27 +183,6 @@ $('#hora_inicio,#hora_fin').timeEntry({show24Hours: true, showSeconds: true});
 
 /////////////////////POA////////////////////
 ///Modificado Freddy Velasco
-<<<<<<< HEAD
-$('#obj_est').change(function(){
-    var id = $('#obj_est').val();
-    $('#det_obj_est').html('');
-    
-    $('#obj_gestion').html('');
-    $('#det_obj_gestion').html('');
-    $('#obj_esp').html('');
-    $('#det_obj_esp').html('');
-    $('#actividad').html('');
-    $('#det_act').html('');
-            var act = 'detobjestrategico';///detalle del Objetivo estrategico
-            var ctr = $('#det_obj_est');
-            ajaxs(id, act, ctr);
-            act = 'objgestion';
-            ctr = $('#obj_gestion');
-            ajaxs(id, act, ctr);
-});
-
-=======
->>>>>>> 88b835add4695d90282b1ed7da71cb3eaaa297a1
 $('#obj_gestion').change(function(){
     var id = $('#obj_gestion').val();
     $('#det_obj_gestion').html('');
@@ -248,10 +227,6 @@ function ajaxs(id, accion, control)
         dataType: "json",
         success: function(item)
         {
-<<<<<<< HEAD
-            //alert(item);
-=======
->>>>>>> 88b835add4695d90282b1ed7da71cb3eaaa297a1
             $(control).html(item);
         },
         error: $(control).html('')
@@ -595,7 +570,7 @@ function dia_literal($n) {
                     </p>
                 </fieldset>
 
-            </form>
+            <!--</form>-->
         </div>
     </div>
     <?php if($documento->fucov == 2):?>
@@ -611,50 +586,12 @@ function dia_literal($n) {
                 </tr>
                 <tr>
                     <td colspan="3">
-<<<<<<< HEAD
-                     <div><b><?php echo Form::label('label_plansectorial', 'PLAN SECTORIAL - POLITICA', array('id' => 'label_plansectorial', 'class' => 'form')); ?> </b></div>   
-                        <table class="classy" border="1">
-                                        <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th style="text-align:center;">Politica Sectorial</th>
-                                                <th style="text-align:center;">Estrategia Sectorial</th>
-                                                <th style="text-align:center;">Programa Sectorial</th>
-                                            </tr>
-                                        </thead>
-                                        <TBODY>
-                                            <tr> 
-                                                <th>CODIGO</th>
-                                                <td><?php echo Form::input('cod_pol_sec','',array('id'=>'cod_pol_sec')) ?></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <th>DESC.</th>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                        </TBODY>
-                        </table>
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="3">
                         <table>
                             <tr>
-                                <td><b><?php echo Form::label('obj_est', 'Objetivo de Estrategico:', array('class' => 'form')); ?></b></td>
-                                <td><?php echo Form::select('obj_est', $obj_est, $poa->id_obj_est, array('class' => 'form', 'name' => 'obj_est', 'id' => 'obj_est', 'class' => 'required')); ?></td>
+                                <td><b>Unidad Ejecutora:</b></td>
+                                <td><?php echo $uejecutorapoa->oficina?></td>
                             </tr>
                             <tr>
-                                <td><b><?php echo Form::label('detalle_obj_est', 'Detalle:', array('class' => 'form')); ?></b>    </td>
-                                <td><br><textarea name="det_obj_est" id="det_obj_est" style="width: 600px;" readonly ><?php echo $det_obj_est; ?></textarea></td>
-                            </tr>
-                            <tr>
-=======
-                        <table>
-                            <tr>
->>>>>>> 88b835add4695d90282b1ed7da71cb3eaaa297a1
                                 <td><b><?php echo Form::label('obj_gestion', 'Objetivo de Gesti&oacute;n:', array('class' => 'form')); ?></b></td>
                                 <td><?php echo Form::select('obj_gestion', $obj_gestion, $poa->id_obj_gestion, array('class' => 'form', 'name' => 'obj_gestion', 'id' => 'obj_gestion', 'class' => 'required')); ?></td>
                             </tr>
@@ -690,7 +627,7 @@ function dia_literal($n) {
                         <table>
                             <tr>
                                 <td><b><?php echo Form::label('tipo_contratacion', 'Tipo de Contrataci&oacute;n:', array('class' => 'form')); ?></b></td>
-                                <td><?php //echo Form::select('id_tipocontratacion', $tipocontratacion, $poa->id_tipocontratacion, array('class' => 'form', 'name' => 'id_tipocontratacion', 'id' => 'id_tipocontratacion', 'class' => 'required')); ?><br></td>
+                                <td><?php echo Form::select('id_tipocontratacion', $tipocontratacion, $poa->id_tipocontratacion, array('class' => 'form', 'name' => 'id_tipocontratacion', 'id' => 'id_tipocontratacion', 'class' => 'required')); ?><br></td>
                                 <td id="id_label_otro_tc"><b><?php echo Form::label('otro_tc', 'Otro:', array('class' => 'form')); ?></b></td>
                                 <td id="id_otro_tipocontracion"><?php echo Form::input('otro_tipocontratacion',$poa->otro_tipocontratacion,array('id'=>'otro_tipocontratacion')); ?><br></td>
                             </tr>
@@ -803,6 +740,7 @@ function dia_literal($n) {
     <div id="pre">
     </div>
     <?php endif;?>
+    </form>
     <div id="adjuntos">
         <div class="formulario">        
             <form method="post" enctype="multipart/form-data" action="" >

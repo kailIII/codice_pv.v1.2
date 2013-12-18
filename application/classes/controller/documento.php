@@ -480,215 +480,129 @@ class Controller_documento extends Controller_DefaultTemplate {
     public function action_editar($id = '') {
         $mensajes = array();
         $documento = ORM::factory('documentos')->where('id', '=', $id)->and_where('id_user', '=', $this->user->id)->find();
+        $id_doc = $documento->id;
         if ($documento->loaded()) {
             //si se envia los datos modificados entonces guardamamos
             if (isset($_POST['referencia'])) {
-/*
-                ///INICIO BUCLE
                 $sw = 1;
-                while( $sw == 1 ){
-                //obtener el documento con el id siguiente
-                    $documento = ORM::factory('documentos')->where('id', '=', $id)->and_where('id_user', '=', $this->user->id)->find();
-                    
-                $contenido = $_POST['descripcion'];
-                //if (isset($_POST['fucov'])) {
-                if ($documento->fucov == 1) {
-                    $contenido = '<p style="text-align: justify;">Por medio del presente Memorándum se ordena a su persona trasladarse desde: La ciudad ' . $_POST['origen'] . ' hasta la ciudad ' . $_POST['destino'] . ' con el objetivo de asistir a ' . $_POST['detalle_comision'] . '. Desde el ' . $_POST['fecha_inicio'] . ' a Hrs. ' . $_POST['hora_inicio'] . ' hasta el ' . $_POST['fecha_fin'] . ' a Hrs. ' . $_POST['hora_fin'] .'.</p>    
-                        <br>
-                        <p style="text-align: justify;">Sírvase tramitar ante la Dirección General de Asuntos Administrativos la asignación de pasajes y viáticos de acuerdo a escala autorizada para los cual su persona deberá coordinar la elaboración del FUCOV. Una vez completada la comisión sírvase hacer llegar el informe de descargo dentro de los próximos 8 días hábiles de concluída la comisión de acuerdo al artículo 25 del reglamento de Pasajes y viáticos del Ministerio de Desarrollo Productivo y Economía Plural. </p> 
-                        <br>
-                        <p style="text-align: justify;">Saludo a usted atentamente. </p>';
-                }
-                $documento->nombre_destinatario = $_POST['destinatario'];
-                $documento->cargo_destinatario = $_POST['cargo_des'];
-                $documento->institucion_destinatario = $_POST['institucion_des'];
-                $documento->nombre_remitente = $_POST['remitente'];
-                $documento->cargo_remitente = $_POST['cargo_rem'];
-                $documento->mosca_remitente = $_POST['mosca'];
-                $documento->referencia = strtoupper($_POST['referencia']);
-                $documento->contenido = $contenido;
-                $documento->adjuntos = $_POST['adjuntos'];
-                $documento->copias = $_POST['copias'];
-                $documento->nombre_via = $_POST['via'];
-                $documento->cargo_via = $_POST['cargovia'];
-                $documento->titulo = $_POST['titulo'];
-                $documento->id_proceso = $_POST['proceso'];
-                $documento->save();
-
-                //Modificado por Freddy Velasco
-                //if (isset($_POST['fucov'])) {// cuando se crea un memoramdum de viaje
-                if ($documento->id_tipo == 2 && $documento->fucov == 1) {///Memo de viaje
-                    $fi = date('Y-m-d', strtotime(substr($_POST['fecha_inicio'], 4, 10))) . ' ' . date('H:i:s', strtotime($_POST['hora_inicio']));
-                    $ff = date('Y-m-d', strtotime(substr($_POST['fecha_fin'], 4, 10))) . ' ' . date('H:i:s', strtotime($_POST['hora_fin']));
-                    $pvcomision = ORM::factory('pvcomisiones')->where('id_documento', '=', $id)->find();
-                    //$pvcomision->id_documento = $documento->id;
-                    $pvcomision->detalle_comision = $_POST['detalle_comision'];
-                    $pvcomision->origen = $_POST['origen'];
-                    $pvcomision->destino = $_POST['destino'];
-                    $pvcomision->fecha_inicio = $fi;
-                    $pvcomision->fecha_fin = $ff;
-                    $pvcomision->observacion = $_POST['observacion'];
+                while( $sw == 1 && $id != 0){
                     $sw = 0;
-                    $pvcomision->save();
-                }elseif ($documento->id_tipo == 13) {///FUCOV
-                    $fi = date('Y-m-d', strtotime(substr($_POST['fecha_salida'], 4, 10))) . ' ' . date('H:i:s', strtotime($_POST['hora_salida']));
-                    $ff = date('Y-m-d', strtotime(substr($_POST['fecha_arribo'], 4, 10))) . ' ' . date('H:i:s', strtotime($_POST['hora_arribo']));
-                    $pvfucov = ORM::factory('pvfucovs')->where('id_documento', '=', $id)->find();
-                    $pvfucov->origen = $_POST['origen'];
-                    $pvfucov->destino = $_POST['destino'];
-                    $pvfucov->fecha_salida = $fi;
-                    $pvfucov->fecha_arribo = $ff;
-                    $pvfucov->cancelar = $_POST['cancelar'];
-                    $pvfucov->porcentaje_viatico = $_POST['porcentaje_viatico'];
-                    $pvfucov->financiador = $_POST['financiador'];
-                    $pvfucov->transporte = $_POST['transporte'];
-                    $pvfucov->representacion = $_POST['representacion'];
-                    $pvfucov->gasto_representacion = $_POST['gasto_representacion'];
-                    $pvfucov->impuesto = $_POST['impuesto'];
-                    $pvfucov->gasto_imp = $_POST['gasto_imp'];
-                    $pvfucov->justificacion_finsem = $_POST['justificacion_finsem'];
-                    $pvfucov->total_viatico = $_POST['total_viatico'];
-                    $pvfucov->total_pasaje = $_POST['total_pasaje'];
-                    $pvfucov->id_categoria = $_POST['id_categoria'];
-                    $pvfucov->id_tipoviaje = $_POST['id_tipoviaje'];
-                    $pvfucov->etapa_proceso = 1;
-                    $pvfucov->tipo_cambio = $_POST['tipo_cambio'];
-                    $pvfucov->tipo_moneda = $_POST['tipo_moneda'];
-                    $pvfucov->viatico_dia = $_POST['viatico_dia'];
-                    ///documento para POA
-                    $id = 
-                    $pvfucov->save();
-                    ///cambiar a documento POA
-                }elseif ($documento->id_tipo == 13) {//MOdificado Freddy Velasco - Editar POA
-                    $poa = ORM::factory('poas')->where('id_documento','=',$id)->find();
-                    $poa->id_obj_gestion = $_POST['obj_gestion'];
-                    $poa->id_obj_esp = $_POST['obj_esp'];
-                    $poa->id_actividad = $_POST['actividad'];
-                    $poa->fecha_modificacion = date('Y-m-d H:i:s');
-                    $poa->tipo_actividad = $_POST['tipo_actividad'];
-                    $poa->id_tipocontratacion = $_POST['id_tipocontratacion'];
-                    $poa->otro_tipocontratacion = $_POST['otro_tipocontratacion'];
-                    $poa->ri_financiador = $_POST['ri_financiador'];
-                    $poa->ri_porcentaje = $_POST['ri_porcentaje'];
-                    $poa->re_financiador = $_POST['re_financiador'];
-                    $poa->re_porcentaje = $_POST['re_porcentaje'];
-                    $poa->proceso_con = $_POST['referencia'];
-                    $poa->cantidad = $_POST['cantidad'];
-                    $poa->monto_total = $_POST['monto_total'];
-                    $poa->plazo_ejecucion = $_POST['plazo_ejecucion'];
-                    $poa->save();
-                }elseif($documento->id_tipo == 14){///PRE
-                    $pre=ORM::factory('presupuestos')->where('id_memo','=',$pvfucov->id_memo)->find();
-                    $pre->id_programatica = $_POST['fuente'];
-                    $pre->antecedente = $_POST['antecedente'];
-                    $pre->fecha_modificacion = date('Y-m-d H:i:s');
-                    $pre->save();
-                    ///eliminar las partidas actuales
-                    $liq = ORM::factory('pvliquidaciones')->where('id_presupuesto','=',$pre->id)->and_where('estado','=',1)->find_all();
-                    foreach($liq as $l){                            
-                        $l->delete();
-                    }   
-                    $id_partida=$_POST['x_id_partida'];
-                    $solicitado=$_POST['x_solicitado'];
-                    $partida=$_POST['x_partida'];
-                    $codigo=$_POST['x_codigo'];
-                    for($f=0;$f<count($id_partida);$f++){
-                        $liq = ORM::factory('pvliquidaciones');
-                        $liq->fecha_creacion = date('Y-m-d H:i:s');
-                        $liq->importe_certificado = $solicitado[$f];
-                        $liq->estado = 1;
-                        $liq->id_partida = $id_partida[$f];
-                        $liq->id_presupuesto = $pre->id;
-                        $liq->partida = $partida[$f];
-                        $liq->cod_partida = $codigo[$f];
-                        $liq->save();
+                    $documento = ORM::factory('documentos')->where('id', '=', $id)->and_where('id_user', '=', $this->user->id)->find();
+                    $contenido = $_POST['descripcion'];
+                    if ($documento->fucov == 1) {
+                        $contenido = '<p style="text-align: justify;">Por medio del presente Memorándum se ordena a su persona trasladarse desde: La ciudad ' . $_POST['origen'] . ' hasta la ciudad ' . $_POST['destino'] . ' con el objetivo de asistir a ' . $_POST['detalle_comision'] . '. Desde el ' . $_POST['fecha_inicio'] . ' a Hrs. ' . $_POST['hora_inicio'] . ' hasta el ' . $_POST['fecha_fin'] . ' a Hrs. ' . $_POST['hora_fin'] .'.</p>    
+                            <br>
+                            <p style="text-align: justify;">Sírvase tramitar ante la Dirección General de Asuntos Administrativos la asignación de pasajes y viáticos de acuerdo a escala autorizada para los cual su persona deberá coordinar la elaboración del FUCOV. Una vez completada la comisión sírvase hacer llegar el informe de descargo dentro de los próximos 8 días hábiles de concluída la comisión de acuerdo al artículo 25 del reglamento de Pasajes y viáticos del Ministerio de Desarrollo Productivo y Economía Plural. </p> 
+                            <br>
+                            <p style="text-align: justify;">Saludo a usted atentamente. </p>';
                     }
-                }
-                ///FIN BUCLE
-                }
-                $mensajes['Modificado!'] = 'El documento se modifico correctamente.';
-*/
-/*                //MOdificado Freddy Velasco - Editar POA
-                $poa = ORM::factory('poas')->where('id_documento','=',$id)->find();
-                if ($poa->loaded()) {
-                    $poa->id_obj_gestion = $_POST['obj_gestion'];
-                    $poa->id_obj_esp = $_POST['obj_esp'];
-                    $poa->id_actividad = $_POST['actividad'];
-                    $poa->fecha_modificacion = date('Y-m-d H:i:s');
-                    $poa->tipo_actividad = $_POST['tipo_actividad'];
-                    $poa->id_tipocontratacion = $_POST['id_tipocontratacion'];
-                    $poa->otro_tipocontratacion = $_POST['otro_tipocontratacion'];
-                    $poa->ri_financiador = $_POST['ri_financiador'];
-                    $poa->ri_porcentaje = $_POST['ri_porcentaje'];
-                    $poa->re_financiador = $_POST['re_financiador'];
-                    $poa->re_porcentaje = $_POST['re_porcentaje'];
-                    $poa->proceso_con = $_POST['referencia'];
-                    $poa->cantidad = $_POST['cantidad'];
-                    $poa->monto_total = $_POST['monto_total'];
-                    $poa->plazo_ejecucion = $_POST['plazo_ejecucion'];
-                    $poa->save();
-                }
-*/
-                ///////end///////////
+                    $documento->nombre_destinatario = $_POST['destinatario'];
+                    $documento->cargo_destinatario = $_POST['cargo_des'];
+                    $documento->institucion_destinatario = $_POST['institucion_des'];
+                    $documento->nombre_remitente = $_POST['remitente'];
+                    $documento->cargo_remitente = $_POST['cargo_rem'];
+                    $documento->mosca_remitente = $_POST['mosca'];
+                    $documento->referencia = strtoupper($_POST['referencia']);
+                    $documento->contenido = $contenido;
+                    $documento->adjuntos = $_POST['adjuntos'];
+                    $documento->copias = $_POST['copias'];
+                    $documento->nombre_via = $_POST['via'];
+                    $documento->cargo_via = $_POST['cargovia'];
+                    $documento->titulo = $_POST['titulo'];
+                    $documento->id_proceso = $_POST['proceso'];
+                    $documento->save();
 
-/*                //cuando se edita un fucov
-                $pvfucov = ORM::factory('pvfucovs')->where('id_documento', '=', $id)->find();
-                if ($pvfucov->loaded()) {
-                    $fi = date('Y-m-d', strtotime(substr($_POST['fecha_salida'], 4, 10))) . ' ' . date('H:i:s', strtotime($_POST['hora_salida']));
-                    $ff = date('Y-m-d', strtotime(substr($_POST['fecha_arribo'], 4, 10))) . ' ' . date('H:i:s', strtotime($_POST['hora_arribo']));
-                    $pvfucov = ORM::factory('pvfucovs')->where('id_documento', '=', $id)->find();
-                    $pvfucov->origen = $_POST['origen'];
-                    $pvfucov->destino = $_POST['destino'];
-                    $pvfucov->fecha_salida = $fi;
-                    $pvfucov->fecha_arribo = $ff;
-                    $pvfucov->cancelar = $_POST['cancelar'];
-                    $pvfucov->porcentaje_viatico = $_POST['porcentaje_viatico'];
-                    $pvfucov->financiador = $_POST['financiador'];
-                    $pvfucov->transporte = $_POST['transporte'];
-                    $pvfucov->representacion = $_POST['representacion'];
-                    $pvfucov->gasto_representacion = $_POST['gasto_representacion'];
-                    $pvfucov->impuesto = $_POST['impuesto'];
-                    $pvfucov->gasto_imp = $_POST['gasto_imp'];
-                    $pvfucov->justificacion_finsem = $_POST['justificacion_finsem'];
-                    $pvfucov->total_viatico = $_POST['total_viatico'];
-                    $pvfucov->total_pasaje = $_POST['total_pasaje'];
-                    $pvfucov->id_categoria = $_POST['id_categoria'];
-                    $pvfucov->id_tipoviaje = $_POST['id_tipoviaje'];
-                    $pvfucov->etapa_proceso = 1;
-                    $pvfucov->tipo_cambio = $_POST['tipo_cambio'];
-                    $pvfucov->tipo_moneda = $_POST['tipo_moneda'];
-                    $pvfucov->viatico_dia = $_POST['viatico_dia'];
-                    //$pvfucov->id_programatica = $_POST['fuente']; ///rodrigo
-                    $pvfucov->save();
-                    
-                    //MOdificado Freddy Velasco - Editar POA
-                        $poa = ORM::factory('poas')->where('id_memo','=',$pvfucov->id_memo)->find();
-                        if ($poa->loaded()) {
-                            $poa->id_obj_gestion = $_POST['obj_gestion'];
-                            $poa->id_obj_esp = $_POST['obj_esp'];
-                            $poa->id_actividad = $_POST['actividad'];
-                            $poa->fecha_modificacion = date('Y-m-d H:i:s');
-                            $poa->save();
+                    //Modificado por Freddy Velasco
+                    //if (isset($_POST['fucov'])) {// cuando se crea un memoramdum de viaje
+                    if ($documento->id_tipo == 2 && $documento->fucov == 1) {///Memo de viaje
+                        $fi = date('Y-m-d', strtotime(substr($_POST['fecha_inicio'], 4, 10))) . ' ' . date('H:i:s', strtotime($_POST['hora_inicio']));
+                        $ff = date('Y-m-d', strtotime(substr($_POST['fecha_fin'], 4, 10))) . ' ' . date('H:i:s', strtotime($_POST['hora_fin']));
+                        $pvcomision = ORM::factory('pvcomisiones')->where('id_documento', '=', $id)->find();
+                        $pvcomision->detalle_comision = $_POST['detalle_comision'];
+                        $pvcomision->origen = $_POST['origen'];
+                        $pvcomision->destino = $_POST['destino'];
+                        $pvcomision->fecha_inicio = $fi;
+                        $pvcomision->fecha_fin = $ff;
+                        $pvcomision->observacion = $_POST['observacion'];
+                        $pvcomision->save();
+                    }elseif ($documento->id_tipo == 13) {///FOCOV
+                        $fi = date('Y-m-d', strtotime(substr($_POST['fecha_salida'], 4, 10))) . ' ' . date('H:i:s', strtotime($_POST['hora_salida']));
+                        $ff = date('Y-m-d', strtotime(substr($_POST['fecha_arribo'], 4, 10))) . ' ' . date('H:i:s', strtotime($_POST['hora_arribo']));
+                        $pvfucov = ORM::factory('pvfucovs')->where('id_documento', '=', $id)->find();
+                        $pvfucov->origen = $_POST['origen'];
+                        $pvfucov->destino = $_POST['destino'];
+                        $pvfucov->fecha_salida = $fi;
+                        $pvfucov->fecha_arribo = $ff;
+                        $pvfucov->cancelar = $_POST['cancelar'];
+                        $pvfucov->porcentaje_viatico = $_POST['porcentaje_viatico'];
+                        $pvfucov->financiador = $_POST['financiador'];
+                        $pvfucov->transporte = $_POST['transporte'];
+                        $pvfucov->representacion = $_POST['representacion'];
+                        $pvfucov->gasto_representacion = $_POST['gasto_representacion'];
+                        $pvfucov->impuesto = $_POST['impuesto'];
+                        $pvfucov->gasto_imp = $_POST['gasto_imp'];
+                        $pvfucov->justificacion_finsem = $_POST['justificacion_finsem'];
+                        $pvfucov->total_viatico = $_POST['total_viatico'];
+                        $pvfucov->total_pasaje = $_POST['total_pasaje'];
+                        $pvfucov->id_categoria = $_POST['id_categoria'];
+                        $pvfucov->id_tipoviaje = $_POST['id_tipoviaje'];
+                        $pvfucov->etapa_proceso = 1;
+                        $pvfucov->tipo_cambio = $_POST['tipo_cambio'];
+                        $pvfucov->tipo_moneda = $_POST['tipo_moneda'];
+                        $pvfucov->viatico_dia = $_POST['viatico_dia'];
+                        $pvfucov->save();
+                        $sw = 1;
+                        $poa = ORM::factory('poas')->where('id_memo','=',$documento->id)->find();///cambiar a documento POA
+                        if($poa->loaded()){
+                            $id = $poa->id_documento;
                         }
-
-                //MOdificado Rodrigo 
-                    $pre=ORM::factory('presupuestos')->where('id_memo','=',$pvfucov->id_memo)->find();
-                    if($pre->loaded()){
-                        $pre->id_programatica = $_POST['fuente'];
+                        else{
+                            $id = 0;
+                            $mensajes['Modificado!'] = 'No se encontro el POA.';
+                        }
+                    }elseif ($documento->id_tipo == 14 && $documento->id == $poa->id_documento) {//MOdificado Freddy Velasco - Editar POA
+                        //$poa = ORM::factory('poas')->where('id_documento','=',$id)->find();
+                        $poa->id_obj_gestion = $_POST['obj_gestion'];
+                        $poa->id_obj_esp = $_POST['obj_esp'];
+                        $poa->id_actividad = $_POST['actividad'];
+                        $poa->fecha_modificacion = date('Y-m-d H:i:s');
+                        $poa->tipo_actividad = $_POST['tipo_actividad'];
+                        $poa->id_tipocontratacion = $_POST['id_tipocontratacion'];
+                        $poa->otro_tipocontratacion = $_POST['otro_tipocontratacion'];
+                        $poa->ri_financiador = $_POST['ri_financiador'];
+                        $poa->ri_porcentaje = $_POST['ri_porcentaje'];
+                        $poa->re_financiador = $_POST['re_financiador'];
+                        $poa->re_porcentaje = $_POST['re_porcentaje'];
+                        $poa->proceso_con = $_POST['referencia'];
+                        $poa->cantidad = $_POST['cantidad'];
+                        $poa->monto_total = $_POST['monto_total'];
+                        $poa->plazo_ejecucion = $_POST['plazo_ejecucion'];
+                        $poa->save();
+//                        $sw=1; ///cambiar a documento PRE
+//                        $pre = ORM::factory('presupuestos')->where('id_memo','=',$poa->id_memo)->find();
+//                        if( $pre->loaded()){
+//                            $id = $pre->id_documento;
+//                        }
+//                        else{
+//                            $id = 0;
+//                            $mensajes['Modificado!'] = 'No se encontro el Presupuesto.';
+//                        }
+                    }elseif($documento->id_tipo == 15 && $documento->id == $pre->id_documento){///PRE
+                        //$pre=ORM::factory('presupuestos')->where('id_memo','=',$pvfucov->id_memo)->find();
+                        /*$pre->id_programatica = $_POST['fuente'];
                         $pre->antecedente = $_POST['antecedente'];
                         $pre->fecha_modificacion = date('Y-m-d H:i:s');
                         $pre->save();
                         ///eliminar las partidas actuales
                         $liq = ORM::factory('pvliquidaciones')->where('id_presupuesto','=',$pre->id)->and_where('estado','=',1)->find_all();
-                        foreach($liq as $l){                            
+                        foreach($liq as $l){
                             $l->delete();
                         }   
                         $id_partida=$_POST['x_id_partida'];
                         $solicitado=$_POST['x_solicitado'];
                         $partida=$_POST['x_partida'];
                         $codigo=$_POST['x_codigo'];
-                        for($f=0;$f<count($id_partida);$f++) 
-                        {
+                        for($f=0;$f<count($id_partida);$f++){
                             $liq = ORM::factory('pvliquidaciones');
                             $liq->fecha_creacion = date('Y-m-d H:i:s');
                             $liq->importe_certificado = $solicitado[$f];
@@ -698,44 +612,22 @@ class Controller_documento extends Controller_DefaultTemplate {
                             $liq->partida = $partida[$f];
                             $liq->cod_partida = $codigo[$f];
                             $liq->save();
+                        }*/
+                    }elseif($documento->id_tipo == 4 && $documento->fucov == 2){///NI
+                        $sw = 1;
+                        $poa = ORM::factory('poas')->where('id_memo','=',$documento->id)->find();///cambiar a documento POA
+                        if($poa->loaded()){
+                            $id = $poa->id_documento;
+                        }
+                        else{
+                            $id = 0;
+                            $mensajes['Modificado!'] = 'No se encontro el POA.';
                         }
                     }
-                }*/
-                //Modificado por rodrigo
-/*                $pre=ORM::factory('presupuestos')->where('id_documento','=',$id)->find();
-                 if($pre->loaded()){
-                    $pre->id_programatica = $_POST['fuente'];
-                    $pre->antecedente = $_POST['antecedente'];
-                    $pre->save();
-                    ///eliminar las partidas actuales
-                    $liq = ORM::factory('pvliquidaciones')->where('id_presupuesto','=',$pre->id)->and_where('estado','=',1)->find_all();
-                    foreach($liq as $l){
-                        $l->estado = 0;
-                        $l->delete();
-                    }
-                    if(isset($_POST['x_id_partida'])){
-                        $id_partida=$_POST['x_id_partida'];
-                        $solicitado=$_POST['x_solicitado'];
-                        $partida=$_POST['x_partida'];
-                        $codigo=$_POST['x_codigo'];
-                        for($f=0;$f<count($id_partida);$f++) 
-                        {
-                            $liq = ORM::factory('pvliquidaciones');
-                            $liq->fecha_creacion = date('Y-m-d H:i:s');
-                            $liq->importe_certificado = $solicitado[$f];
-                            $liq->estado = 1;
-                            $liq->id_partida = $id_partida[$f];
-                            $liq->id_presupuesto = $pre->id;
-                            $liq->partida = $partida[$f];
-                            $liq->cod_partida = $codigo[$f];
-                            $liq->save();
-                        }
-
-                    }
-                }*/
-                ///////////end//////////////////
-                
-                //$mensajes['Modificado!'] = 'El documento se modifico correctamente.';
+                }///END WHILE
+                if( $id != 0)
+                    $mensajes['Modificado!'] = 'El documento se modifico correctamente.';
+                $documento = ORM::factory('documentos')->where('id', '=', $id_doc)->and_where('id_user', '=', $this->user->id)->find();///cargar el documento original 
             }
             if (isset($_POST['adjuntar'])) {
 
@@ -970,7 +862,7 @@ class Controller_documento extends Controller_DefaultTemplate {
         }
                  $this->template->content = View::factory('documentos/edit_pre')
                         ->bind('documento', $documento)
-                        ->Bind('archivos', $archivos)
+                        ->bind('archivos', $archivos)
                         ->bind('tipo', $tipo)
                         ->bind('superior', $superior)
                         ->bind('vias', $vias)
@@ -992,53 +884,16 @@ class Controller_documento extends Controller_DefaultTemplate {
                         ;
             }else if($tipo->action == 'nota'){
                 
-                //$pvcomision = ORM::factory('pvcomisiones')->where('id_documento', '=', $documento->id)->find();
-                //$pvfucov = ORM::factory('pvfucovs')->where('id_documento', '=', $documento->id)->find();
-                //$pvtipoviaje = ORM::factory('pvtipoviajes')->where('estado', '=', '1')->find_all();
-                //$opt_tv = array();
-                //$opt_tv[''] = "(Seleccionar)";
-                //foreach ($pvtipoviaje as $tv) {
-                //    $opt_tv[$tv->id] = $tv->tipoviaje;
-                //}
-
                 ///Modificado Freddy Velasco POA
                 $cambio = ORM::factory('pvtipocambios')->find_all();
                 foreach($cambio as $c)
                     $tipo_cambio = $c->cambio_venta;
-
-<<<<<<< HEAD
-                
-=======
->>>>>>> 88b835add4695d90282b1ed7da71cb3eaaa297a1
+                ///
                 $poa = ORM::factory('poas')->where('id_memo', '=', $documento->id)->find();
+
                 $uEjepoa = New Model_oficinas();
-                $uejecutorapoa = $uEjepoa->uejecutorapoa($this->user->id_oficina); ///buscar la unidad ejecutora POA y PPT para la oficina de este usuario
-
-<<<<<<< HEAD
-                $oestrategico = ORM::factory('pvoestrategicos')->where('estado','=',1)->find_all();
-                $objest[''] = '(Seleccione)';
-                foreach ($oestrategico as $oes){$objest[$oes->id] = $oes->codigo;}
-
-                //$ogestion = ORM::factory('pvogestiones')->where('id_oficina','=',$uejecutorapoa->id)->and_where('estado','=',1)->find_all();///objetivos de gestion
+                $uejecutorapoa = $uEjepoa->uejecutorapoa($this->user->id_oficina);
                 
-                //foreach ($ogestion as $og){$objgestion[$og->id] = $og->codigo;}
-
-                $objgestion[''] = '(Seleccione)';
-                $objespecifico[''] = '(Seleccione)';
-                $actividad[''] = '(Seleccione)';
-                if($poa->id_obj_est){
-                    
-                    $det = ORM::factory('pvoestrategicos')->where('id', '=', $poa->id_obj_est)->find(); ///Detalle Objetivo Estrategico
-                    $detallegestion = $det->objetivo;
-
-                    $oges = ORM::factory('pvogestiones')->where('id_obj_est', '=', $poa->id_obj_est)->find_all(); ///objetivo gestion
-                    foreach ($oges as $og) {
-                        $objgestion[$og->id] = $og->codigo;
-                        if ($og->id == $poa->id_obj_gestion)
-                            $detalleestrategico = $og->objetivo;
-                    }
-
-=======
                 $ogestion = ORM::factory('pvogestiones')->where('id_oficina','=',$uejecutorapoa->id)->and_where('estado','=',1)->find_all();///objetivos de gestion
                 $objgestion[''] = 'Seleccione Objetivo de Gestion';
                 foreach ($ogestion as $og){$objgestion[$og->id] = $og->codigo;}
@@ -1048,7 +903,6 @@ class Controller_documento extends Controller_DefaultTemplate {
                 if($poa->id_obj_gestion){
                     $det = ORM::factory('pvogestiones')->where('id', '=', $poa->id_obj_gestion)->find(); ///Detalle Objetivo de Gestion
                     $detallegestion = $det->objetivo;
->>>>>>> 88b835add4695d90282b1ed7da71cb3eaaa297a1
                     $oesp = ORM::factory('pvoespecificos')->where('id_obj_gestion', '=', $poa->id_obj_gestion)->find_all(); ///objetivo especifico
                     foreach ($oesp as $oe) {
                         $objespecifico[$oe->id] = $oe->codigo;
@@ -1062,6 +916,12 @@ class Controller_documento extends Controller_DefaultTemplate {
                             $detalleactividad = $a->actividad;
                     }    
                 }
+               
+                $tipoc = ORM::factory('poatipocontrataciones')->where('estado','=','1')->find_all();
+                $tipocontratacion[''] = 'Seleccionar Tipo Contratacion';
+                foreach ($tipoc as $tc){$tipocontratacion[$tc->id] = $tc->nombre;}
+                ///
+                
                 
                 //PRE
                 //
@@ -1069,7 +929,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                 ///////end/////////////
 
                 $this->template->content = View::factory('documentos/edit')
-                        ->bind('documento', $documento)
+                        ->bind('documento', $documento)///NI
                         ->bind('archivos', $archivos)
                         ->bind('tipo', $tipo)
                         ->bind('superior', $superior)
@@ -1085,21 +945,13 @@ class Controller_documento extends Controller_DefaultTemplate {
                         // POA
                         ->bind('uejecutorapoa', $uejecutorapoa)
                         ->bind('poa', $poa)
-<<<<<<< HEAD
-                        ->bind('obj_est', $objest)
-                        ->bind('obj_gestion', $objgestion)
-                        ->bind('obj_esp', $objespecifico)
-                        ->bind('actividad', $actividad)
-                        ->bind('det_obj_est', $detalleestrategico)
-                        ->bind('det_obj_gestion', $detallegestion)
-=======
                         ->bind('obj_gestion', $objgestion)
                         ->bind('obj_esp', $objespecifico)
                         ->bind('actividad', $actividad)
                         ->bind('det_obj_gestion', $detallegestion)//detalle del objetivo de gestion
->>>>>>> 88b835add4695d90282b1ed7da71cb3eaaa297a1
                         ->bind('det_obj_esp', $detalleespecifico)
                         ->bind('det_act', $detalleactividad)
+                        ->bind('tipocontratacion', $tipocontratacion);  /// en poa//
                         //PRE
                         ;
             }else {
