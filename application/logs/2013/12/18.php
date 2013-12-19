@@ -31,3 +31,15 @@
 2013-12-18 11:26:01 --- ERROR: ErrorException [ 8 ]: Undefined variable: id_partida ~ APPPATH/classes/controller/documento.php [ 609 ]
 2013-12-18 11:27:14 --- ERROR: ErrorException [ 8 ]: Undefined variable: id_partida ~ APPPATH/classes/controller/documento.php [ 618 ]
 2013-12-18 11:29:54 --- ERROR: ErrorException [ 8 ]: Undefined variable: id_partida ~ APPPATH/classes/controller/documento.php [ 618 ]
+2013-12-18 11:43:34 --- ERROR: Database_Exception [ 0 ]: [1064] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') GROUP BY u.id' at line 4 ( SELECT u.id, u.nombre,u.cargo,COUNT(*) as  pendientes FROM users u
+    INNER JOIN seguimiento s ON s.derivado_a=u.id
+    WHERE s.estado='2'
+    AND s.derivado_a IN  ) GROUP BY u.id ) ~ MODPATH/database/classes/kohana/database/mysql.php [ 181 ]
+2013-12-18 14:39:45 --- ERROR: Database_Exception [ 0 ]: [1064] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') GROUP BY u.id' at line 4 ( SELECT u.id, u.nombre,u.cargo,COUNT(*) as  pendientes FROM users u
+    INNER JOIN seguimiento s ON s.derivado_a=u.id
+    WHERE s.estado='2'
+    AND s.derivado_a IN  ) GROUP BY u.id ) ~ MODPATH/database/classes/kohana/database/mysql.php [ 181 ]
+2013-12-18 15:53:18 --- ERROR: Database_Exception [ 0 ]: [1064] You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ') GROUP BY u.id' at line 4 ( SELECT u.id, u.nombre,u.cargo,COUNT(*) as  pendientes FROM users u
+    INNER JOIN seguimiento s ON s.derivado_a=u.id
+    WHERE s.estado='2'
+    AND s.derivado_a IN  ) GROUP BY u.id ) ~ MODPATH/database/classes/kohana/database/mysql.php [ 181 ]

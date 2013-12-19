@@ -1075,7 +1075,7 @@ class Controller_documento extends Controller_DefaultTemplate {
         } 
         if ($nivel == 8) {
             $memo = ORM::factory('documentos')->where('id','=',$id)->find();
-            if($memo->fucov == '1'){
+            if($memo->fucov > '0'){
                 $poa = ORM::factory('poas')->where('id_memo','=',$id)->find();
             }else{
                 $poa = ORM::factory('poas')->where('id_documento','=',$id)->find();
