@@ -183,6 +183,24 @@ $('#hora_inicio,#hora_fin').timeEntry({show24Hours: true, showSeconds: true});
 
 /////////////////////POA////////////////////
 ///Modificado Freddy Velasco
+$('#obj_est').change(function(){
+    var id = $('#obj_est').val();
+    $('#det_obj_est').html('');
+    
+    $('#obj_gestion').html('');
+    $('#det_obj_gestion').html('');
+    $('#obj_esp').html('');
+    $('#det_obj_esp').html('');
+    $('#actividad').html('');
+    $('#det_act').html('');
+            var act = 'detobjestrategico';///detalle del Objetivo estrategico
+            var ctr = $('#det_obj_est');
+            ajaxs(id, act, ctr);
+            act = 'objgestion';
+            ctr = $('#obj_gestion');
+            ajaxs(id, act, ctr);
+});
+
 $('#obj_gestion').change(function(){
     var id = $('#obj_gestion').val();
     $('#det_obj_gestion').html('');
@@ -719,10 +737,47 @@ function dia_literal($n) {
                 </tr>
                 <tr>
                     <td colspan="3">
+                     <div><b><?php echo Form::label('label_plansectorial', 'PLAN SECTORIAL - POLITICA', array('id' => 'label_plansectorial', 'class' => 'form')); ?> </b></div>   
+                        <table class="classy" border="1">
+                                        <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th style="text-align:center;">Politica Sectorial</th>
+                                                <th style="text-align:center;">Estrategia Sectorial</th>
+                                                <th style="text-align:center;">Programa Sectorial</th>
+                                            </tr>
+                                        </thead>
+                                        <TBODY>
+                                            <tr> 
+                                                <th>CODIGO</th>
+                                                <td><?php echo Form::input('cod_pol_sec','',array('id'=>'cod_pol_sec')) ?></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <th>DESC.</th>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </TBODY>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
                         <table>
                             <tr>
                                 <td><b>Unidad Ejecutora:</b></td>
                                 <td><?php echo $uejecutorapoa->oficina?></td>
+                            </tr>
+                            <tr>
+                                <td><b><?php echo Form::label('obj_est', 'Objetivo de Estrategico:', array('class' => 'form')); ?></b></td>
+                                <td><?php echo Form::select('obj_est', $obj_est, $poa->id_obj_est, array('class' => 'form', 'name' => 'obj_est', 'id' => 'obj_est', 'class' => 'required')); ?></td>
+                            </tr>
+                            <tr>
+                                <td><b><?php echo Form::label('detalle_obj_est', 'Detalle:', array('class' => 'form')); ?></b>    </td>
+                                <td><br><textarea name="det_obj_est" id="det_obj_est" style="width: 600px;" readonly ><?php echo $det_obj_est; ?></textarea></td>
                             </tr>
                             <tr>
                                 <td><b><?php echo Form::label('obj_gestion', 'Objetivo de Gesti&oacute;n:', array('class' => 'form')); ?></b></td>

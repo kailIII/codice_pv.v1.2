@@ -35,3 +35,5 @@
 2013-12-18 11:27:14 --- ERROR: ErrorException [ 8 ]: Undefined variable: id_partida ~ APPPATH/classes/controller/documento.php [ 618 ]
 2013-12-18 11:29:54 --- ERROR: ErrorException [ 8 ]: Undefined variable: id_partida ~ APPPATH/classes/controller/documento.php [ 618 ]
 >>>>>>> ecfde573421cdf175193267bd4b0977880d7c30d
+
+2013-12-18 11:50:51 --- ERROR: ErrorException [ 8 ]: Undefined variable: obj_est ~ APPPATH/views/documentos/edit.php [ 776 ]

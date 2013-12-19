@@ -804,15 +804,25 @@ class Controller_documento extends Controller_DefaultTemplate {
                 $uEjepoa = New Model_oficinas();
                 $uejecutorapoa = $uEjepoa->uejecutorapoa($this->user->id_oficina);
                 
-                $ogestion = ORM::factory('pvogestiones')->where('id_oficina','=',$uejecutorapoa->id)->and_where('estado','=',1)->find_all();///objetivos de gestion
-                $objgestion[''] = 'Seleccione Objetivo de Gestion';
-                foreach ($ogestion as $og){$objgestion[$og->id] = $og->codigo;}
-                
-                $objespecifico[''] = 'Seleccione Objetivo Especifico';
-                $actividad[''] = 'Seleccione la Actividad';
-                if($poa->id_obj_gestion){
-                    $det = ORM::factory('pvogestiones')->where('id', '=', $poa->id_obj_gestion)->find(); ///Detalle Objetivo de Gestion
-                    $detallegestion = $det->objetivo;
+                $oestrategico = ORM::factory('pvoestrategicos')->where('estado','=',1)->find_all();
+                $objest[''] = '(Seleccione)';
+                foreach ($oestrategico as $oes){$objest[$oes->id] = $oes->codigo;}
+
+                                
+                $objgestion[''] = '(Seleccione)';
+                $objespecifico[''] = '(Seleccione)';
+                $actividad[''] = '(Seleccione)';
+                if($poa->id_obj_est){
+                    $det = ORM::factory('pvoestrategicos')->where('id', '=', $poa->id_obj_est)->find(); ///Detalle Objetivo Estrategico
+                    $detalleestrategico = $det->objetivo;
+
+                    $oges = ORM::factory('pvogestiones')->where('id_obj_est', '=', $poa->id_obj_est)->find_all(); ///objetivo especifico
+                    foreach ($oges as $oe) {
+                        $objgestion[$oe->id] = $oe->codigo;
+                        if ($oe->id == $poa->id_obj_gestion)
+                            $detallegestion = $oe->objetivo;
+                    }
+                    
                     $oesp = ORM::factory('pvoespecificos')->where('id_obj_gestion', '=', $poa->id_obj_gestion)->find_all(); ///objetivo especifico
                     foreach ($oesp as $oe) {
                         $objespecifico[$oe->id] = $oe->codigo;
