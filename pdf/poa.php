@@ -85,7 +85,8 @@ $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
 //set margins
 //$pdf->SetMargins(20, 33, 20);
-$pdf->SetMargins(20, PDF_MARGIN_TOP, 20);
+//$pdf->SetMargins(20, PDF_MARGIN_TOP, 20);
+$pdf->SetMargins(20, PDF_MARGIN_TOP, 15);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
@@ -102,7 +103,7 @@ $pdf->SetFont('Helvetica', 'B', 18);
 
 // add a page
 $pdf->AddPage();
-$nombre = 'cert_ppto';
+$nombre = 'cert_poa';
 try {
     $dbh = New db();
     $stmt = $dbh->prepare("SELECT * FROM documentos d 
@@ -150,6 +151,11 @@ try {
     $stmt->execute();
     $pvobjetivos = $stmt->fetch(PDO::FETCH_OBJ);
     
+///presupuesto
+    $stmt = $dbh->prepare("select * from presupuestos where id_memo = $pvobjetivos->id_memo");
+    $stmt->execute();
+    $pre = $stmt->fetch(PDO::FETCH_OBJ);
+    
     if($pvobjetivos){
     ///verificar si esta aprobado
     if($pvobjetivos->auto_poa == 1){
@@ -170,23 +176,24 @@ try {
     $pdf->Ln();
     $pdf->SetFont('Helvetica', '', 13);
     $pdf->write(0,$rs->nur,'',0,'C');
-    $pdf->SetFont('Helvetica', 'B', 14);
+    //$pdf->SetFont('Helvetica', 'B', 14);
     $tabla1 = "
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-        <table style=\" width: 170px;\"  border=\"1px\">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <table style=\" width: 156px;\"  border=\"1px\">
             <tr>
                 <td style = \" width: 40px;\" colspan = \"3\"><b>N°</b></td>
-                <td style = \" width: 130px;\">$pvobjetivos->nro_poa</td>
+                <td style = \" width: 116px;\">$pvobjetivos->nro_poa</td>
             </tr>
         </table>";
     $pdf->writeHTML($tabla1, false, false, false,false,'C');
-    $pdf->SetFont('Helvetica', '', 10);
+    $pdf->SetFont('Helvetica', '', 7);
     $color = "#CBCBCB";
-    $altura = "20 px";
-    $altura2 = "18 px";
+    $altura = "18 px";
+    $altura2 = "16 px";
     $actividad = utf8_encode($pvobjetivos->act);
     if($pvobjetivos->tipo_actividad == 'INVERSION'){
         $tipo_inv = 'X';
@@ -198,50 +205,74 @@ try {
     }
     $tipo_con = array();
     $tipo_con[$pvobjetivos->id_tipocontratacion]='<b>X</b>';
-    ///verificar si es pasajes y viaticos
-    $proceso_con="";
-    if($pvobjetivos->memo == 0)
-    {
-        $proceso_con ="<tr>
-                            <td colspan = \"3\">
-                                <table border = \"1px\" style=\" width:100%;\">
-                                    <tr bgcolor=\"$color\">
-                                        <td style=\"width: 51%;\"  height =\"$altura\">PROCESO DE CONTRATACION / ADQUISICION:</td>
-                                        <td style=\"width: 10%;\">Cantidad</td>
-                                        <td style=\"width: 18%;\">Monto Total(Bs)</td>
-                                        <td style=\"width: 20%;\">Plazo de ejecucion</td>
-                                    </tr>
-                                    <tr>
-                                        <td>$pvobjetivos->proceso_con</td>
-                                        <td>$pvobjetivos->cantidad</td>
-                                        <td>$pvobjetivos->monto_total</td>
-                                        <td>$pvobjetivos->plazo_ejecucion</td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>";
-    }
+    ///Solicitud, unidad solicitante
     $tabla1 = "
-        <table style=\" width: 600px;\" border=\"0px\" frame=\"border\">
+        <table style=\" width: 650px;\" border=\"0px\" frame=\"border\">
             <tr>
-                <td style = \" width: 100%;\" colspan = \"3\" height =\"$altura\"><b>I. SOLICITUD</b></td>
+                <td style = \" width: 100%;\" colspan = \"3\" height =\"$altura\"></td>
             </tr>
             <tr>
                 <td colspan = \"3\">
-                    <table border = \"1px\" STYLE=\" WIDTH:580px;\">
+                    <table border = \"1px\" STYLE=\" width: 99%;\">
                         <tr>
-                            <td style=\"width: 150px;\" bgcolor=\"$color\">UNIDAD SOLICITANTE:</td>
-                            <td style=\"width: 300px;\">$oficina->oficina</td>
-                            <td style=\"width: 130px;\">Dependiencia: $oficina2->sigla</td>
+                            <td style=\"width: 80%;\" colspan=\"2\"><b>I. SOLICITUD</b></td>
+                            <td style=\"width: 20%;\" > Dependiencia:</td>
+                        </tr>                        
+                        <tr>
+                            <td style=\"width: 25%;\" bgcolor=\"$color\" height =\"$altura\">UNIDAD SOLICITANTE:</td>
+                            <td style=\"width: 55%;\">$oficina->oficina</td>
+                            <td style=\"width: 20%;\">$oficina2->sigla</td>
                         </tr>
                     </table>
                 </td>
             </tr>
             <tr>
                 <td style = \" width: 100%;\" colspan = \"3\">&nbsp;</td>
+            </tr>";
+    ///PEI
+    $tabla1 .= "
+            
+            <tr>
+                <td colspan = \"3\">
+                    <table border = \"1px\" style=\" width: 99%;\">
+                        <tr>
+                            <td rowspan=\"3\" bgcolor=\"$color\" style=\" width: 15%;\"><b>PLAN SECTORIAL. POLITICA</b></td>
+                            <td bgcolor=\"$color\" style=\" width: 8%;\" height =\"$altura\"></td>
+                            <td colspan=\"2\" bgcolor=\"$color\" style=\" width: 26%;\">POLITICA SECTORIAL</td>
+                            <td bgcolor=\"$color\" style=\" width: 26%;\">ESTRATEGIA SECTORIAL</td>
+                            <td bgcolor=\"$color\" style=\" width: 25%;\">PROGRAMA SECTORIAL</td>
+                        </tr>                        
+                        <tr>
+                            <td bgcolor=\"$color\">CODIGO:</td>
+                            <td colspan=\"2\"></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td bgcolor=\"$color\" height =\"$altura\">DESC.<br /> TEXTUAL:</td>
+                            <td colspan=\"2\" ></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td bgcolor=\"$color\">PLAN ESTRATEGICO INSTITUCIONAL:</td>
+                            <td bgcolor=\"$color\"><br /><br />CODIGO:</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
             <tr>
-                <td>
+                <td style = \" width: 100%;\" colspan = \"3\">&nbsp;</td>
+            </tr>";
+    ///FIN -PEI 
+
+    ///Actividad POA
+    $tabla1 .="<tr>
+                <!--<td>
                     <table border = \"1px\" style=\" width:580px;\">
                         <tr bgcolor=\"$color\">
                             <td style=\"width: 130px; text align:center\" height =\"$altura\">POA</td>
@@ -256,23 +287,92 @@ try {
                             <td>$pvobjetivos->cod_esp</td>
                         </tr>
                     </table>
-                </td>
-                <td colspan =\"2\">
-                    <table border = \"1px\" style=\" width:380px;\">
+                </td>-->
+                <td colspan =\"3\">
+                    <table border = \"1px\" style=\" width:100%;\">
                         <tr bgcolor=\"$color\">
-                            <td style=\"width: 60px;\" height =\"$altura\" >CODIGO</td>
-                            <td style=\"width: 320px;\" >ACTIVIDAD - DESCRIPCION SEGUN POA</td>
+                            <td style=\"width: 10%;\" height =\"$altura\" >CODIGO</td>
+                            <td style=\"width: 50%;\">ACTIVIDAD - DESCRIPCION SEGUN POA</td>
+                            <td style=\"width: 39%;\">META(Textual)</td>
                         </tr>
                         <tr>
-                            <td >$pvobjetivos->cod_act</td>
-                            <td >$actividad</td>
+                            <td>$pvobjetivos->cod_act</td>
+                            <td>$actividad</td>
+                            <td></td>
                         </tr>
                     </table>
                 </td>
             </tr>
             <tr>
                 <td style = \" width: 100%;\" colspan = \"3\">&nbsp;</td>
-            </tr>
+            </tr>";
+///Inicio - Presupuesto
+$tabla1 .=" <tr>
+                <td colspan=\"3\">
+                    <table border = \"1px\" style=\" width: 99%;\">
+                        <tr bgcolor=\"$color\">
+                            <td colspan=\"7\" height =\"$altura\" style=\"width: 80%;\">PRESUPUESTO PARA LA ACTIVIDAD: </td>
+                            <td style=\"width: 20%;\" rowspan=\"2\">SALDO DISPONIBLE<br />A LA FECHA Bs.</td>
+                        </tr>
+                        <tr>
+                            <td style=\"width: 12%;\" height =\"$altura2\">D.A.</td>
+                            <td style=\"width: 12%;\">U.E.</td>
+                            <td style=\"width: 12%;\">PROGRAMA</td>
+                            <td style=\"width: 12%;\">PROYECTO</td>
+                            <td style=\"width: 12%;\">ACTIVIDAD</td>
+                            <td style=\"width: 10%;\">FUENTE</td>
+                            <td style=\"width: 10%;\">PARTIDA</td>
+                        </tr>";
+///Lista de Fuentes seleccionadas
+    if($pre){
+        $stmt = $dbh->prepare("select prog.codigo cod_programa, substring(prog.programa,1,9) programa, proy.codigo cod_proyecto, substring(proy.proyecto,1,9) proyecto, act.codigo cod_actividad, substring(act.actividad,1,15) actividad, fte.codigo cod_fuente, 
+            fte.sigla fuente, org.codigo cod_organismo, org.sigla organismo,
+            da.sigla da, da.ppt_cod_da cod_da, ue.sigla ue, ue.ppt_cod_ue cod_ue
+            from pvprogramaticas p 
+            inner join pvprogramas prog on p.id_programa = prog.id
+            inner join pvproyectos proy on p.id_proyecto = proy.id
+            inner join pvpptactividades act on p.id_actividadppt = act.id
+            inner join pvorganismos org on p.id_organismo = org.id
+            inner join pvfuentes fte on p.id_fuente = fte.id
+            inner join oficinas da on p.id_da = da.id
+            inner join oficinas ue on p.id_ue = ue.id
+            where p.id = $pre->id_programatica");
+        $stmt->execute();
+        $detalle_pre = $stmt->fetch(PDO::FETCH_OBJ);///detalle de la estructura programatica
+        $stmt = $dbh->prepare("select * from pvliquidaciones where id_presupuesto = $pre->id");
+        $stmt->execute();
+        while ($liq = $stmt->fetch(PDO::FETCH_OBJ)) {///si la ejecucion presupuestaria tiene partidas seleccionadas
+            if ($liq->id) {
+                $tabla1 .="<tr>
+                            <td>$detalle_pre->cod_da $detalle_pre->da</td>
+                            <td>$detalle_pre->cod_ue $detalle_pre->ue</td>
+                            <td>$detalle_pre->cod_programa $detalle_pre->programa</td>";
+                if($detalle_pre->cod_proyecto != '0000')///en caso de no haber proyecto
+                    $tabla1 .="<td>$detalle_pre->cod_proyecto $detalle_pre->proyecto</td>";
+                else
+                    $tabla1 .="<td></td>";
+                $tabla1 .=" <td>$detalle_pre->cod_actividad $detalle_pre->actividad</td>
+                            <td>$detalle_pre->cod_fuente $detalle_pre->fuente</td>
+                            <td>$liq->cod_partida</td>";
+                if($pre->auto_pre == 1)///en caso de que el presupuesto aun no fue autorizado
+                    $tabla1 .= "<td>$liq->cs_saldo_devengado</td>";
+                else
+                    $tabla1 .= "<td>Sin Autorizar</td>";
+                $tabla1 .= "</tr>";
+            }
+        }
+    }
+        $tabla1 .= "</table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style = \" width: 100%;\" colspan = \"3\">&nbsp;</td>
+                    </tr>";
+///Fin - Presupuesto
+
+$tabla1 .="";
+///TIPO actividad, Tipo Contratacion, Recursos
+    $tabla1 .= "
             <tr>
                 <td>
                     <table border = \"1px\" style=\" width:190px;\">
@@ -290,33 +390,44 @@ try {
                     </table>
                 </td>
                 <td rowspan=\"3\" colspan=\"2\">
-                    <table border = \"1px\" style=\" width:380px;\">
+                    <table border = \"1px\" style=\" width:98.5%;\">
                         <tr bgcolor=\"$color\">
-                            <td colspan=\"2\" height =\"$altura\">TIPO DE CONTRATACION</td>
+                            <td colspan=\"4\" height =\"$altura\">TIPO DE CONTRATACION</td>
+                        </tr>
+                        <tr bgcolor=\"$color\">
+                            <td height =\"$altura2\" style=\"width: 10%;\">Grupo Gasto</td>
+                            <td style=\"width: 18%;\">Descripcion</td>
+                            <td style=\"width: 12%;\">Partida</td>
+                            <td style=\"width: 60%;\">Descripcion</td>
                         </tr>
                         <tr>
-                            <td height =\"$altura2\" style=\"width: 330px;\">Consultoria Individual de linea</td>
-                            <td style=\"width: 50px;\">$tipo_con[1]</td>
+                            <td bgcolor=\"$color\" height =\"$altura2\">10000</td>
+                            <td bgcolor=\"$color\">Servicios Personales</td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <td height =\"$altura2\">Consultoria Individual por producto</td>
-                            <td>$tipo_con[2]</td>
+                            <td bgcolor=\"$color\" height =\"$altura2\">20000</td>
+                            <td bgcolor=\"$color\">Servicios No Personales</td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <td height =\"$altura2\">Servicios de Empresa consultora(estudios)</td>
-                            <td>$tipo_con[3]</td>
+                            <td bgcolor=\"$color\" height =\"$altura2\">30000</td>
+                            <td bgcolor=\"$color\">Materiales y Suministros</td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <td height =\"$altura2\">Adquisicion de Bienes</td>
-                            <td>$tipo_con[4]</td>
+                            <td bgcolor=\"$color\" height =\"$altura2\">40000</td>
+                            <td bgcolor=\"$color\">Activos Reales</td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         <tr>
-                            <td height =\"$altura2\">Contratacion de obras</td>
-                            <td>$tipo_con[5]</td>
-                        </tr>
-                        <tr>
-                            <td height =\"$altura2\">Otros | $pvobjetivos->otro_tipocontratacion</td>
-                            <td>$tipo_con[6]</td>
+                            <td bgcolor=\"$color\" height =\"$altura2\"></td>
+                            <td bgcolor=\"$color\">Otros</td>
+                            <td colspan=\"2\">$pvobjetivos->otro_tipocontratacion</td>
                         </tr>
                     </table>
                 </td>
@@ -347,9 +458,31 @@ try {
             </tr>
             <tr>
                 <td style = \" width: 100%;\" colspan = \"3\">&nbsp;</td>
-            </tr>
-                $proceso_con
-            <tr>
+            </tr>";
+    ///verificar si es pasajes y viaticos
+    if($pvobjetivos->memo == 0)
+    {
+        $tabla1 .="<tr>
+                            <td colspan = \"3\">
+                                <table border = \"1px\" style=\" width:100%;\">
+                                    <tr bgcolor=\"$color\">
+                                        <td style=\"width: 51%;\"  height =\"$altura\">PROCESO DE CONTRATACION / ADQUISICION:</td>
+                                        <td style=\"width: 10%;\">Cantidad</td>
+                                        <td style=\"width: 18%;\">Monto Total(Bs)</td>
+                                        <td style=\"width: 20%;\">Plazo de ejecucion</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$pvobjetivos->proceso_con</td>
+                                        <td>$pvobjetivos->cantidad</td>
+                                        <td>$pvobjetivos->monto_total</td>
+                                        <td>$pvobjetivos->plazo_ejecucion</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>";
+    }
+    ///REsponsable SOlicitud
+            $tabla1 .="<tr>
                 <td style = \" width: 100%;\" colspan = \"3\">Responsable de Solicitud:</td>
             </tr>            
             <tr>
@@ -364,7 +497,7 @@ try {
                         <tr>
                             <td  height =\"$altura2\"><br /><br />$user->nombre</td>
                             <td><br /><br />$user->cargo</td>
-                            <td height =\"50\"></td>
+                            <td height =\"40\"></td>
                             <td><br /><br />$documento->fecha_creacion</td>
                         </tr>
                     </table>
@@ -374,20 +507,20 @@ try {
                 <td style = \" width: 100%;\" colspan = \"3\">&nbsp;</td>
             </tr>
         </table>";
-    $pdf->Ln();
+    $pdf->Ln(-5);
     //$pdf->Cell(169.5,111,'',1,0,'C');
     //$pdf->Ln(1);
     $pdf->writeHTML( $tabla1, false, false, false);
     
-    $tabla2 = "
-    <table style=\"width: 600px;\"  border=\"1px\" >
+    $tabla2 = " &nbsp;&nbsp;
+    <table style=\"width: 100%;\"  border=\"1px\" >
             <tr bgcolor = \"$color\">
                 <td style = \" width: 100%;\" height =\"$altura\"><b>II. CERTIFICACI&Oacute;N (A ser llenado por la DGP)</b></td>
             </tr>
             <tr>
                 <td style = \" width: 100%;\">
                     <center>
-                    <table border = \"1px\" style=\" width:580px;\" >
+                    <table border = \"1px\" style=\" width:99%;\" >
                         <tr>
                             <td>En cumplimiento de los reglamentos Específicos del Sistema de Programación de Operaciones y del Sistema de 
                             Administración de Bienes y servicios del MDPyEP, la Dirección General de Planificación <b>Certifica</b> que la actividad solicitada
@@ -404,7 +537,7 @@ try {
             </tr>
             <tr>
                 <td><p>
-                    <table border = \"1px\" style=\" width:580px;\" >
+                    <table border = \"1px\" style=\" width:99%;\" >
                         <tr>
                             <td style=\"width: 90px;\" bgcolor = \"$color\">Responsable Verificación POA</td>
                             <td style=\"width: 200px;\"><span style=\"color:#DADADA; text-align:center; font-size: 60%;\"><br /><br /><br /><br /><span style=\"color:#000000; text-align:center; font-size: 120%;\">$autoriza</span><br />FIRMA</span></td>
