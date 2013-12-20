@@ -400,6 +400,9 @@ public  function action_lista(){
                 $ejecucion->saldo_devengado = $ejecucion->saldo_devengado - $l->importe_certificado;
                 $ejecucion->save();
             }
+            if($pre->id_memo != 0)
+                $this->request->redirect('documento/detalle/'.$pre->id_memo);
+            else
             $this->request->redirect('documento/detalle/'.$pre->id_documento);
         }
     }

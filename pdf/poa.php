@@ -207,8 +207,9 @@ try {
     $tipo_con[$pvobjetivos->id_tipocontratacion]='<b>X</b>';
     ///Solicitud, unidad solicitante
     $tabla1 = "
-        <table style=\" width: 650px;\" border=\"0px\" frame=\"border\">
-            <tr>
+        <table style=\" width: 650px;\" border=\"0px\" frame=\"border\">";
+    
+    $tabla1 .= "<tr>
                 <td style = \" width: 100%;\" colspan = \"3\" height =\"$altura\"></td>
             </tr>
             <tr>
@@ -314,7 +315,7 @@ $tabla1 .=" <tr>
                             <td colspan=\"7\" height =\"$altura\" style=\"width: 80%;\">PRESUPUESTO PARA LA ACTIVIDAD: </td>
                             <td style=\"width: 20%;\" rowspan=\"2\">SALDO DISPONIBLE<br />A LA FECHA Bs.</td>
                         </tr>
-                        <tr>
+                        <tr bgcolor=\"$color\">
                             <td style=\"width: 12%;\" height =\"$altura2\">D.A.</td>
                             <td style=\"width: 12%;\">U.E.</td>
                             <td style=\"width: 12%;\">PROGRAMA</td>
@@ -357,7 +358,7 @@ $tabla1 .=" <tr>
                 if($pre->auto_pre == 1)///en caso de que el presupuesto aun no fue autorizado
                     $tabla1 .= "<td>$liq->cs_saldo_devengado</td>";
                 else
-                    $tabla1 .= "<td>Sin Autorizar</td>";
+                    $tabla1 .= "<td>No Aprobado</td>";
                 $tabla1 .= "</tr>";
             }
         }
@@ -370,7 +371,7 @@ $tabla1 .=" <tr>
                     </tr>";
 ///Fin - Presupuesto
 
-$tabla1 .="";
+//$tabla1 .="";
 ///TIPO actividad, Tipo Contratacion, Recursos
     $tabla1 .= "
             <tr>
@@ -505,12 +506,12 @@ $tabla1 .="";
             </tr>
             <tr>
                 <td style = \" width: 100%;\" colspan = \"3\">&nbsp;</td>
-            </tr>
-        </table>";
+            </tr>";
+    $tabla1 .= "</table>";
     $pdf->Ln(-5);
     //$pdf->Cell(169.5,111,'',1,0,'C');
     //$pdf->Ln(1);
-    $pdf->writeHTML( $tabla1, false, false, false);
+    $pdf->writeHTML( utf8_encode($tabla1), false, false, false);
     
     $tabla2 = " &nbsp;&nbsp;
     <table style=\"width: 100%;\"  border=\"1px\" >

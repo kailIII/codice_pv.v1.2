@@ -469,7 +469,12 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
             $poa->nro_poa = $nur;
             $poa->auto_poa = 1;
             $poa->save();
-            $this->request->redirect('documento/detalle/'.$poa->id_documento);
+            //$this->request->redirect('documento/detalle/'.$poa->id_documento);
+            ///para redireccionar buscamos el documento al que pertenece(Nota o FOCOV)
+            if($poa->id_memo != 0)
+                $this->request->redirect('documento/detalle/'.$poa->id_memo);
+            else
+                $this->request->redirect('documento/detalle/'.$poa->id_documento);
         }
     }
     ///////////////////////end////

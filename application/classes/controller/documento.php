@@ -195,8 +195,8 @@ class Controller_documento extends Controller_DefaultTemplate {
                         }
 
                     ///////////end//////////////////
-                    if(!isset($nur)){
-                        if (isset($_POST['asignar_nur'])) {
+                    if(!isset($nur)){///primera vez 
+                        if (isset($_POST['asignar_nur']) && $nota == 0) {///HR existente para los demas documentos
                             $nur = $_POST['asignar_nur'];   
                             $nur_asignado = $_POST['asignar_nur'];   
                         }else{
@@ -869,7 +869,6 @@ class Controller_documento extends Controller_DefaultTemplate {
                         ->bind('det_obj_esp', $detalleespecifico)
                         ->bind('det_act', $detalleactividad)
                         ->bind('tipocontratacion', $tipocontratacion);  /// en poa//
-
             }else if ($tipo->action == 'pre') {
                 $pre = ORM::factory('presupuestos')->where('id_documento','=',$documento->id)->find();
                 $uEjeppt = New Model_oficinas();
@@ -915,7 +914,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                          ->bind('x_disponible', $x_disponible)
                          ->bind('x_solicitado', $x_solicitado)
                         ;
-            }else if($tipo->action == 'nota'){
+            }else if($tipo->action == 'nota' && $documento->fucov == '2'){///Nota con certificacion POA y PRE
                 
                 ///Modificado Freddy Velasco POA
                 $cambio = ORM::factory('pvtipocambios')->find_all();
@@ -1111,13 +1110,13 @@ class Controller_documento extends Controller_DefaultTemplate {
         } 
         if ($nivel == 8) {
             $memo = ORM::factory('documentos')->where('id','=',$id)->find();
-            if($memo->fucov > '0'){
+//            if($memo->fucov > '0'){
                 $poa = ORM::factory('poas')->where('id_memo','=',$id)->find();
-            }else{
-                $poa = ORM::factory('poas')->where('id_documento','=',$id)->find();
-            }
+//            }else{
+//                $poa = ORM::factory('poas')->where('id_documento','=',$id)->find();
+//            }
             
-            if($estado =='2' && $poa->loaded()){
+            if($memo->fucov > '0' && $estado =='2' && $poa->loaded()){
                 $uEjepoa = New Model_oficinas();
                 $uejecutorapoa = $uEjepoa->uejecutorapoa($id_oficina);
                 
@@ -1154,7 +1153,6 @@ class Controller_documento extends Controller_DefaultTemplate {
                     }    
                 }
 
-               
                 $tipoc = ORM::factory('poatipocontrataciones')->where('estado','=','1')->find_all();
                 $tipocontratacion[''] = '(Seleccionar)';
                 foreach ($tipoc as $tc){$tipocontratacion[$tc->id] = $tc->codigo.' - '.$tc->nombre;}
@@ -1174,22 +1172,21 @@ class Controller_documento extends Controller_DefaultTemplate {
                         ->bind('ue_poa', $uejecutorapoa)
                         ->bind('id_oficina', $id_oficina)
                         ;
-
         }
         }
         if ($nivel == 7) {
             $memo = ORM::factory('documentos')->where('id','=',$id)->find();
             $pvfucov = ORM::factory('pvfucovs')->where('id_memo','=',$id)->find();
-            if($memo->fucov == '1'){
+//            if($memo->fucov > '0'){
                 $pre = ORM::factory('presupuestos')->where('id_memo','=',$id)->find();
-            }else{
-                $poa = ORM::factory('poas')->where('id_documento','=',$id)->find();
-                if($poa->loaded())
-                    $pre = ORM::factory('presupuestos')->where('id_memo','=',$id)->find();
-                else
-                    $pre = ORM::factory('presupuestos')->where('id_documento','=',$id)->find();
-            }
-            if($estado == '2' && $pre->loaded()){
+//            }else{
+//                $poa = ORM::factory('poas')->where('id_documento','=',$id)->find();
+//                if($poa->loaded())
+//                    $pre = ORM::factory('presupuestos')->where('id_memo','=',$id)->find();
+//                else
+//                    $pre = ORM::factory('presupuestos')->where('id_documento','=',$id)->find();
+//            }
+            if( $memo->fucov > '0' && $estado == '2' && $pre->loaded() ){
                 $uEjeppt = New Model_oficinas();
                 $uejecutorapre = $uEjeppt->uejecutorappt($this->user->id_oficina);
                 $oFuente = New Model_Pvprogramaticas(); ///fuentes de financiamiento
