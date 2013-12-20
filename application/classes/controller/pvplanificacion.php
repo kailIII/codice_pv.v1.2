@@ -420,6 +420,7 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
         $poa = ORM::factory('poas')->where('id','=',$id)->find();
         if ($poa->loaded()) {
             if($poa->auto_poa == 0){
+                    $poa->id_obj_est = $_POST['obj_est'];
                     $poa->id_obj_gestion = $_POST['obj_gestion'];
                     $poa->id_obj_esp = $_POST['obj_esp'];
                     $poa->id_actividad = $_POST['actividad'];
@@ -435,6 +436,12 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
                     $poa->cantidad = $_POST['cantidad'];
                     $poa->monto_total = $_POST['monto_total'];
                     $poa->plazo_ejecucion = $_POST['plazo_ejecucion'];
+                    $poa->cod_pol_sec = $_POST['cod_pol_sec'];
+                    $poa->cod_est_sec = $_POST['cod_est_sec'];
+                    $poa->cod_prog_sec = $_POST['cod_prog_sec'];
+                    $poa->des_pol_sec = $_POST['des_pol_sec'];
+                    $poa->des_est_sec = $_POST['des_est_sec'];
+                    $poa->des_prog_sec = $_POST['des_prog_sec'];
                     $poa->save();
                 if($poa->id_memo)
                     $this->request->redirect('documento/detalle/'.$poa->id_memo);

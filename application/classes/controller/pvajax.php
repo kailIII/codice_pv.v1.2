@@ -46,8 +46,14 @@ public function action_detobjestrategico()
 
 public function action_objgestion()
     {       
+        
         $id = $_POST['id'];
-        $objetivo = ORM::factory('pvogestiones')->where('id_obj_est','=',$id)->find_all();
+        $id_ofi = $_POST['id_oficina'];
+
+        $uEjepoa = New Model_oficinas();
+        $uejecutorapoa = $uEjepoa->uejecutorapoa($id_ofi);
+
+        $objetivo = ORM::factory('pvogestiones')->where('id_obj_est','=',$id)->and_where('id_oficina','=',$uejecutorapoa->id)->find_all();
         $obj = '<option value = "" selected>(Seleccione)</option>';
         foreach($objetivo as $o){
             $obj = $obj.'<option value="'.$o->id.'">'.$o->codigo.'</option>';

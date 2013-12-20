@@ -571,6 +571,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                         }
                     }elseif ($documento->id_tipo == 14 && $documento->id == $poa->id_documento) {//MOdificado Freddy Velasco - Editar POA
                         //$poa = ORM::factory('poas')->where('id_documento','=',$id)->find();
+                        $poa->id_obj_est = $_POST['obj_est'];
                         $poa->id_obj_gestion = $_POST['obj_gestion'];
                         $poa->id_obj_esp = $_POST['obj_esp'];
                         $poa->id_actividad = $_POST['actividad'];
@@ -582,10 +583,16 @@ class Controller_documento extends Controller_DefaultTemplate {
                         $poa->ri_porcentaje = $_POST['ri_porcentaje'];
                         $poa->re_financiador = $_POST['re_financiador'];
                         $poa->re_porcentaje = $_POST['re_porcentaje'];
-                        $poa->proceso_con = $_POST['referencia'];
+                        $poa->proceso_con = $_POST['proceso_con'];
                         $poa->cantidad = $_POST['cantidad'];
                         $poa->monto_total = $_POST['monto_total'];
                         $poa->plazo_ejecucion = $_POST['plazo_ejecucion'];
+                        $poa->cod_pol_sec = $_POST['cod_pol_sec'];
+                        $poa->cod_est_sec = $_POST['cod_est_sec'];
+                        $poa->cod_prog_sec = $_POST['cod_prog_sec'];
+                        $poa->des_pol_sec = $_POST['des_pol_sec'];
+                        $poa->des_est_sec = $_POST['des_est_sec'];
+                        $poa->des_prog_sec = $_POST['des_prog_sec'];
                         $poa->save();
                         $sw=1; ///cambiar a documento PRE
                         $pre = ORM::factory('presupuestos')->where('id_memo','=',$poa->id_memo)->find();
@@ -853,13 +860,16 @@ class Controller_documento extends Controller_DefaultTemplate {
                         ->bind('archivos', $archivos)
                         ->bind('destinatarios', $destinatarios)
                         ->bind('poa', $poa)
+                        ->bind('obj_est', $objest)
                         ->bind('obj_gestion', $objgestion)
                         ->bind('obj_esp', $objespecifico)
                         ->bind('actividad', $actividad)
+                        ->bind('det_obj_est', $detalleestrategico)
                         ->bind('det_obj_gestion', $detallegestion)//detalle del objetivo de gestion
                         ->bind('det_obj_esp', $detalleespecifico)
                         ->bind('det_act', $detalleactividad)
                         ->bind('tipocontratacion', $tipocontratacion);  /// en poa//
+
             }else if ($tipo->action == 'pre') {
                 $pre = ORM::factory('presupuestos')->where('id_documento','=',$documento->id)->find();
                 $uEjeppt = New Model_oficinas();
@@ -917,15 +927,29 @@ class Controller_documento extends Controller_DefaultTemplate {
                 $uEjepoa = New Model_oficinas();
                 $uejecutorapoa = $uEjepoa->uejecutorapoa($this->user->id_oficina);
                 
-                $ogestion = ORM::factory('pvogestiones')->where('id_oficina','=',$uejecutorapoa->id)->and_where('estado','=',1)->find_all();///objetivos de gestion
-                $objgestion[''] = 'Seleccione Objetivo de Gestion';
-                foreach ($ogestion as $og){$objgestion[$og->id] = $og->codigo;}
+//                $ogestion = ORM::factory('pvogestiones')->where('id_oficina','=',$uejecutorapoa->id)->and_where('estado','=',1)->find_all();///objetivos de gestion
+//                $objgestion[''] = 'Seleccione Objetivo de Gestion';
+//                foreach ($ogestion as $og){$objgestion[$og->id] = $og->codigo;}
                 
-                $objespecifico[''] = 'Seleccione Objetivo Especifico';
-                $actividad[''] = 'Seleccione la Actividad';
-                if($poa->id_obj_gestion){
-                    $det = ORM::factory('pvogestiones')->where('id', '=', $poa->id_obj_gestion)->find(); ///Detalle Objetivo de Gestion
-                    $detallegestion = $det->objetivo;
+                $oestrategico = ORM::factory('pvoestrategicos')->where('estado','=',1)->find_all();
+                $objest[''] = '(Seleccione)';
+                foreach ($oestrategico as $oes){$objest[$oes->id] = $oes->codigo;}
+
+                                
+                $objgestion[''] = '(Seleccione)';
+                $objespecifico[''] = '(Seleccione)';
+                $actividad[''] = '(Seleccione)';
+                if($poa->id_obj_est){
+                    $det = ORM::factory('pvoestrategicos')->where('id', '=', $poa->id_obj_est)->find(); ///Detalle Objetivo Estrategico
+                    $detalleestrategico = $det->objetivo;
+
+                    $oges = ORM::factory('pvogestiones')->where('id_obj_est', '=', $poa->id_obj_est)->and_where('estado','=',1)->and_where('id_oficina','=',$uejecutorapoa->id)->find_all(); ///objetivo especifico
+                    foreach ($oges as $oe) {
+                        $objgestion[$oe->id] = $oe->codigo;
+                        if ($oe->id == $poa->id_obj_gestion)
+                            $detallegestion = $oe->objetivo;
+                    }
+                    
                     $oesp = ORM::factory('pvoespecificos')->where('id_obj_gestion', '=', $poa->id_obj_gestion)->find_all(); ///objetivo especifico
                     foreach ($oesp as $oe) {
                         $objespecifico[$oe->id] = $oe->codigo;
@@ -941,8 +965,8 @@ class Controller_documento extends Controller_DefaultTemplate {
                 }
                
                 $tipoc = ORM::factory('poatipocontrataciones')->where('estado','=','1')->find_all();
-                $tipocontratacion[''] = 'Seleccionar Tipo Contratacion';
-                foreach ($tipoc as $tc){$tipocontratacion[$tc->id] = $tc->nombre;}
+                $tipocontratacion[''] = '(Seleccionar)';
+                foreach ($tipoc as $tc){$tipocontratacion[$tc->id] = $tc->codigo.' - '.$tc->nombre;}
                 
                 //PRE - Modificado por Rodrigo Aguilar
                 $pre = ORM::factory('presupuestos')->where('id_memo', '=', $documento->id)->find();
@@ -986,9 +1010,11 @@ class Controller_documento extends Controller_DefaultTemplate {
                         // POA
                         ->bind('uejecutorapoa', $uejecutorapoa)
                         ->bind('poa', $poa)
+                        ->bind('obj_est', $objest)
                         ->bind('obj_gestion', $objgestion)
                         ->bind('obj_esp', $objespecifico)
                         ->bind('actividad', $actividad)
+                        ->bind('det_obj_est', $detalleestrategico)//detalle del objetivo de estrategico
                         ->bind('det_obj_gestion', $detallegestion)//detalle del objetivo de gestion
                         ->bind('det_obj_esp', $detalleespecifico)
                         ->bind('det_act', $detalleactividad)
@@ -1095,15 +1121,25 @@ class Controller_documento extends Controller_DefaultTemplate {
                 $uEjepoa = New Model_oficinas();
                 $uejecutorapoa = $uEjepoa->uejecutorapoa($id_oficina);
                 
-                $ogestion = ORM::factory('pvogestiones')->where('id_oficina','=',$uejecutorapoa->id)->and_where('estado','=',1)->find_all();///objetivos de gestion
-                $objgestion[''] = 'Seleccione Objetivo de Gestion';
-                foreach ($ogestion as $og){$objgestion[$og->id] = $og->codigo;}
-                
-                $objespecifico[''] = 'Seleccione Objetivo Especifico';
-                $actividad[''] = 'Seleccione la Actividad';
-                if($poa->id_obj_gestion){
-                    $det = ORM::factory('pvogestiones')->where('id', '=', $poa->id_obj_gestion)->find(); ///Detalle Objetivo de Gestion
-                    $detallegestion = $det->objetivo;
+                $oestrategico = ORM::factory('pvoestrategicos')->where('estado','=',1)->find_all();
+                $objest[''] = '(Seleccione)';
+                foreach ($oestrategico as $oes){$objest[$oes->id] = $oes->codigo;}
+
+                                
+                $objgestion[''] = '(Seleccione)';
+                $objespecifico[''] = '(Seleccione)';
+                $actividad[''] = '(Seleccione)';
+                if($poa->id_obj_est){
+                    $det = ORM::factory('pvoestrategicos')->where('id', '=', $poa->id_obj_est)->find(); ///Detalle Objetivo Estrategico
+                    $detalleestrategico = $det->objetivo;
+
+                    $oges = ORM::factory('pvogestiones')->where('id_obj_est', '=', $poa->id_obj_est)->and_where('estado','=',1)->and_where('id_oficina','=',$uejecutorapoa->id)->find_all(); ///objetivo especifico
+                    foreach ($oges as $oe) {
+                        $objgestion[$oe->id] = $oe->codigo;
+                        if ($oe->id == $poa->id_obj_gestion)
+                            $detallegestion = $oe->objetivo;
+                    }
+                    
                     $oesp = ORM::factory('pvoespecificos')->where('id_obj_gestion', '=', $poa->id_obj_gestion)->find_all(); ///objetivo especifico
                     foreach ($oesp as $oe) {
                         $objespecifico[$oe->id] = $oe->codigo;
@@ -1117,23 +1153,28 @@ class Controller_documento extends Controller_DefaultTemplate {
                             $detalleactividad = $a->actividad;
                     }    
                 }
+
                
                 $tipoc = ORM::factory('poatipocontrataciones')->where('estado','=','1')->find_all();
-                $tipocontratacion[''] = 'Seleccionar Tipo Contratacion';
-                foreach ($tipoc as $tc){$tipocontratacion[$tc->id] = $tc->nombre;}
+                $tipocontratacion[''] = '(Seleccionar)';
+                foreach ($tipoc as $tc){$tipocontratacion[$tc->id] = $tc->codigo.' - '.$tc->nombre;}
                 $mensajes = '';
                 $contenido = View::factory('pvplanificacion/contenidopoa')
                         ->bind('mensajes', $mensajes)
                         ->bind('poa', $poa)
+                        ->bind('obj_est', $objest)
                         ->bind('obj_gestion', $objgestion)
                         ->bind('obj_esp', $objespecifico)
                         ->bind('actividad', $actividad)
+                        ->bind('det_obj_est', $detalleestrategico)//detalle del objetivo de estrategico
                         ->bind('det_obj_gestion', $detallegestion)//detalle del objetivo de gestion
                         ->bind('det_obj_esp', $detalleespecifico)
                         ->bind('det_act', $detalleactividad)
                         ->bind('tipocontratacion', $tipocontratacion)
                         ->bind('ue_poa', $uejecutorapoa)
-                ;
+                        ->bind('id_oficina', $id_oficina)
+                        ;
+
         }
         }
         if ($nivel == 7) {

@@ -185,6 +185,7 @@ $('#hora_inicio,#hora_fin').timeEntry({show24Hours: true, showSeconds: true});
 ///Modificado Freddy Velasco
 $('#obj_est').change(function(){
     var id = $('#obj_est').val();
+    var id_oficina = $('#id_oficina').val();
     $('#det_obj_est').html('');
     
     $('#obj_gestion').html('');
@@ -193,12 +194,13 @@ $('#obj_est').change(function(){
     $('#det_obj_esp').html('');
     $('#actividad').html('');
     $('#det_act').html('');
+
             var act = 'detobjestrategico';///detalle del Objetivo estrategico
             var ctr = $('#det_obj_est');
-            ajaxs(id, act, ctr);
+            ajaxs(id, act, ctr,0);
             act = 'objgestion';
             ctr = $('#obj_gestion');
-            ajaxs(id, act, ctr);
+            ajaxs(id, act, ctr,id_oficina);
 });
 
 $('#obj_gestion').change(function(){
@@ -210,10 +212,10 @@ $('#obj_gestion').change(function(){
     $('#det_act').html('');
             var act = 'detobjgestion';///detalle del Objetivo de Gestion 
             var ctr = $('#det_obj_gestion');
-            ajaxs(id, act, ctr);
+            ajaxs(id, act, ctr,0);
             act = 'objespecifico';
             ctr = $('#obj_esp');
-            ajaxs(id, act, ctr);
+            ajaxs(id, act, ctr,0);
         });
 $('#obj_esp').change(function(){
     var id = $('#obj_esp').val();
@@ -222,25 +224,25 @@ $('#obj_esp').change(function(){
     $('#det_act').html('');
             var act = 'detobjespecifico';///detalle del Objetivo Especifico 
             var ctr = $('#det_obj_esp');
-            ajaxs(id, act, ctr);
+            ajaxs(id, act, ctr,0);
             act = 'actividad';///actividades 
             ctr = $('#actividad');
-            ajaxs(id, act, ctr);
+            ajaxs(id, act, ctr,0);
         });
 $('#actividad').change(function(){
     var id = $('#actividad').val();
     $('#det_act').html('');
             var act = 'detactividad';///detalle del Objetivo Especifico 
             var ctr = $('#det_act');
-            ajaxs(id, act, ctr);
+            ajaxs(id, act, ctr,0);
             
         });
 
-function ajaxs(id, accion, control)
+function ajaxs(id, accion, control,id_oficina)
 {        
     $.ajax({
         type: "POST",
-        data: { id: id},
+        data: { id: id, id_oficina: id_oficina},
         url: "/pvajax/"+accion,
         dataType: "json",
         success: function(item)
@@ -254,7 +256,7 @@ function ajaxs(id, accion, control)
 
 // Modificado por Freddy Velasco
 var valor = $('#id_tipocontratacion option:selected').html();
-     if(valor =='Otros'){
+     if(valor ==' - Otros'){
         $('#id_label_otro_tc').show();
         $('#id_otro_tipocontracion').show();
         $('#otro_tipocontratacion').attr('class','required');
@@ -266,7 +268,7 @@ var valor = $('#id_tipocontratacion option:selected').html();
 
 $('#id_tipocontratacion').change(function(){
      var valor = $('#id_tipocontratacion option:selected').html();
-     if(valor =='Otros'){
+     if(valor ==' - Otros'){
         $('#id_label_otro_tc').show();
         $('#id_otro_tipocontracion').show();
         $('#otro_tipocontratacion').attr('class','required');
@@ -579,6 +581,7 @@ function dia_literal($n) {
                                 <p>
                                     <?php
                                     echo Form::hidden('id_doc', $documento->id);
+                                    echo Form::hidden('id_oficina', $documento->id_oficina,array('id'=>'id_oficina'));
                                     echo Form::label('destinatario', 'Nombre del destinatario:', array('class' => 'form'));
                                     echo Form::input('destinatario', $documento->nombre_destinatario, array('id' => 'destinatario', 'size' => 45, 'class' => 'required'));
                                     ?>
@@ -733,6 +736,10 @@ function dia_literal($n) {
             <table width="100%">
                 
                 <tr>
+                                                <td><b>Unidad Ejecutora:</b></td>
+                                                <td colspan="2"><?php echo $uejecutorapoa->oficina?></td>
+                                            </tr>
+                <tr>
                     <td colspan="3"><hr /><br/></td>
                 </tr>
                 <tr>
@@ -750,15 +757,15 @@ function dia_literal($n) {
                                         <TBODY>
                                             <tr> 
                                                 <th>CODIGO</th>
-                                                <td><?php echo Form::input('cod_pol_sec','',array('id'=>'cod_pol_sec')) ?></td>
-                                                <td></td>
-                                                <td></td>
+                                                <td><?php echo Form::input('cod_pol_sec',$poa->cod_pol_sec,array('id'=>'cod_pol_sec')) ?></td>
+                                                <td><?php echo Form::input('cod_est_sec',$poa->cod_est_sec,array('id'=>'cod_est_sec')) ?></td>
+                                                <td><?php echo Form::input('cod_prog_sec',$poa->cod_prog_sec,array('id'=>'cod_prog_sec')) ?></td>
                                             </tr>
                                             <tr>
                                                 <th>DESC.</th>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
+                                                <td><textarea name="des_pol_sec" id="des_pol_sec" style="width: 190px"><?php echo $poa->des_pol_sec; ?></textarea></td>
+                                                <td><textarea name="des_est_sec" id="des_est_sec" style="width: 190px"><?php echo $poa->des_est_sec; ?></textarea></td>
+                                                <td><textarea name="des_prog_sec" id="des_prog_sec" style="width: 190px"><?php echo $poa->des_prog_sec; ?></textarea></td>
                                             </tr>
                                         </TBODY>
                         </table>
@@ -767,10 +774,6 @@ function dia_literal($n) {
                 <tr>
                     <td colspan="3">
                         <table>
-                            <tr>
-                                <td><b>Unidad Ejecutora:</b></td>
-                                <td><?php echo $uejecutorapoa->oficina?></td>
-                            </tr>
                             <tr>
                                 <td><b><?php echo Form::label('obj_est', 'Objetivo de Estrategico:', array('class' => 'form')); ?></b></td>
                                 <td><?php echo Form::select('obj_est', $obj_est, $poa->id_obj_est, array('class' => 'form', 'name' => 'obj_est', 'id' => 'obj_est', 'class' => 'required')); ?></td>
@@ -896,7 +899,7 @@ function dia_literal($n) {
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td><textarea name="referencia" id="referencia" style="width: 380px;" ><?php echo $poa->proceso_con; ?></textarea></td>
+                                                <td><textarea name="proceso_con" id="proceso_con" style="width: 380px;" ><?php echo $poa->proceso_con; ?></textarea></td>
                                                 <td><?php echo Form::input('cantidad',$poa->cantidad,array('id'=>'cantidad','size'=>'4','class'=>'number')); ?></td>
                                                 <td><?php echo Form::input('monto_total',$poa->monto_total,array('id'=>'monto_total','size'=>'8','class'=>'number')); ?></td>
                                                 <td><?php echo Form::input('plazo_ejecucion',$poa->plazo_ejecucion,array('id'=>'plazo_ejecucion','size'=>'15')); ?></td>
