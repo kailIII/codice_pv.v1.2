@@ -180,8 +180,8 @@ class Controller_documento extends Controller_DefaultTemplate {
                                 $poa->id_documento = $documento->id;
                                 $poa->fecha_modificacion = date('Y-m-d H:i:s');
                                 $poa->tipo_actividad = 'FUNCIONAMIENTO';
-                                $poa->id_tipocontratacion = 5;
-                                $poa->otro_tipocontratacion = 'Pago de Viaticos';
+                                $poa->id_tipocontratacion = 0;
+                                $poa->otro_tipocontratacion = '';
                                 $poa->id_memo = $id_memo;
                                 $poa->save();
                         }
