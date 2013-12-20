@@ -180,7 +180,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                                 $poa->id_documento = $documento->id;
                                 $poa->fecha_modificacion = date('Y-m-d H:i:s');
                                 $poa->tipo_actividad = 'FUNCIONAMIENTO';
-                                $poa->id_tipocontratacion = 6;
+                                $poa->id_tipocontratacion = 5;
                                 $poa->otro_tipocontratacion = 'Pago de Viaticos';
                                 $poa->id_memo = $id_memo;
                                 $poa->save();
@@ -1184,6 +1184,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                         ->bind('tipocontratacion', $tipocontratacion)
                         ->bind('ue_poa', $uejecutorapoa)
                         ->bind('id_oficina', $id_oficina)
+                        ->bind('documento', $memo)
                         ;
         }
         }

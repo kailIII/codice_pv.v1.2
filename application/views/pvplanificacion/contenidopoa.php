@@ -1,5 +1,16 @@
 <script type="text/javascript">
     $(function(){
+
+        <?php if($documento->fucov==1){ ?>
+            $('#grupo1').hide();
+            $('#grupo2').hide();
+            $('#grupo3').hide();
+            $('#grupo4').hide();
+            $('#grupo5').hide();
+            $('#grupo6').hide();
+            $('#grupo7').hide();
+        <?php } ?>
+
         $('#obj_est').change(function(){
             var id = $('#obj_est').val();
             var id_oficina = $('#id_oficina').val();
@@ -120,13 +131,14 @@ $('.autorizar').live('click', function() {
                         <td colspan="2"><?php echo $ue_poa->oficina ?></td>
                         <td>Nro.: <?php echo Form::input('nro_poa',$poa->nro_poa); ?></td>
                     </tr>
-                    <tr>
+                    <tr id='grupo1'>
                         <td colspan="4">
                            <div><b><?php echo Form::label('label_plansectorial', 'PLAN SECTORIAL - POLITICA', array('id' => 'label_plansectorial', 'class' => 'form')); ?> </b></div>   
                            <table class="classy" border="1">
                             <thead>
                                 <tr>
-                                    <th><?php echo Form::hidden('id_oficina', $id_oficina,array('id'=>'id_oficina')); ?></th>
+                                    <th><?php echo Form::hidden('id_oficina', $id_oficina,array('id'=>'id_oficina')); ?>
+                                    </th>
                                     <th style="text-align:center;">Politica Sectorial</th>
                                     <th style="text-align:center;">Estrategia Sectorial</th>
                                     <th style="text-align:center;">Programa Sectorial</th>
@@ -186,19 +198,19 @@ $('.autorizar').live('click', function() {
                         <textarea name="det_act" id="det_act" style="width: 600px;" readonly rows="2" ><?php echo $det_act; ?></textarea>
                     </td>
                 </tr>
-                <tr>
+                <tr id="grupo2">
                     <td colspan="4"><hr /><br /></td>
                 </tr>
-                <tr>
+                <tr id="grupo3">
                     <td><b><?php echo Form::label('id_tipocontratacion', 'Tipo de Contratacion:', array('class' => 'form')); ?></b></td>
                     <td><?php echo Form::select('id_tipocontratacion', $tipocontratacion, $poa->id_tipocontratacion, array('class' => 'form', 'class' => 'required', 'id' => 'id_tipocontratacion', 'name' => 'id_tipocontratacion')); ?></td>
                     <td id="id_label_otro_tc"><b><?php echo Form::label('otro_tipocontratacion', 'Otro:', array('class' => 'form')); ?></b></td>
                     <td id="id_otro_tipocontracion"><?php echo Form::input('otro_tipocontratacion',$poa->otro_tipocontratacion,array('class'=>'form','id'=>'otro_tipocontratacion')); ?></td>
                 </tr>
-                <tr>
+                <tr id="grupo4">
                     <td colspan="4"><hr /><br /></td>
                 </tr>
-                <tr>
+                <tr id="grupo5">
                     <td colspan="4" align="center">
                         <table>
                             <tr>
@@ -251,10 +263,10 @@ $('.autorizar').live('click', function() {
 
                     </td>
                 </tr>
-                <tr>
+                <tr id="grupo6">
                     <td colspan="4"><hr /><br /></td>
                 </tr>
-                <tr>
+                <tr id="grupo7">
                     <td colspan="4">
                         <table>
                             <tr>
