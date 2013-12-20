@@ -229,7 +229,7 @@
             	            success: function(item)
             	            {
                                     if(item){
-                                        alert('Comision durante el feriado: '+item);
+                                        //alert('Comision durante el feriado: '+item);
                                         $("#justificacion_finsem").attr("class", "required");
                                     }
                                     else{
@@ -293,55 +293,76 @@
         /////////////end////////////////////
         
         ///Modificado Rodrigo 260813
-        $('#obj_gestion').change(function(){
-            var id = $('#obj_gestion').val();
-            $('#det_obj_gestion').html('');
-            $('#obj_esp').html('');
-            $('#det_obj_esp').html('');
-            $('#actividad').html('');
-            $('#det_act').html('');
+        $('#obj_est').change(function(){
+    var id = $('#obj_est').val();
+    var id_oficina = $('#id_oficina').val();
+    $('#det_obj_est').html('');
+    
+    $('#obj_gestion').html('');
+    $('#det_obj_gestion').html('');
+    $('#obj_esp').html('');
+    $('#det_obj_esp').html('');
+    $('#actividad').html('');
+    $('#det_act').html('');
+
+            var act = 'detobjestrategico';///detalle del Objetivo estrategico
+            var ctr = $('#det_obj_est');
+            ajaxs(id, act, ctr,0);
+            act = 'objgestion';
+            ctr = $('#obj_gestion');
+            ajaxs(id, act, ctr,id_oficina);
+});
+
+$('#obj_gestion').change(function(){
+    var id = $('#obj_gestion').val();
+    $('#det_obj_gestion').html('');
+    $('#obj_esp').html('');
+    $('#det_obj_esp').html('');
+    $('#actividad').html('');
+    $('#det_act').html('');
             var act = 'detobjgestion';///detalle del Objetivo de Gestion 
             var ctr = $('#det_obj_gestion');
-            ajaxs(id, act, ctr);
+            ajaxs(id, act, ctr,0);
             act = 'objespecifico';
             ctr = $('#obj_esp');
-            ajaxs(id, act, ctr);
+            ajaxs(id, act, ctr,0);
         });
-        $('#obj_esp').change(function(){
-            var id = $('#obj_esp').val();
-            $('#det_obj_esp').html('');
-            $('#actividad').html('');
-            $('#det_act').html('');
+$('#obj_esp').change(function(){
+    var id = $('#obj_esp').val();
+    $('#det_obj_esp').html('');
+    $('#actividad').html('');
+    $('#det_act').html('');
             var act = 'detobjespecifico';///detalle del Objetivo Especifico 
             var ctr = $('#det_obj_esp');
-            ajaxs(id, act, ctr);
+            ajaxs(id, act, ctr,0);
             act = 'actividad';///actividades 
             ctr = $('#actividad');
-            ajaxs(id, act, ctr);
+            ajaxs(id, act, ctr,0);
         });
-        $('#actividad').change(function(){
-            var id = $('#actividad').val();
-            $('#det_act').html('');
+$('#actividad').change(function(){
+    var id = $('#actividad').val();
+    $('#det_act').html('');
             var act = 'detactividad';///detalle del Objetivo Especifico 
             var ctr = $('#det_act');
-            ajaxs(id, act, ctr);
+            ajaxs(id, act, ctr,0);
             
         });
-        
-        function ajaxs(id, accion, control)
-        {        
-            $.ajax({
-                type: "POST",
-                data: { id: id},
-                url: "/pvajax/"+accion,
-                dataType: "json",
-                success: function(item)
-                {
-                    $(control).html(item);
-                },
-                error: $(control).html('')
-            });
-        }
+
+function ajaxs(id, accion, control,id_oficina)
+{        
+    $.ajax({
+        type: "POST",
+        data: { id: id, id_oficina: id_oficina},
+        url: "/pvajax/"+accion,
+        dataType: "json",
+        success: function(item)
+        {
+            $(control).html(item);
+        },
+        error: $(control).html('')
+    });
+}
+
         $('#fuente').change(function(){
             ajaxppt();
         });
@@ -545,6 +566,7 @@ function dia_literal($n) {
                                 <p>
                                     <?php
                                     echo Form::hidden('id_doc', $documento->id);
+                                    echo Form::hidden('id_oficina', $documento->id_oficina,array('id'=>'id_oficina'));
                                     echo Form::label('destinatario', 'Autoriza el Viaje:', array('class' => 'form'));
                                     echo Form::input('destinatario', $documento->nombre_destinatario, array('id' => 'destinatario', 'size' => 45, 'class' => 'required'));
                                     ?>
@@ -802,6 +824,24 @@ function dia_literal($n) {
         <div class="formulario">        
             <div style="border-bottom: 1px solid #ccc; background: #F2F7FC; display: block; padding: 10px 0;   width: 100%;  ">
                 <h2 style="text-align:center;">Certificaci&oacute;n POA</h2><hr/>
+                <?php echo Form::hidden('tipo_actividad',$poa->tipo_actividad);?>
+                <?php echo Form::hidden('id_tipocontratacion',$poa->id_tipocontratacion);?>
+                <?php echo Form::hidden('otro_tipocontratacion',$poa->otro_tipocontratacion);?>
+                <?php echo Form::hidden('ri_financiador',$poa->ri_financiador);?>
+                <?php echo Form::hidden('ri_porcentaje',$poa->ri_porcentaje);?>
+                <?php echo Form::hidden('re_financiador',$poa->re_financiador);?>
+                <?php echo Form::hidden('re_porcentaje',$poa->re_porcentaje);?>
+                <?php echo Form::hidden('proceso_con',$poa->proceso_con);?>
+                <?php echo Form::hidden('cantidad',$poa->cantidad);?>
+                <?php echo Form::hidden('monto_total',$poa->monto_total);?>
+                <?php echo Form::hidden('plazo_ejecucion',$poa->plazo_ejecucion);?>
+                <?php echo Form::hidden('cod_pol_sec',$poa->cod_pol_sec);?>
+                <?php echo Form::hidden('cod_est_sec',$poa->cod_est_sec);?>
+                <?php echo Form::hidden('cod_prog_sec',$poa->cod_prog_sec);?>
+                <?php echo Form::hidden('des_pol_sec',$poa->des_pol_sec);?>
+                <?php echo Form::hidden('des_est_sec',$poa->des_est_sec);?>
+                <?php echo Form::hidden('des_prog_sec',$poa->des_prog_sec);?>
+
                 <fieldset>
                     <table width="100%" border="0px">
                         <tr>
@@ -811,6 +851,14 @@ function dia_literal($n) {
                         <tr>
                             <td colspan="2"><hr /><br/></td>
                         </tr>
+                        <tr>
+                                <td><b><?php echo Form::label('obj_est', 'C&oacute;digo Objetivo de Estrategico:', array('class' => 'form')); ?></b></td>
+                                <td><?php echo Form::select('obj_est', $obj_est, $poa->id_obj_est, array('class' => 'form', 'name' => 'obj_est', 'id' => 'obj_est', 'class' => 'required')); ?></td>
+                            </tr>
+                            <tr>
+                                <td><b><?php echo Form::label('detalle_obj_est', 'Detalle:', array('class' => 'form')); ?></b>    </td>
+                                <td><br><textarea name="det_obj_est" id="det_obj_est" style="width: 600px;" readonly ><?php echo $det_obj_est; ?></textarea></td>
+                            </tr>
                         <tr>
                             <td>
                                 <b><?php echo Form::label('obj_gestion', 'C&oacute;digo Objetivo de Gesti&oacute;n:', array('class' => 'form')); ?></b>

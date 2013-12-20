@@ -561,7 +561,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                         $pvfucov->viatico_dia = $_POST['viatico_dia'];
                         $pvfucov->save();
                         $sw = 1;
-                        $poa = ORM::factory('poas')->where('id_memo','=',$documento->id)->find();///cambiar a documento POA
+                        $poa = ORM::factory('poas')->where('id_memo','=',$pvfucov->id_memo)->find();///cambiar a documento POA
                         if($poa->loaded()){
                             $id = $poa->id_documento;
                         }
@@ -729,15 +729,25 @@ class Controller_documento extends Controller_DefaultTemplate {
                 $uEjepoa = New Model_oficinas();
                 $uejecutorapoa = $uEjepoa->uejecutorapoa($this->user->id_oficina); ///buscar la unidad ejecutora POA y PPT para la oficina de este usuario
 
-                $ogestion = ORM::factory('pvogestiones')->where('id_oficina','=',$uejecutorapoa->id)->and_where('estado','=',1)->find_all();///objetivos de gestion
-                $objgestion[''] = 'Seleccione Objetivo de Gestion';
-                foreach ($ogestion as $og){$objgestion[$og->id] = $og->codigo;}
-                
-                $objespecifico[''] = 'Seleccione Objetivo Especifico';
-                $actividad[''] = 'Seleccione la Actividad';
-                if($poa->id_obj_gestion){
-                    $det = ORM::factory('pvogestiones')->where('id', '=', $poa->id_obj_gestion)->find(); ///Detalle Objetivo de Gestion
-                    $detallegestion = $det->objetivo;
+                $oestrategico = ORM::factory('pvoestrategicos')->where('estado','=',1)->find_all();
+                $objest[''] = '(Seleccione)';
+                foreach ($oestrategico as $oes){$objest[$oes->id] = $oes->codigo;}
+
+                                
+                $objgestion[''] = '(Seleccione)';
+                $objespecifico[''] = '(Seleccione)';
+                $actividad[''] = '(Seleccione)';
+                if($poa->id_obj_est){
+                    $det = ORM::factory('pvoestrategicos')->where('id', '=', $poa->id_obj_est)->find(); ///Detalle Objetivo Estrategico
+                    $detalleestrategico = $det->objetivo;
+
+                    $oges = ORM::factory('pvogestiones')->where('id_obj_est', '=', $poa->id_obj_est)->and_where('estado','=',1)->and_where('id_oficina','=',$uejecutorapoa->id)->find_all(); ///objetivo especifico
+                    foreach ($oges as $oe) {
+                        $objgestion[$oe->id] = $oe->codigo;
+                        if ($oe->id == $poa->id_obj_gestion)
+                            $detallegestion = $oe->objetivo;
+                    }
+                    
                     $oesp = ORM::factory('pvoespecificos')->where('id_obj_gestion', '=', $poa->id_obj_gestion)->find_all(); ///objetivo especifico
                     foreach ($oesp as $oe) {
                         $objespecifico[$oe->id] = $oe->codigo;
@@ -751,6 +761,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                             $detalleactividad = $a->actividad;
                     }    
                 }
+
                 /// fin 260813/
                 //  Modificado por Rodrigo - PRE
                 $pre = ORM::factory('presupuestos')->where('id_memo','=',$pvfucov->id_memo)->find();
@@ -787,9 +798,11 @@ class Controller_documento extends Controller_DefaultTemplate {
                         // POA
                         ->bind('uejecutorapoa', $uejecutorapoa)
                         ->bind('poa', $poa)
+                        ->bind('obj_est', $objest)
                         ->bind('obj_gestion', $objgestion)
                         ->bind('obj_esp', $objespecifico)
                         ->bind('actividad', $actividad)
+                        ->bind('det_obj_est', $detalleestrategico)
                         ->bind('det_obj_gestion', $detallegestion)//detalle del objetivo de gestion
                         ->bind('det_obj_esp', $detalleespecifico)
                         ->bind('det_act', $detalleactividad)
