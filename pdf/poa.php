@@ -138,12 +138,14 @@ try {
     }
     
    $stmt = $dbh->prepare("select p.*
+        ,ot.codigo cod_est, ot.objetivo obj_est, ot.gestion
         ,og.codigo cod_ges, og.objetivo obj_ges, og.gestion
         ,oe.codigo cod_esp, oe.objetivo obj_esp
         ,ac.codigo cod_act, ac.actividad act
         ,t.nombre
         from poas p 
-        inner join pvogestiones og on p.id_obj_gestion = og.id
+        inner join pvoestrategicos ot on p.id_obj_est = ot.id
+				inner join pvogestiones og on p.id_obj_gestion = og.id
         inner join pvoespecificos oe on p.id_obj_esp = oe.id
         inner join pvactividades ac on p.id_actividad = ac.id
         inner join poatipocontrataciones t on p.id_tipocontratacion = t.id
@@ -155,6 +157,11 @@ try {
     $stmt = $dbh->prepare("select * from presupuestos where id_memo = $pvobjetivos->id_memo");
     $stmt->execute();
     $pre = $stmt->fetch(PDO::FETCH_OBJ);
+    
+///verificar FOCOV
+    $stmt = $dbh->prepare("select * from documentos where id = $pvobjetivos->id_memo");
+    $stmt->execute();
+    $memo = $stmt->fetch(PDO::FETCH_OBJ);
     
     if($pvobjetivos){
     ///verificar si esta aprobado
@@ -229,13 +236,16 @@ try {
             <tr>
                 <td style = \" width: 100%;\" colspan = \"3\">&nbsp;</td>
             </tr>";
-    ///PEI
+    ///PL SECT. - PEI
     $tabla1 .= "
-            
             <tr>
                 <td colspan = \"3\">
-                    <table border = \"1px\" style=\" width: 99%;\">
-                        <tr>
+                    <table border = \"1px\" style=\" width: 99%;\">";
+    ///PLAN SECTORIAL
+    ///verificar si es pasajes y viaticos
+    if($memo->fucov != 1)
+    {
+        $tabla1 .= "    <tr>
                             <td rowspan=\"3\" bgcolor=\"$color\" style=\" width: 15%;\"><b>PLAN SECTORIAL. POLITICA</b></td>
                             <td bgcolor=\"$color\" style=\" width: 8%;\" height =\"$altura\"></td>
                             <td colspan=\"2\" bgcolor=\"$color\" style=\" width: 26%;\">POLITICA SECTORIAL</td>
@@ -253,16 +263,17 @@ try {
                             <td colspan=\"2\" ></td>
                             <td></td>
                             <td></td>
-                        </tr>
-                        <tr>
+                        </tr>";
+    }
+    /// PEI 
+        $tabla1 .= "    <tr>
                             <td bgcolor=\"$color\">PLAN ESTRATEGICO INSTITUCIONAL:</td>
-                            <td bgcolor=\"$color\"><br /><br />CODIGO:</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </table>
+                            <td bgcolor=\"$color\">CODIGO:</td>
+                            <td>$pvobjetivos->cod_est</td>
+                            <td bgcolor=\"$color\"><br />OBJETIVO ESTRATEGICO:</td>
+                            <td colspan=\"2\">$pvobjetivos->obj_est</td>
+                        </tr>";
+        $tabla1 .= "</table>
                 </td>
             </tr>
             <tr>
@@ -341,9 +352,10 @@ $tabla1 .=" <tr>
         $detalle_pre = $stmt->fetch(PDO::FETCH_OBJ);///detalle de la estructura programatica
         $stmt = $dbh->prepare("select * from pvliquidaciones where id_presupuesto = $pre->id");
         $stmt->execute();
+        $grupo2 = "";
         while ($liq = $stmt->fetch(PDO::FETCH_OBJ)) {///si la ejecucion presupuestaria tiene partidas seleccionadas
             if ($liq->id) {
-                $tabla1 .="<tr>
+                $tabla1 .= "<tr>
                             <td>$detalle_pre->cod_da $detalle_pre->da</td>
                             <td>$detalle_pre->cod_ue $detalle_pre->ue</td>
                             <td>$detalle_pre->cod_programa $detalle_pre->programa</td>";
@@ -353,7 +365,7 @@ $tabla1 .=" <tr>
                     $tabla1 .="<td></td>";
                 $tabla1 .=" <td>$detalle_pre->cod_actividad $detalle_pre->actividad</td>
                             <td>$detalle_pre->cod_fuente $detalle_pre->fuente</td>
-                            <td>$liq->cod_partida</td>";
+                            <td>$liq->cod_partida </td>";
                 if($pre->auto_pre == 1)///en caso de que el presupuesto aun no fue autorizado
                     $tabla1 .= "<td>$liq->cs_saldo_devengado</td>";
                 else
@@ -460,7 +472,7 @@ $tabla1 .=" <tr>
                 <td style = \" width: 100%;\" colspan = \"3\">&nbsp;</td>
             </tr>";
     ///verificar si es pasajes y viaticos
-    if($pvobjetivos->memo == 0)
+    if($memo->fucov != 1)
     {
         $tabla1 .="<tr>
                             <td colspan = \"3\">
@@ -539,10 +551,10 @@ $tabla1 .=" <tr>
                 <td><p>
                     <table border = \"1px\" style=\" width:99%;\" >
                         <tr>
-                            <td style=\"width: 90px;\" bgcolor = \"$color\">Responsable Verificación POA</td>
-                            <td style=\"width: 200px;\"><span style=\"color:#DADADA; text-align:center; font-size: 60%;\"><br /><br /><br /><br /><span style=\"color:#000000; text-align:center; font-size: 120%;\">$autoriza</span><br />FIRMA</span></td>
-                            <td style=\"width: 200px;\"><span style=\"color:#DADADA; text-align:center; font-size: 60%;\"><br /><br /><br /><br /><br />SELLO</span></td>
-                            <td style=\"width: 90px;\" bgcolor = \"$color\">FECHA $fecha_aprobado</td>
+                            <td style=\"width: 15%;\" bgcolor = \"$color\">Responsable Verificación POA</td>
+                            <td style=\"width: 35%;\"><span style=\"color:#DADADA; text-align:center; font-size: 60%;\"><br /><br /><br /><br /><span style=\"color:#000000; text-align:center; font-size: 120%;\">$autoriza</span><br />FIRMA</span></td>
+                            <td style=\"width: 35%;\"><span style=\"color:#DADADA; text-align:center; font-size: 60%;\"><br /><br /><br /><br /><br />SELLO</span></td>
+                            <td style=\"width: 15%;\" bgcolor = \"$color\">FECHA $fecha_aprobado</td>
                         </tr>
                         <tr>
                             <td bgcolor = \"$color\">Dirección General de Planificación</td>
