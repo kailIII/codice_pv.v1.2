@@ -194,7 +194,6 @@ try {
     $color = "#CBCBCB";
     $altura = "18 px";
     $altura2 = "16 px";
-    $actividad = utf8_encode($pvobjetivos->act);
     if($pvobjetivos->tipo_actividad == 'INVERSION'){
         $tipo_inv = 'X';
         $tipo_fun = '';
@@ -298,7 +297,7 @@ try {
                         </tr>
                         <tr>
                             <td>$pvobjetivos->cod_act</td>
-                            <td>$actividad</td>
+                            <td>$pvobjetivos->act</td>
                             <td></td>
                         </tr>
                     </table>
@@ -511,7 +510,7 @@ $tabla1 .=" <tr>
     $pdf->Ln(-5);
     //$pdf->Cell(169.5,111,'',1,0,'C');
     //$pdf->Ln(1);
-    $pdf->writeHTML( utf8_encode($tabla1), false, false, false);
+    $pdf->writeHTML(utf8_encode($tabla1), false, false, false);
     
     $tabla2 = " &nbsp;&nbsp;
     <table style=\"width: 100%;\"  border=\"1px\" >
