@@ -75,7 +75,7 @@ if($d->id_tipo==13){
     </tr>
     <?php } ?>
     
-    <?php if ($pvfucov->loaded()) { ?>
+    <?php if ($pvfucov->loaded()) {/* ?>
     <tr> 
         <td colspan="3">
             <table border="1" >
@@ -220,6 +220,6 @@ if($d->id_tipo==13){
                 <?php echo $pvliquidacion;?>
             </td>
         </tr>
-    <?php } ?>
+    <?php */} ?>
     </table>
-    <?php echo Form::hidden('id',$d->id,array('id'=>'id'));?>
+    <?php //echo Form::hidden('id',$d->id,array('id'=>'id'));?>
