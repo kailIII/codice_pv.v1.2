@@ -190,13 +190,18 @@ class Controller_documento extends Controller_DefaultTemplate {
                             $pre->id_documento = $documento->id;
                             $pre->fecha_creacion = date('Y-m-d H:i:s');
                             $pre->fecha_modificacion = date('Y-m-d H:i:s');
+                            if($this->user->genero == 'hombre')
+                                $title = "del Sr. ".$this->user->nombre.", ".$this->user->cargo;
+                            else
+                                $title = "de la Sra. ".$this->user->nombre.", ".$this->user->cargo;
+                            $pre->antecedente = "Mediante Hoja de Seguimiento $nur, se remite la $documento->referencia $title, solicitando...";
                             $pre->id_memo = $id_memo;
                             $pre->save();
                         }
 
                     ///////////end//////////////////
                     if(!isset($nur)){///primera vez 
-                        if (isset($_POST['asignar_nur']) && $nota == 0) {///HR existente para los demas documentos
+                        if (isset($_POST['asignar_nur']) && $nota == 0 && !isset($_POST['fucov'])){///add HR existente si no es NI o MEMO de viaje 
                             $nur = $_POST['asignar_nur'];   
                             $nur_asignado = $_POST['asignar_nur'];   
                         }else{
@@ -486,14 +491,14 @@ class Controller_documento extends Controller_DefaultTemplate {
             if (isset($_POST['referencia'])) {
                 $sw = 1;
                 ///PRE
-                if(isset($_POST['x_id_partida']))
+                /*if(isset($_POST['x_id_partida']))
                     $id_partida=$_POST['x_id_partida'];
                 if(isset($_POST['x_solicitado']))
                     $solicitado=$_POST['x_solicitado'];
                 if(isset($_POST['x_partida']))
                     $partida=$_POST['x_partida'];
                 if(isset($_POST['x_codigo']))
-                    $codigo=$_POST['x_codigo'];
+                    $codigo=$_POST['x_codigo'];*/
                 while( $sw == 1 && $id != 0){
                     $sw = 0;
                     $documento = ORM::factory('documentos')->where('id', '=', $id)->and_where('id_user', '=', $this->user->id)->find();
@@ -614,14 +619,14 @@ class Controller_documento extends Controller_DefaultTemplate {
                         foreach($liq as $l){
                             $l->delete();
                         }
-                        /*if(isset($_POST['x_id_partida']))
+                        if(isset($_POST['x_id_partida']))
                             $id_partida=$_POST['x_id_partida'];
                         if(isset($_POST['x_solicitado']))
                             $solicitado=$_POST['x_solicitado'];
                         if(isset($_POST['x_partida']))
                             $partida=$_POST['x_partida'];
                         if(isset($_POST['x_codigo']))
-                            $codigo=$_POST['x_codigo'];*/
+                            $codigo=$_POST['x_codigo'];
                         for($f=0;$f<count($id_partida);$f++){
                             $liq = ORM::factory('pvliquidaciones');
                             $liq->fecha_creacion = date('Y-m-d H:i:s');
