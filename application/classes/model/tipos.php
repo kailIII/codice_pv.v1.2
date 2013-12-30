@@ -25,7 +25,7 @@ class Model_Tipos extends ORM{
 public function misTipos($id){
     $sql="SELECT t.id, t.tipo,t.action,t.plural,t.image,t.descripcion FROM tipos t 
         INNER JOIN usertipo u ON u.id_tipo=t.id
-        WHERE u.id_user='$id'";
+        WHERE u.id_user='$id' and t.prioridad=0 ";
     return $this->_db->query(Database::SELECT, $sql,TRUE);
 }    
     

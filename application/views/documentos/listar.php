@@ -34,7 +34,7 @@ $(function(){
 <?php if(sizeof($results)>0){?>
 <br/>
 <p style="margin: 5px auto; font-size: 10px; font-weight: normal; "> FILTRAR: <input type="text" id="FilterTextBox" name="FilterTextBox" size="40" />
-    <span style="float:right; padding-right: 5px;"><a href="/documento/crear/<?php echo $tipo->action;?>" class="uiButton">Crear <?php echo $tipo->tipo;?></a>
+    <span style="float:right; padding-right: 5px;"><?php if($tipo->prioridad == 0) { ?><a href="/documento/crear/<?php echo $tipo->action;?>" class="uiButton">Crear <?php echo $tipo->tipo;?></a><?php } ?>
 </span></p>
 <table id="theTable" class="tablesorter">
     <thead>

@@ -93,8 +93,12 @@ class Model_Oficinas extends ORM{
     public function uejecutorappt($id)///Buscar la primera oficina superior con ppt_uni_ejecutora = 1,
     {
         $unidad = ORM::factory('oficinas')->where('id','=',$id)->find();
-        while($unidad->ppt_unid_ejecutora == NULL || $unidad->ppt_unid_ejecutora == 0){
+        $sw=0;
+        while(($unidad->ppt_unid_ejecutora == NULL || $unidad->ppt_unid_ejecutora == 0 ) and $sw = 0){
             $unidad = ORM::factory('oficinas')->where('id','=',$unidad->padre)->find();
+            if ($unidad->loaded()) {
+              $sw=1;  
+            }
         }
         return $unidad;//->oficina;
     }
