@@ -149,8 +149,20 @@ where ofi.id = '$rs->id_oficina'");
         $pdf->Ln();
         $pdf->SetFont('Helvetica', '', 13);
         $pdf->write(0,$rs->nur,'',0,'C');
-        
-        $pdf->Ln(10);
+            $tabla1 = "
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <table style=\" width: 156px;\"  border=\"1px\">
+            <tr>
+                <td style = \" width: 40px;\" colspan = \"3\"><b>N°</b></td>
+                <td style = \" width: 116px;\">$pre->nro_pre</td>
+            </tr>
+        </table>";
+    $pdf->writeHTML($tabla1, false, false, false,false,'C');
+        $pdf->Ln(1);
         $pdf->SetFont('Helvetica', 'U', 12);
         $pdf->Write(0, 'ANTECEDENTES: ' ,'', 0, 'L');
         $pdf->Ln(10);
@@ -275,10 +287,11 @@ where p.id = $pre->id_programatica");
         <br /><br />La Paz, ".$fecha_certificacion.".";
         $pdf->Ln(10);
         $pdf->writeHTML($html, false, false, false);
-        
+        if($userppt){
         $html="<div style=\"text-align: center;\">$userppt->nombre <br /><b>$userppt->cargo</b></div>";
         $pdf->Ln(25);
         $pdf->writeHTML($html, false, false, false);
+        }
     
 } catch (PDOException $e) {
     print "Error!: " . $e->getMessage() . "<br/>";

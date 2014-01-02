@@ -254,15 +254,15 @@ try {
                         </tr>                        
                         <tr>
                             <td bgcolor=\"$color\">CODIGO:</td>
-                            <td colspan=\"2\"></td>
-                            <td></td>
-                            <td></td>
+                            <td colspan=\"2\">$pvobjetivos->cod_pol_sec</td>
+                            <td>$pvobjetivos->cod_est_sec</td>
+                            <td>$pvobjetivos->cod_prog_sec</td>
                         </tr>
                         <tr>
                             <td bgcolor=\"$color\" height =\"$altura\">DESC.<br /> TEXTUAL:</td>
-                            <td colspan=\"2\" ></td>
-                            <td></td>
-                            <td></td>
+                            <td colspan=\"2\" >$pvobjetivos->des_pol_sec</td>
+                            <td>$pvobjetivos->des_est_sec</td>
+                            <td>$pvobjetivos->des_prog_sec</td>
                         </tr>";
     }
     /// PEI 

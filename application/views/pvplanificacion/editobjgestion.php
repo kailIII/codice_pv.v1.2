@@ -8,7 +8,7 @@ $(function(){
     #file-word{ display: none;  }
     td{padding:5px;}    
 </style>
-<div style="width: 800px;"><h2 class="subtitulo">Obgetivos de Gesti&oacute;n<br/><span>Llene corresctamente los datos en el formulario</span></h2></div>
+<div style="width: 800px;"><h2 class="subtitulo">Objetivos de Gesti&oacute;n<br/><span>Llene corresctamente los datos en el formulario</span></h2></div>
 <table border="0">
     <tr>
         <td><b>Entidad:</b></td>
@@ -26,6 +26,10 @@ $(function(){
 <form action="/pvplanificacion/editobjgestion/<?php echo $objetivo->id;?>" method="post" id="frmCreate">
 <input type="hidden" id="id_oficina" name="id_oficina" value="<?php echo $oficina->id;?>" />
 <table>
+    <tr>
+        <td><?php echo Form::label('estrategico','Objetivo estratégico')?></td>
+        <td><?php echo Form::select('estrategico',$estrategico,$objetivo->id_obj_est,array('name'=>'estrategico','id'=>'estrategico','class'=>'required')) ?></td>
+    </tr>
     <tr>
         <td><?php echo Form::label('codigo','Codigo')?></td>
         <td><?php echo Form::input('codigo',$objetivo->codigo,array('name'=>'codigo','id'=>'codigo','class'=>'required')) ?></td>

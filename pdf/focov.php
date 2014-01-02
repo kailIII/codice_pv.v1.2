@@ -151,7 +151,7 @@ try {
         else
             $tipoviaje = '<b>NO SELECCIONADO</b>';
         $pdf->SetFont('Helvetica', 'B', 15);
-        $pdf->Write(0, 'FORMULARIO UNICO DE COMISION DE VIAJE ('.strtoupper($rs->tipo).')', '', 0, 'C');
+        $pdf->Write(0, 'FORMULARIO DE COMISION DE VIAJE ('.strtoupper($rs->tipo).')', '', 0, 'C');
         $pdf->Ln();
         $pdf->SetFont('Helvetica', '', 11);
         $pdf->Write(0, strtoupper($rs->codigo), '', 0, 'C');

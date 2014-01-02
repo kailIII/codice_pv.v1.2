@@ -96,12 +96,13 @@ $('#fucov').click(function(){
             $("#hora_inicio").attr("class", "required");
             $("#hora_fin").attr("class", "required");
             $("#detalle_comision").attr("class","required");
-            
+            $('#otro_nur').hide();
         } else {
             $('#label_referencia').text('Referencia');
             $('#label_contenido').hide();
             $('#contenido1').show();
             $('#contenido2').hide();
+            $('#otro_nur').show();
             
             //elimar atribuitos
              $("#origen").removeAttr("class");

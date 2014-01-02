@@ -286,7 +286,7 @@ $('#fuente').change(function(){///fuente = id_programatica
         $('#partida').html('');
         $('#disponible').val(0);
         $('#saldo').val(0);
-        $("#x_tableMeta").html("<table id='x_tableMeta' border='1' class='classy'><thead><th>Partida</th><th>Disponible</th><th>Solicitado</th><th>Saldo</th></thead><tbody></tbody></table>");
+        $("#x_tableMeta").html("<table id='x_tableMeta' border='1' class='classy'><thead><th>Partida</th><th><!--Disponible--></th><th>Solicitado</th><th><!--Saldo--></th></thead><tbody></tbody></table>");
         if(id){
             $.ajax({
                 type: "POST",
@@ -391,7 +391,7 @@ function anadirMetaFinal()
             var disponible = $('#disponible').val();
             var solicitado = parseFloat($('#solicitado').val());
             var saldo = $('#saldo').val();
-            x.append("<tr><td><input type='hidden' size='2' name='x_id_partida[]' id='x_id_partida_"+y+"' value='"+id_partida+"' readonly/><input type='text' size='5' name='x_codigo[]' id='x_codigo_"+y+"' value='"+part[0]+"' readonly/> <input type='text' size='35' name='x_partida[]' id='x_partida_"+y+"' value='"+part[1]+"' readonly/></td><td><input type='text' size='5' name='x_disponible[]' id='x_disponible_"+y+"' value='"+disponible+"' readonly/></td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_"+y+"' value='"+solicitado+"' readonly/></td><td><input type='text' size='5' name='x_saldo[]' id='x_saldo_"+y+"' value='"+saldo+"' readonly/></td></tr>");
+            x.append("<tr><td><input type='hidden' size='2' name='x_id_partida[]' id='x_id_partida_"+y+"' value='"+id_partida+"' readonly/><input type='text' size='5' name='x_codigo[]' id='x_codigo_"+y+"' value='"+part[0]+"' readonly/> <input type='text' size='35' name='x_partida[]' id='x_partida_"+y+"' value='"+part[1]+"' readonly/></td><td><input type='hidden' size='5' name='x_disponible[]' id='x_disponible_"+y+"' value='"+disponible+"' readonly/></td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_"+y+"' value='"+solicitado+"' readonly/></td><td><input type='hidden' size='5' name='x_saldo[]' id='x_saldo_"+y+"' value='"+saldo+"' readonly/></td></tr>");
             $('#partida').val('');
             $('#disponible').val(0);
             $('#solicitado').val(0);
@@ -547,7 +547,7 @@ function dia_literal($n) {
                     <fieldset> <legend>Proceso: <?php echo Form::select('proceso', $options, $documento->id_proceso); ?>
                             &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                             <?php
-                            if ($documento->id_tipo == '2') { ?>FOCOV: <?php echo Form::checkbox('fucov',1,FALSE,array('id'=>'fucov','name'=>'fucov',$checked,'title'=>'seleccione si quiere habilitar un memoramdum de viaje'))?><?php }?>    
+                            if ($documento->fucov == '1') { ?><b>MEMOR&Aacute;NDUM DE VIAJE </b><?php /*echo Form::checkbox('fucov',1,FALSE,array('id'=>'fucov','name'=>'fucov',$checked,'title'=>'seleccione si quiere habilitar un memoramdum de viaje'))*/?><?php }?>    
                         </legend>
                     <?php endif; ?>            
                     <table width="100%">
@@ -952,16 +952,16 @@ function dia_literal($n) {
                                 <td><?php echo Form::select('partida', $partidas, NULL, array('id' => 'partida')) ?></td>
                             </tr>
                             <tr>
-                                <td><?php echo Form::label('disponible','Saldo Actual Disponible')?></td>
-                                <td><?php echo Form::input('disponible',0,array('size'=>10,'readonly','id'=>'disponible')) ?></td>
+                                <td><?php //echo Form::label('disponible','Saldo Actual Disponible')?></td>
+                                <td><?php echo Form::hidden('disponible',0,array('size'=>10,'readonly','id'=>'disponible')) ?></td>
                             </tr>
                             <tr>
                                 <td><?php echo Form::label('solicitado','Cantidad Solicitada')?></td>
                                 <td><?php echo Form::input('solicitado',0,array('size'=>10,'id'=>'solicitado')) ?></td>
                             </tr>
                             <tr>
-                                <td><?php echo Form::label('saldo','Nuevo Saldo')?></td>
-                                <td><?php echo Form::input('saldo',0,array('size'=>10,'readonly','id'=>'saldo')) ?></td>
+                                <td><?php //echo Form::label('saldo','Nuevo Saldo')?></td>
+                                <td><?php echo Form::hidden('saldo',0,array('size'=>10,'readonly','id'=>'saldo')) ?></td>
                             </tr>
                             <tr>
                                 <td colspan="2"><div style=" text-align: center" id="metaAdd" ><img src="/media/images/mail_ham2.png" style="border: none; cursor: pointer" />Adicionar Partida</div></td>
@@ -975,9 +975,9 @@ function dia_literal($n) {
                     <table id="x_tableMeta" border="1" class="classy">
                             <thead>
                                 <th>Partida</th>
-                                <th>Disponible</th>
+                                <th><!--Disponible--></th>
                                 <th>Solicitado(Bs.)</th>
-                                <th>Nuevo Saldo</th>
+                                <th><!--Nuevo Saldo--></th>
                             </thead>
                             <tbody>
                                 <?php for($f=0;$f<count($x_partida);$f++):?>
@@ -986,9 +986,9 @@ function dia_literal($n) {
                                         <?php echo Form::input('x_codigo[]',$x_codigo[$f],array('id'=>'x_codigo_'.$f,'readonly','size'=>5))?>
                                         <?php echo Form::input('x_partida[]',$x_partida[$f],array('id'=>'x_partida_'.$f,'readonly','size'=>35))?>
                                     </td>
-                                    <td><?php echo Form::input('x_disponible[]',$x_disponible[$f],array('id'=>'x_disponible_'.$f,'readonly','size'=>5))?></td>
+                                    <td><?php echo Form::hidden('x_disponible[]',$x_disponible[$f],array('id'=>'x_disponible_'.$f,'readonly','size'=>5))?></td>
                                     <td><?php echo Form::input('x_solicitado[]',$x_solicitado[$f],array('id'=>'x_solicitado_'.$f,'readonly','size'=>5))?></td>
-                                    <td><?php echo Form::input('x_saldo[]',$x_disponible[$f] - $x_solicitado[$f],array('id'=>'x_saldo_'.$f,'readonly','size'=>5))?></td>
+                                    <td><?php echo Form::hidden('x_saldo[]',$x_disponible[$f] - $x_solicitado[$f],array('id'=>'x_saldo_'.$f,'readonly','size'=>5))?></td>
                                 </tr>
                                 <?php endfor ?>
                             </tbody>

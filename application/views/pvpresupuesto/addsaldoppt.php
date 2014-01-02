@@ -99,7 +99,7 @@ $(function(){
     </tr>
     <tr>
         <td><?php echo Form::label('gestion','Gesti&oacute;n')?></td>
-        <td><?php echo Form::select('gestion',array('2013'=>'2013','2014'=>'2014'),'',array('name'=>'saldoPagar','id'=>'saldoPagar','class'=>'required')) ?></td>
+        <td><?php $anio=date('Y'); echo Form::select('gestion',array($anio=>$anio,$anio+1=>$anio+1),'',array('name'=>'gestion','id'=>'gestion','class'=>'required')) ?></td>
     </tr>
 </table>
 <input type="submit" value="Adicionar" class="uibutton" name="submit" id="crear" title="Crear Ejecuci&oacute;n Presupuestaria."  />

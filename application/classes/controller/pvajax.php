@@ -114,21 +114,21 @@ public function action_detactividad()
         
         $oDisp = new Model_Pvprogramaticas();
         $disp = $oDisp->saldopresupuesto($id);
-        $result = "<table class='classy' border='1px'><thead><th>Partida</th><th>Disponible</th><th>Solicitado (Bs.)</th><th>Nuevo Saldo</th></thead><tbody>";
+        $result = "<table class='classy' border='1px'><thead><th>Partida</th><th><!--Disponible--></th><th>Solicitado (Bs.)</th><th><!--Nuevo Saldo--></th></thead><tbody>";///titulos de tabla comentados
         $sw = 0;
         $resp = 0;
         $c=0;$cont=0;
-        foreach($disp as $d){
+        foreach($disp as $d){///variables ocultas
             if( $viaje <= 2){
                 if( $d['codigo'] == '22110'){///pasaje al interio del pais
                     $resp = round($d['saldo_devengado'] - $pasaje,2);
                     $solicitado = $pasaje;
-                    $result .= "<tr><td><input type='hidden' name='x_id_partida[]' readonly size='2' id='x_id_partida_".$c."' value='".$d['id_partida']."'/><input type='text' name='x_codigo[]' readonly size='5' id='x_codigo_".$c."' value='".$d['codigo']."'/><input type='text' name='x_partida[]' readonly size='35' id='x_partida_".$c."' value='".$d['partida']."'/></td><td>".$d['saldo_devengado']."</td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_".$c."' value='".$solicitado."' readonly/></td><td>".$resp."</td></tr>";
+                    $result .= "<tr><td><input type='hidden' name='x_id_partida[]' readonly size='2' id='x_id_partida_".$c."' value='".$d['id_partida']."'/><input type='text' name='x_codigo[]' readonly size='5' id='x_codigo_".$c."' value='".$d['codigo']."'/><input type='text' name='x_partida[]' readonly size='35' id='x_partida_".$c."' value='".$d['partida']."'/></td><td>".""/*$d['saldo_devengado']*/."</td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_".$c."' value='".$solicitado."' readonly/></td><td>".""/*$resp*/."</td></tr>";
                 }
                 if( $d['codigo'] == '22210'){///viatico al interior
                     $resp = round($d['saldo_devengado'] - $viatico,2);
                     $solicitado = $viatico;
-                    $result .= "<tr><td><input type='hidden' name='x_id_partida[]' readonly size='2' id='x_id_partida_".$c."' value='".$d['id_partida']."'/><input type='text' name='x_codigo[]' readonly size='5' id='x_codigo_".$c."' value='".$d['codigo']."'/><input type='text' name='x_partida[]' readonly size='35' id='x_partida_".$c."' value='".$d['partida']."'/></td><td>".$d['saldo_devengado']."</td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_".$c."' value='".$solicitado."' readonly/></td><td>".$resp."</td></tr>";
+                    $result .= "<tr><td><input type='hidden' name='x_id_partida[]' readonly size='2' id='x_id_partida_".$c."' value='".$d['id_partida']."'/><input type='text' name='x_codigo[]' readonly size='5' id='x_codigo_".$c."' value='".$d['codigo']."'/><input type='text' name='x_partida[]' readonly size='35' id='x_partida_".$c."' value='".$d['partida']."'/></td><td>".""/*$d['saldo_devengado']*/."</td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_".$c."' value='".$solicitado."' readonly/></td><td>".""/*$resp*/."</td></tr>";
                 }
             }
             else
@@ -136,17 +136,17 @@ public function action_detactividad()
                 if( $d['codigo'] == '22120'){///pasaje al exterior
                     $resp = round($d['saldo_devengado'] - $pasaje,2);
                     $solicitado = $pasaje;
-                    $result .= "<tr><td><input type='hidden' name='x_id_partida[]' readonly size='2' id='x_id_partida_".$c."' value='".$d['id_partida']."'/><input type='text' name='x_codigo[]' readonly size='5' id='x_codigo_".$c."' value='".$d['codigo']."'/><input type='text' name='x_partida[]' readonly size='35' id='x_partida_".$c."' value='".$d['partida']."'/></td><td>".$d['saldo_devengado']."</td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_".$c."' value='".$solicitado."' readonly/></td><td>".$resp."</td></tr>";
+                    $result .= "<tr><td><input type='hidden' name='x_id_partida[]' readonly size='2' id='x_id_partida_".$c."' value='".$d['id_partida']."'/><input type='text' name='x_codigo[]' readonly size='5' id='x_codigo_".$c."' value='".$d['codigo']."'/><input type='text' name='x_partida[]' readonly size='35' id='x_partida_".$c."' value='".$d['partida']."'/></td><td>".""/*$d['saldo_devengado']*/."</td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_".$c."' value='".$solicitado."' readonly/></td><td>".""/*$resp*/."</td></tr>";
                 }
                 if( $d['codigo'] == '22220'){///viaticos al exterior
                     $resp = round($d['saldo_devengado'] - $viatico,2);
                     $solicitado = $viatico;
-                    $result .= "<tr><td><input type='hidden' name='x_id_partida[]' readonly size='2' id='x_id_partida_".$c."' value='".$d['id_partida']."'/><input type='text' name='x_codigo[]' readonly size='5' id='x_codigo_".$c."' value='".$d['codigo']."'/><input type='text' name='x_partida[]' readonly size='35' id='x_partida_".$c."' value='".$d['partida']."'/></td><td>".$d['saldo_devengado']."</td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_".$c."' value='".$solicitado."' readonly/></td><td>".$resp."</td></tr>";
+                    $result .= "<tr><td><input type='hidden' name='x_id_partida[]' readonly size='2' id='x_id_partida_".$c."' value='".$d['id_partida']."'/><input type='text' name='x_codigo[]' readonly size='5' id='x_codigo_".$c."' value='".$d['codigo']."'/><input type='text' name='x_partida[]' readonly size='35' id='x_partida_".$c."' value='".$d['partida']."'/></td><td>".""/*$d['saldo_devengado']*/."</td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_".$c."' value='".$solicitado."' readonly/></td><td>".""/*$resp*/."</td></tr>";
                 }                    
                 if( $d['codigo'] == '26910'){///gastos de representacion
                     $resp = round($d['saldo_devengado'] - $gasto,2);
                     $solicitado = $gasto;
-                    $result .= "<tr><td><input type='hidden' name='x_id_partida[]' readonly size='2' id='x_id_partida_".$c."' value='".$d['id_partida']."'/><input type='text' name='x_codigo[]' readonly size='5' id='x_codigo_".$c."' value='".$d['codigo']."'/><input type='text' name='x_partida[]' readonly size='35' id='x_partida_".$c."' value='".$d['partida']."'/></td><td>".$d['saldo_devengado']."</td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_".$c."' value='".$solicitado."' readonly/></td><td>".$resp."</td></tr>";
+                    $result .= "<tr><td><input type='hidden' name='x_id_partida[]' readonly size='2' id='x_id_partida_".$c."' value='".$d['id_partida']."'/><input type='text' name='x_codigo[]' readonly size='5' id='x_codigo_".$c."' value='".$d['codigo']."'/><input type='text' name='x_partida[]' readonly size='35' id='x_partida_".$c."' value='".$d['partida']."'/></td><td>".""/*$d['saldo_devengado']*/."</td><td><input type='text' size='5' name='x_solicitado[]' id='x_solicitado_".$c."' value='".$solicitado."' readonly/></td><td>".""/*$resp*/."</td></tr>";
                 }
             }
             if($resp < 0)
@@ -154,8 +154,8 @@ public function action_detactividad()
             $c++;            
         }
         $result .= "</tbody></table>";
-        if($sw == 1)
-            $result .="<br /><font color=\"red\" size=\"4\"><center>PRESUPUESTO INSUFICIENTE!!!</center></font>";
+        //if($sw == 1)
+        //    $result .="<br /><font color=\"red\" size=\"4\"><center>PRESUPUESTO INSUFICIENTE!!!</center></font>";
         echo json_encode($result);
   }
         

@@ -137,14 +137,14 @@
             var viatico_dia = $('#viatico_dia').val();
             var nro_dias = $('#nro_dias').val();
             var tipo_moneda = $('#tipo_moneda').val();
-            var h_arribo = $('#hora_arribo').val();
+            //var h_arribo = $('#hora_arribo').val();
 
             if(tipo_moneda==0)
                 tipo_moneda=' Bs.'
             else
                 tipo_moneda=' $us.'
 
-            var porcentaje_pv=0;
+            /*var porcentaje_pv=0;
             if(nro_dias==1){
                 //porcentaje_pv = 100;  // Porcentaje segun reglamento
                 var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*1;
@@ -162,15 +162,15 @@
                    monto_parcial+= (parseFloat(porcentaje)*parseFloat(viatico_dia2))/100;  
                 }
             }else{
-                if (h_arribo>'12:00:00') {nro_dias--;}
+                if (h_arribo>'12:00:00') {nro_dias--;}*/
                 var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*parseFloat(nro_dias);
-                 if(h_arribo>'12:00:00' && h_arribo<'18:30:01'){
+                 /*if(h_arribo>'12:00:00' && h_arribo<'18:30:01'){
                      monto_parcial+= (((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*70)/100; 
                  }
                  if(h_arribo>'18:30:00'){
                      monto_parcial+= (parseFloat(porcentaje)*parseFloat(viatico_dia))/100;  
                  }
-            }
+            }*/
             //calculo
             //var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*parseFloat(nro_dias);
             var desc_iva=0;
@@ -948,9 +948,9 @@ function dia_literal($n) {
                     <table id="x_tableMeta" border="1" class="classy">
                             <thead>
                                 <th>Partida</th>
-                                <th>Disponible</th>
+                                <th><!--Disponible--></th>
                                 <th>Solicitado(Bs.)</th>
-                                <th>Nuevo Saldo</th>
+                                <th><!--Nuevo Saldo--></th>
                             </thead>
                             <tbody>
                                 <?php for($f=0;$f<count($x_partida);$f++):?>
@@ -959,9 +959,9 @@ function dia_literal($n) {
                                         <?php echo Form::input('x_codigo[]',$x_codigo[$f],array('id'=>'x_codigo_'.$f,'readonly','size'=>5))?>
                                         <?php echo Form::input('x_partida[]',$x_partida[$f],array('id'=>'x_partida_'.$f,'readonly','size'=>35))?>
                                     </td>
-                                    <td><?php echo Form::input('x_disponible[]',$x_disponible[$f],array('id'=>'x_disponible_'.$f,'readonly','size'=>5))?></td>
+                                    <td><?php echo Form::hidden('x_disponible[]',0/*$x_disponible[$f]*/,array('id'=>'x_disponible_'.$f,'readonly','size'=>5))?></td>
                                     <td><?php echo Form::input('x_solicitado[]',$x_solicitado[$f],array('id'=>'x_solicitado_'.$f,'readonly','size'=>5))?></td>
-                                    <td><?php echo Form::input('x_saldo[]',$x_disponible[$f] - $x_solicitado[$f],array('id'=>'x_saldo_'.$f,'readonly','size'=>5))?></td>
+                                    <td><?php echo Form::hidden('x_saldo[]',0/*$x_disponible[$f] - $x_solicitado[$f]*/,array('id'=>'x_saldo_'.$f,'readonly','size'=>5))?></td>
                                 </tr>
                                 <?php endfor?>
                             </tbody>

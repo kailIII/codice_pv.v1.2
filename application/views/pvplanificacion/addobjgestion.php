@@ -36,6 +36,10 @@ $(function(){
 
 <table>
     <tr>
+        <td><?php echo Form::label('estrategico','Objetivo estratégico')?></td>
+        <td><?php echo Form::select('estrategico',$estrategico,NULL,array('name'=>'estrategico','id'=>'estrategico','class'=>'required')) ?></td>
+    </tr>
+    <tr>
         <td><?php echo Form::label('codigo','Codigo')?></td>
         <td><?php echo Form::input('codigo',NULL,array('name'=>'codigo','id'=>'codigo','class'=>'required')) ?></td>
     </tr>

@@ -94,12 +94,15 @@ class Model_Oficinas extends ORM{
     {
         $unidad = ORM::factory('oficinas')->where('id','=',$id)->find();
         $sw=0;
-        while(($unidad->ppt_unid_ejecutora == NULL || $unidad->ppt_unid_ejecutora == 0 ) and $sw = 0){
+        //while(($unidad->ppt_unid_ejecutora == NULL || $unidad->ppt_unid_ejecutora == 0 ) /*and $sw = 0*/){
+        while($unidad->ppt_unid_ejecutora != 1 && $sw == 0){
             $unidad = ORM::factory('oficinas')->where('id','=',$unidad->padre)->find();
-            if ($unidad->loaded()) {
+            if ($unidad->id == 1) {///si llegamos a despacho entonces seleccionar DGAA como unidad ejecutora PRE
               $sw=1;  
             }
         }
+        if($sw == 1)
+            $unidad = ORM::factory('oficinas')->where('oficina','=','DIRECCION GENERAL DE ASUNTOS ADMINISTRATIVOS')->find();
         return $unidad;//->oficina;
     }
     

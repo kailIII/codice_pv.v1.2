@@ -53,6 +53,7 @@ $(function()
         <tr>
             <th>C&oacute;digo</th>
             <th>Objetivo</th>
+            <th>Gesti&oacute;n</th>
             <th>Opciones</th>
         </tr>
     </thead>    
@@ -62,6 +63,7 @@ $(function()
         <tr>
             <td ><a href="/pvplanificacion/objetivoespecifico/<?php echo $obj->id;?>" title="Lista de Objetivos Especificos" ><?php echo $obj->codigo;?></td>
             <td ><?php echo $obj->objetivo;?></td>
+            <td ><?php echo $obj->gestion;?></td>
             <td><a href="/pvplanificacion/editobjgestion/<?php echo $obj->id;?>" class="uibutton" title="Modificar Objetivo" ><img src="/media/images/edit.png"/> </a>
                 <a href="/pvplanificacion/eliminarobjgestion/<?php echo $obj->id;?>" class="uibutton" title="Eliminar Objetivo" onclick="javascript: return verificar();" ><img src="/media/images/delete.png"/> </a>
             </td>

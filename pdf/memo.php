@@ -133,8 +133,12 @@ try {
     //echo "<B>outputting...</B><BR>";
     //$pdf->Ln(7);
     while ($rs = $stmtp->fetch(PDO::FETCH_OBJ)) {
+        if($rs->fucov == 1)
+            $focov = ' DE VIAJE';
+        else
+            $focov = '';
         $pdf->SetFont('Helvetica', 'B', 15);
-        $pdf->Write(0, strtoupper($rs->tipo), '', 0, 'C');
+        $pdf->Write(0, strtoupper($rs->tipo).$focov, '', 0, 'C');
         $pdf->Ln();
         $pdf->SetFont('Helvetica', '', 11);
         $pdf->Write(0, strtoupper($rs->codigo), '', 0, 'C');

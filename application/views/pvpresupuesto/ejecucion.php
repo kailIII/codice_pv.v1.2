@@ -42,9 +42,10 @@
 
 <br />
 <h2 class="subtitulo">Ejecuci&oacute;n Presupuestaria<br/> <span>Lista de Fuentes de Financiamiento</span></h2>
+<div style="float: right;"><a href="/pvpresupuesto/addejecucionppt/" >+ Adicionar</a></div>
 <?php if(sizeof($presupuesto)>0):?>
 <p style="margin: 5px auto;"> <b>Filtrar/Buscar: </b><input type="text" id="FilterTextBox" name="FilterTextBox" size="40" /></p>
-<div style="float: right;"><a href="/pvpresupuesto/addejecucionppt/" >+ Adicionar</a></div>
+<!--<div style="float: right;"><a href="/pvpresupuesto/addejecucionppt/" >+ Adicionar</a></div>-->
 <table id="theTable" class="tablesorter" border="1px" >
     <thead>
         <tr>

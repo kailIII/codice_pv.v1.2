@@ -81,7 +81,7 @@ $(function(){
     </tr>
     <tr>
         <td>Gesti&oacute;n:</td>
-        <td><?php echo Form::select('gestion',array('2013'=>'2013','2014'=>'2014'),'2013');?></td>
+        <td><?php $anio=date('Y'); echo Form::select('gestion',array($anio=>$anio,$anio+1=>$anio+1),'',array('name'=>'gestion','id'=>'gestion','class'=>'required')) ?></td>
     </tr>
 </table>
 <br />

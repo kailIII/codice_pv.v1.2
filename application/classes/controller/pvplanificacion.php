@@ -196,10 +196,15 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
         $mensajes=array();
         $oficina = ORM::factory('oficinas')->where('id','=',$id)->find();
         $entidad = ORM::factory('entidades')->where('id','=',$oficina->id_entidad)->find();
+        $oest = ORM::factory('pvoestrategicos')->where('estado','=',1)->find_all();
+        $estrategico = array();
+        foreach($oest as $e)
+            $estrategico[$e->id] = $e->codigo." - ".substr ($e->objetivo, 0,110);
         if (isset($_POST['submit'])) {
             $objetivo = ORM::factory('pvogestiones');
             $objetivo->codigo = trim($_POST['codigo']);
             $objetivo->objetivo = trim($_POST['objetivo']);
+            $objetivo->id_obj_est = trim($_POST['estrategico']);
             $objetivo->id_oficina = $id;
             $objetivo->estado = 1;
             $objetivo->save();
@@ -214,6 +219,7 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
                                         ->bind('oficina', $oficina)
                                         ->bind('entidad', $entidad)
                                         ->bind('mensajes', $mensajes)
+                                        ->bind('estrategico', $estrategico)
                                         ;
     }
     
@@ -222,10 +228,14 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
         if (isset($_POST['submit'])) {
             $objetivo->codigo = trim($_POST['codigo']);
             $objetivo->objetivo = trim($_POST['objetivo']);
-            //$objetivo->id_oficina = $_POST['id_oficina'];
+            $objetivo->id_obj_est = trim($_POST['estrategico']);
             $objetivo->save();
             $this->request->redirect('pvplanificacion/objetivogestion/'.$_POST['id_oficina']);
         }
+        $oest = ORM::factory('pvoestrategicos')->where('estado','=',1)->find_all();
+        $estrategico = array();
+        foreach($oest as $e)
+            $estrategico[$e->id] = $e->codigo." - ".substr ($e->objetivo, 0,110);
         $oficina = ORM::factory('oficinas')->where('id','=',$objetivo->id_oficina)->find();
         $entidad = ORM::factory('entidades')->where('id','=',$oficina->id_entidad)->find();
         $this->template->styles = array('media/css/tablas.css' => 'all');
@@ -234,6 +244,7 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
                                         ->bind('objetivo', $objetivo)
                                         ->bind('oficina', $oficina)
                                         ->bind('entidad', $entidad)
+                                        ->bind('estrategico', $estrategico)
                                         ;
     }
     
@@ -347,7 +358,7 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
     public function action_listaactividades($id = ''){
         $oespecifico = ORM::factory('pvoespecificos')->where('id','=',$id)->and_where('estado','=',1)->find();
         $ogestion = ORM::factory('pvogestiones')->where('id','=',$oespecifico->id_obj_gestion)->find();
-        $actividades = ORM::factory('pvactividades')->where('id_objespecifico','=',$oespecifico->id)->find_all();
+        $actividades = ORM::factory('pvactividades')->where('id_objespecifico','=',$oespecifico->id)->and_where('estado','=',1)->find_all();
         $oficina = ORM::factory('oficinas')->where('id','=',$ogestion->id_oficina)->find();
         $this->template->styles = array('media/css/tablas.css' => 'all');
         $this->template->scripts = array('media/js/jquery.tablesorter.min.js');
@@ -475,6 +486,18 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
                 $this->request->redirect('documento/detalle/'.$poa->id_memo);
             else
                 $this->request->redirect('documento/detalle/'.$poa->id_documento);
+        }
+    }
+    
+    public function action_eliminaractividad($id = ''){
+        $actividad = ORM::factory('pvactividades')->where('id','=',$id)->find();
+        if ($actividad->loaded()) {
+            $actividad->estado = 0;
+            $actividad->save();
+            $this->request->redirect('pvplanificacion/listaactividades/'.$actividad->id_objespecifico);
+        }
+        else{
+            $this->template->content = 'La Actividad No Existe.';
         }
     }
     ///////////////////////end////
