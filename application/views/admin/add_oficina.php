@@ -57,7 +57,7 @@
                 Si <?php echo Form::radio('ppt_unid_ejecutora', 'Si', False); ?>
             </td>
             <td width="80px">Codigo:</td>
-            <td><?php echo Form::input('ppt_cod_ue', HTML::chars(Arr::get($_POST, 'ppt_cod_ue')), array('id' => 'ppt_cod_ue','class'=>'required')); ?></td>
+            <td><?php echo Form::input('ppt_cod_ue', HTML::chars(Arr::get($_POST, 'ppt_cod_ue')), array('id' => 'ppt_cod_ue')); ?></td>
         </tr>
         <tr>
             <td>Direccion Administrativa Presupuesto:</td>
@@ -65,7 +65,7 @@
                 Si <?php echo Form::radio('ppt_da', 'Si', False); ?>
             </td>
             <td>Codigo:</td>
-            <td><?php echo Form::input('ppt_cod_da', HTML::chars(Arr::get($_POST, 'ppt_cod_da')), array('id' => 'ppt_cod_da','class'=>'required')); ?></td>
+            <td><?php echo Form::input('ppt_cod_da', HTML::chars(Arr::get($_POST, 'ppt_cod_da')), array('id' => 'ppt_cod_da')); ?></td>
         </tr>
         <tr>
             <td colspan="4">

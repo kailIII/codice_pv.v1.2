@@ -27,7 +27,7 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             $id_entidad = $rs2->id;
         }
         if ($id_entidad <> 2 && $id_entidad <> 4) {
-            $this->Image($image_file, 89, 5, 40, 23, 'PNG');
+            $this->Image($image_file, 80, 5, 60, 25, 'PNG');
         }
         $this->SetFont('helvetica', 'B', 20);
         //$this->Ln(120);
@@ -51,19 +51,19 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             $id_entidad = $rs->id;
         }
         if ($id_entidad <> 2 && $id_entidad <> 4) {
-            // Linea vertical negra
+        
+            // Position at 15 mm from bottom
+        $this->SetY(-15);
+        // Set font
+        $this->SetFont('helvetica', 'I', 7);
 
-            $style = array('width' => 1.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0));
-            $this->Line(140, 257, 140, 272, $style);
-            // logo quinua
-            $this->Image('../media/logos/logo_quinua.jpg', 140, 253, 40, 22, 'JPG');
-            // Pie de pagina
-            $this->SetFont('helvetica', 'I', 7);
-            $this->MultiCell(85, 0, $pie1, 0, 'R', false, 1, 50, 260, true, 0, false, true, 0, 'T', false);
-            $this->MultiCell(90, 0, $pie2, 0, 'R', false, 1, 45, 266, true, 0, false, true, 0, 'T', false);
-            $this->SetY(30);
+        $this->Cell(0, 10, $pie1, 'T', false, 'C', 0, '', 0, false, 'T', 'M');
+        $this->Ln(2);
+        $this->Cell(0, 15, $pie2, 0, false, 'C', 0, '', 0, false, 'T', 'M');
         }
     }
+
+    
 
     
 }
