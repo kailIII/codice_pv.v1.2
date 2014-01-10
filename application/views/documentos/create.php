@@ -299,7 +299,7 @@ $('#hora_inicio,#hora_fin').timeEntry({show24Hours: true, showSeconds: true});
             </div>
             <div id='contenido2' style="width: 780px;">
                 <br>
-                <p>Por medio del presente Memorándum se ordena a su persona trasladarse desde:</p><br> 
+                <p>Por medio del presente Memorándum se autoriza a su persona trasladarse desde:</p><br> 
                 <p align='justify;'>La ciudad (origen)
                 <?php echo Form::input('origen','',array('id'=>'origen')); ?> 
                 hasta la ciudad (destino)

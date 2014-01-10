@@ -34,7 +34,7 @@ class Controller_Busqueda extends Controller_DefaultTemplate{
     //listar nuris generados por el usuario logeado
     public function action_index()
     {
-        if($_GET['buscar']){            
+        if(isset($_GET['buscar'])){            
             $text=trim($_GET['txt_buscar']);
             if($text!='')
             {

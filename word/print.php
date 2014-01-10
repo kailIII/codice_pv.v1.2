@@ -32,15 +32,18 @@ else
 $debug=2;
 $suffix='';
 $tipo=strtoupper($rs->tipo);
-$cite=''.$rs->cite_original;
-$titulo=''.$rs->titulo;
-$institucion_destinatario=''.$rs->institucion_destinatario;
-$nombre_destinatario=''.$rs->nombre_destinatario;
-$cargo_destinatario=''.$rs->cargo_destinatario;
-$nombre_via=''.$rs->nombre_via; //para informes con via
-$cargo_via=''.$rs->cargo_via;  //para informes sin via
-$nombre_remitente=''.$rs->nombre_remitente;
-$cargo_remitente=''.$rs->cargo_remitente;
+//$cite=html_entity_decode('<!DOCTYPE html><html><head></head><body><p>'.$rs->cite_original.'</p></body></html>');
+$cite=utf8_encode(''.$rs->cite_original);
+$titulo=utf8_encode(''.$rs->titulo);
+$institucion_destinatario=utf8_encode(''.$rs->institucion_destinatario);
+
+$nombre_destinatario=utf8_encode($rs->nombre_destinatario);
+
+$cargo_destinatario=utf8_encode(''.$rs->cargo_destinatario);
+$nombre_via=utf8_encode(''.$rs->nombre_via); //para informes con via
+$cargo_via=utf8_encode(''.$rs->cargo_via);  //para informes sin via
+$nombre_remitente=utf8_encode(''.$rs->nombre_remitente);
+$cargo_remitente=utf8_encode(''.$rs->cargo_remitente);
 
 //$imagen_file = $imagen_file2;
 
@@ -54,15 +57,15 @@ $fecha = $xdia. ' de '. $meses[$xmes] . ' de '. $xanio;
 
 //$fecha=Date('Y-m-d');
 
-$referencia=''.$rs->referencia;
-$hojaruta=''.$rs->nur;
-$copias=''.$rs->copias;
+$referencia=utf8_encode(''.$rs->referencia);
+$hojaruta=utf8_encode(''.$rs->nur);
+$copias=utf8_encode(''.$rs->copias);
 
-$adjuntos=''.$rs->adjuntos;
+$adjuntos=utf8_encode(''.$rs->adjuntos);
 $mosca_remitente=''.$rs->mosca_remitente;
 
-$contenido=strip_tags(html_entity_decode(''.$rs->contenido));       // original
-//$contenido=''.$rs->contenido;
+$contenido='';  //strip_tags(html_entity_decode(''.$rs->contenido));       // original
+//$contenido=utf8_decode(''.$rs->contenido);
 
 
 //logo

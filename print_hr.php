@@ -135,22 +135,22 @@ try {
     {
         if(strlen($rs->institucion_remitente)>100)
         {
-            $pdf->MultiCell(115, 10, $rs->institucion_remitente, 1,'L'); 
+            $pdf->MultiCell(115, 10, utf8_encode($rs->institucion_remitente), 1,'L'); 
         }
         else
         {
-            $pdf->Cell(115, 10, $rs->institucion_remitente, 1,'L'); 
+            $pdf->Cell(115, 10, utf8_encode($rs->institucion_remitente), 1,'L'); 
         }
     }
     else
     {
         if(strlen($rs->entidad)>80)
         {
-            $pdf->MultiCell(115, 5, $rs->entidad, 1,'L'); 
+            $pdf->MultiCell(115, 5, utf8_encode($rs->entidad), 1,'L'); 
         }
         else
         {
-            $pdf->Cell(115, 10, $rs->entidad, 1,'L'); 
+            $pdf->Cell(115, 10, utf8_encode($rs->entidad), 1,'L'); 
         }         
     }
     //fecha

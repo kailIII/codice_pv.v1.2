@@ -32,7 +32,7 @@ function ajaxs(oficial)
         
         var id_tipo=$('#id_tipo').val();
         if(id_tipo==5 && oficial==2){
-            destinatario = 119;     // usuario creado, como usuario externo
+            destinatario = 83;     // usuario creado, como usuario externo
             oficial=1;
         }
 

@@ -69,7 +69,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                 
                 $contenido = $_POST['descripcion'];
                 if (isset($_POST['fucov'])) {
-                    $contenido = '<p style="text-align: justify;">Por medio del presente Memorándum se ordena a su persona trasladarse desde: La ciudad ' . $_POST['origen'] . ' hasta la ciudad ' . $_POST['destino'] . ' con el objetivo de asistir a ' . $_POST['detalle_comision'] . '. Desde el ' . $_POST['fecha_inicio'] . ' a Hrs. ' . $_POST['hora_inicio'] . ' hasta el ' . $_POST['fecha_fin'] . ' a Hrs. ' . $_POST['hora_fin'] .'.</p>    
+                    $contenido = '<p style="text-align: justify;">Por medio del presente Memorándum se autoriza a su persona trasladarse desde: La ciudad ' . $_POST['origen'] . ' hasta la ciudad ' . $_POST['destino'] . ' con el objetivo de asistir a ' . $_POST['detalle_comision'] . '. Desde el ' . $_POST['fecha_inicio'] . ' a Hrs. ' . $_POST['hora_inicio'] . ' hasta el ' . $_POST['fecha_fin'] . ' a Hrs. ' . $_POST['hora_fin'] .'.</p>    
                         <p></p>
                         <p style="text-align: justify;">Sírvase tramitar ante la Dirección General de Asuntos Administrativos la asignación de pasajes y viáticos de acuerdo a escala autorizada para lo cual su persona deberá coordinar la elaboración del FOCOV. Una vez completada la comisión sírvase hacer llegar el informe de descargo dentro de los próximos 8 días hábiles de concluída la comisión de acuerdo al artículo 25 del reglamento de Pasajes y Viáticos del Ministerio de Desarrollo Productivo y Economía Plural.</p>
                         <p></p>
@@ -504,7 +504,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                     $documento = ORM::factory('documentos')->where('id', '=', $id)->and_where('id_user', '=', $this->user->id)->find();
                     $contenido = $_POST['descripcion'];
                     if ($documento->fucov == 1) {
-                        $contenido = '<p style="text-align: justify;">Por medio del presente Memorándum se ordena a su persona trasladarse desde: La ciudad ' . $_POST['origen'] . ' hasta la ciudad ' . $_POST['destino'] . ' con el objetivo de asistir a ' . $_POST['detalle_comision'] . '. Desde el ' . $_POST['fecha_inicio'] . ' a Hrs. ' . $_POST['hora_inicio'] . ' hasta el ' . $_POST['fecha_fin'] . ' a Hrs. ' . $_POST['hora_fin'] .'.</p>    
+                        $contenido = '<p style="text-align: justify;">Por medio del presente Memorándum se autoriza a su persona trasladarse desde: La ciudad ' . $_POST['origen'] . ' hasta la ciudad ' . $_POST['destino'] . ' con el objetivo de asistir a ' . $_POST['detalle_comision'] . '. Desde el ' . $_POST['fecha_inicio'] . ' a Hrs. ' . $_POST['hora_inicio'] . ' hasta el ' . $_POST['fecha_fin'] . ' a Hrs. ' . $_POST['hora_fin'] .'.</p>    
                             <br>
                             <p style="text-align: justify;">Sírvase tramitar ante la Dirección General de Asuntos Administrativos la asignación de pasajes y viáticos de acuerdo a escala autorizada para los cual su persona deberá coordinar la elaboración del FUCOV. Una vez completada la comisión sírvase hacer llegar el informe de descargo dentro de los próximos 8 días hábiles de concluída la comisión de acuerdo al artículo 25 del reglamento de Pasajes y viáticos del Ministerio de Desarrollo Productivo y Economía Plural. </p> 
                             <br>

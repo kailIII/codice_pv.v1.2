@@ -693,7 +693,7 @@ function dia_literal($n) {
                         
                         <div id='contenido2' style="width: 780px;">
                             <br>
-                            Por medio del presente Memorándum se ordena a su persona trasladarse desde:<br> 
+                            Por medio del presente Memorándum se autoriza a su persona trasladarse desde:<br> 
                             La ciudad (origen)
                             <?php echo Form::input('origen', $origen, array('id' => 'origen')); ?> 
                             hasta la ciudad (destino)

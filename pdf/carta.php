@@ -153,7 +153,10 @@ try {
     //$pdf->Ln(7);
     while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {
         $pdf->SetFont('Helvetica', '', 10);
-        $pdf->Write(0, $pdf->get_fecha($rs->fecha_creacion), '', 0, 'R');
+        if (isset($rs->fecha_creacion)) {
+            $pdf->Write(0, $pdf->get_fecha($rs->fecha_creacion), '', 0, 'R');
+        }
+        
         $pdf->Ln();
         $pdf->SetFont('Helvetica', 'B', 11);
         $pdf->Write(0, strtoupper($rs->codigo), '', 0, 'R');
