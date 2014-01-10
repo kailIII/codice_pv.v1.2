@@ -293,62 +293,62 @@
         /////////////end////////////////////
         
         ///Modificado Rodrigo 260813
-        $('#obj_est').change(function(){
+    $('#obj_est').change(function(){
     var id = $('#obj_est').val();
     var id_oficina = $('#id_oficina').val();
-    $('#det_obj_est').html('');
+    $('#det_obj_est').val('');
     
     $('#obj_gestion').html('');
-    $('#det_obj_gestion').html('');
+    $('#det_obj_gestion').val('');
     $('#obj_esp').html('');
-    $('#det_obj_esp').html('');
+    $('#det_obj_esp').val('');
     $('#actividad').html('');
-    $('#det_act').html('');
+    $('#det_act').val('');
 
             var act = 'detobjestrategico';///detalle del Objetivo estrategico
             var ctr = $('#det_obj_est');
-            ajaxs(id, act, ctr,0);
+            ajaxs(id, act, ctr,0,1);
             act = 'objgestion';
             ctr = $('#obj_gestion');
-            ajaxs(id, act, ctr,id_oficina);
+            ajaxs(id, act, ctr,id_oficina,0);
 });
 
 $('#obj_gestion').change(function(){
     var id = $('#obj_gestion').val();
     $('#det_obj_gestion').html('');
     $('#obj_esp').html('');
-    $('#det_obj_esp').html('');
+    $('#det_obj_esp').val('');
     $('#actividad').html('');
-    $('#det_act').html('');
+    $('#det_act').val('');
             var act = 'detobjgestion';///detalle del Objetivo de Gestion 
             var ctr = $('#det_obj_gestion');
-            ajaxs(id, act, ctr,0);
+            ajaxs(id, act, ctr,0,1);
             act = 'objespecifico';
             ctr = $('#obj_esp');
-            ajaxs(id, act, ctr,0);
+            ajaxs(id, act, ctr,0,0);
         });
 $('#obj_esp').change(function(){
     var id = $('#obj_esp').val();
-    $('#det_obj_esp').html('');
+    $('#det_obj_esp').val('');
     $('#actividad').html('');
-    $('#det_act').html('');
+    $('#det_act').val('');
             var act = 'detobjespecifico';///detalle del Objetivo Especifico 
             var ctr = $('#det_obj_esp');
-            ajaxs(id, act, ctr,0);
+            ajaxs(id, act, ctr,0,1);
             act = 'actividad';///actividades 
             ctr = $('#actividad');
-            ajaxs(id, act, ctr,0);
+            ajaxs(id, act, ctr,0,0);
         });
 $('#actividad').change(function(){
     var id = $('#actividad').val();
-    $('#det_act').html('');
+    $('#det_act').val('');
             var act = 'detactividad';///detalle del Objetivo Especifico 
             var ctr = $('#det_act');
-            ajaxs(id, act, ctr,0);
+            ajaxs(id, act, ctr,0,1);
             
         });
 
-function ajaxs(id, accion, control,id_oficina)
+function ajaxs(id, accion, control,id_oficina,sel_det)
 {        
     $.ajax({
         type: "POST",
@@ -357,7 +357,12 @@ function ajaxs(id, accion, control,id_oficina)
         dataType: "json",
         success: function(item)
         {
-            $(control).html(item);
+            if (sel_det==1) {
+                $(control).val(item);
+            }else{
+                $(control).html(item);    
+            }
+            
         },
         error: $(control).html('')
     });
@@ -852,12 +857,12 @@ function dia_literal($n) {
                             <td colspan="2"><hr /><br/></td>
                         </tr>
                         <tr>
-                                <td><b><?php echo Form::label('obj_est', 'C&oacute;digo Objetivo de Estrategico:', array('class' => 'form')); ?></b></td>
+                                <td><b><?php echo Form::label('obj_est', 'C&oacute;digo Objetivo Estrategico:', array('class' => 'form')); ?></b></td>
                                 <td><?php echo Form::select('obj_est', $obj_est, $poa->id_obj_est, array('class' => 'form', 'name' => 'obj_est', 'id' => 'obj_est', 'class' => 'required')); ?></td>
                             </tr>
                             <tr>
                                 <td><b><?php echo Form::label('detalle_obj_est', 'Detalle:', array('class' => 'form')); ?></b>    </td>
-                                <td><br><textarea name="det_obj_est" id="det_obj_est" style="width: 600px;" readonly ><?php echo $det_obj_est; ?></textarea></td>
+                                <td><br><textarea name="det_obj_est" id="det_obj_est" style="width: 600px;" ><?php echo $det_obj_est; ?></textarea></td>
                             </tr>
                         <tr>
                             <td>
@@ -873,7 +878,7 @@ function dia_literal($n) {
                             </td>
                             <td>
                                 <br />
-                                <textarea name="det_obj_gestion" id="det_obj_gestion" style="width: 600px;" readonly ><?php echo $det_obj_gestion; ?></textarea>
+                                <textarea name="det_obj_gestion" id="det_obj_gestion" style="width: 600px;" ><?php echo $det_obj_gestion; ?></textarea>
                             </td>
                         </tr>
                         <tr>
@@ -892,7 +897,7 @@ function dia_literal($n) {
 <b><?php echo Form::label('det_obj_esp', 'Detalle:', array('class' => 'form')); ?></b>
                             </td>
                             <td><br />
-                                <textarea name="det_obj_esp" id="det_obj_esp" style="width: 600px;" readonly ><?php echo $det_obj_esp; ?></textarea>
+                                <textarea name="det_obj_esp" id="det_obj_esp" style="width: 600px;" ><?php echo $det_obj_esp; ?></textarea>
                             </td>
                         </tr>
                         <tr>
@@ -932,7 +937,13 @@ function dia_literal($n) {
                                     if($user->genero == 'mujer')
                                         $de = ' de la Sra. ';
                                     echo Form::label('referencia','Antecedentes');?>
-                                    <textarea name="antecedente" id="antecedente" style="width: 760px;" rows="5" readonly>Mediante Hoja de Seguimiento <?php echo $documento->nur?>, se remite el FOCOV <?php echo $documento->codigo.$de.$documento->nombre_remitente.', '.$documento->cargo_remitente?>, solicitando vi&aacute;ticos por viaje a realizar a la ciudad de <?php echo $pvfucov->destino?>, con el objeto de: <?php echo $documento->referencia?></textarea>
+                                    <?php if ($pre->antecedente=='') { ?>
+                                        <textarea name="antecedente" id="antecedente" style="width: 760px;" rows="5" >Mediante Hoja de Seguimiento <?php echo $documento->nur?>, se remite el FOCOV <?php echo $documento->codigo.$de.$documento->nombre_remitente.', '.$documento->cargo_remitente?>, solicitando vi&aacute;ticos por viaje a realizar a la ciudad de <?php echo $pvfucov->destino?>, con el objeto de: <?php echo $documento->referencia?></textarea>
+                                    <?php } else{ ?>
+                                    <textarea name="antecedente" id="antecedente" style="width: 760px;" rows="5" ><?php echo $pre->antecedente ?></textarea>
+                                    <?php } ?>
+
+                                    
                                 </td>
                             </tr>
                             <tr>

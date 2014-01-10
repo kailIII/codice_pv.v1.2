@@ -468,16 +468,16 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
                 $this->template->content = 'El documento no existe';
     }
 
-    public function action_aprobarpoa($id = '') {
+    public function action_aprobarpoa($id = '',$nro_poa=0) {
         $poa = ORM::factory('poas')->where('id','=',$id)->find();
         if ($poa->loaded()) {
 
-            $oNur = New Model_nurs();
-            $nur=$oNur->correlativo(-4, '',$this->user->id_entidad);
+//            $oNur = New Model_nurs();
+//            $nur=$oNur->correlativo(-4, '',$this->user->id_entidad);
 
             $poa->fecha_aprobacion = date('Y-m-d H:i:s');
             $poa->id_user_auto = $this->user->id;
-            $poa->nro_poa = $nur;
+            $poa->nro_poa = $nro_poa;
             $poa->auto_poa = 1;
             $poa->save();
             //$this->request->redirect('documento/detalle/'.$poa->id_documento);

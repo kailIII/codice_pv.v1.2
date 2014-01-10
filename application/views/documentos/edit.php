@@ -775,7 +775,7 @@ function dia_literal($n) {
                     <td colspan="3">
                         <table>
                             <tr>
-                                <td><b><?php echo Form::label('obj_est', 'Objetivo de Estrategico:', array('class' => 'form')); ?></b></td>
+                                <td><b><?php echo Form::label('obj_est', 'Objetivo Estrategico:', array('class' => 'form')); ?></b></td>
                                 <td><?php echo Form::select('obj_est', $obj_est, $poa->id_obj_est, array('class' => 'form', 'name' => 'obj_est', 'id' => 'obj_est', 'class' => 'required')); ?></td>
                             </tr>
                             <tr>

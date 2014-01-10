@@ -181,18 +181,18 @@ try {
      //REMITENTE
     $pdf->SetXY(10, 50);
     $pdf->Cell(30, 10, 'REMITENTE:', 1,FALSE,'L');    
-    $pdf->Cell(105, 6, $rs->nombre_remitente, 0,FALSE,'L');
+    $pdf->Cell(105, 6, utf8_encode($rs->nombre_remitente), 0,FALSE,'L');
 
     $pdf->SetFont('helvetica', 'B', 9);   
     $pdf->SetXY(40, 55);
-    $pdf->Cell(105, 3, $rs->cargo_remitente, 0,FALSE,'L');
+    $pdf->Cell(105, 3, utf8_encode($rs->cargo_remitente), 0,FALSE,'L');
     $pdf->SetFont('helvetica', '', 9);    
     //proceso
     //fecha
     $pdf->SetXY(155, 50);   
     $pdf->SetFontSize(7);
     $pdf->Cell(13, 10, 'PROCESO', 1,FALSE,'R');     
-    $pdf->Cell(42, 10, $rs->proceso, 1,FALSE,'C');     
+    $pdf->Cell(42, 10, utf8_encode($rs->proceso), 1,FALSE,'C');     
     //$pdf->MultiCell(42, 10, $rs->proceso, 1,'C');        
     $pdf->SetXY(10, 60);
     $pdf->SetFontSize(9);
@@ -200,7 +200,7 @@ try {
     $pdf->SetFont('helvetica', '', 8);             
     // if(strlen($rs->referencia)>100)
     // {
-       $pdf->MultiCell(170, 11, $rs->referencia, 1, 'L', 0, 0, '', '', true, 0, false, false, 11, 'M');
+       $pdf->MultiCell(170, 11, utf8_encode($rs->referencia), 1, 'L', 0, 0, '', '', true, 0, false, false, 11, 'M');
        $pdf->Ln();    
     // }
     // else

@@ -207,8 +207,8 @@ try {
                         <td>'.$memo->fecha_creacion.'</td>
                     </tr>
                     <tr>
-                        <td ><span style="color:#DADADA; text-align:center; font-size: 80%;"><br /><br /><br /><br /><br />SELLO</span></td>
-                        <td><span style="color:#DADADA; text-align:center; font-size: 80%;"><br /><br /><br /><br /><br />FIRMA</span></td>
+                        <td><br></td>
+                        <td><br></td>
                     </tr>
                     <tr style="text-align:left;background-color: #F4F4F4;">
                         <td colspan="2"><b>PARTE III. SOLICITUD DE PASAJES Y VIATICOS</b></td>

@@ -167,14 +167,14 @@ $('#hora_inicio,#hora_fin').timeEntry({show24Hours: true, showSeconds: true});
         <fieldset>
             <?php if($tipo->tipo=='Carta'):
             echo Form::hidden('proceso',1);
-            else: ?>
+            ?>
+            <div id="otro_nur"><br><br>ASIGNAR NUR: <select id="asignar_nur" name="asignar_nur" ></select></div>
+            <?php else: ?>
             <legend>Proceso: <?php echo Form::select('proceso', $options, NULL);?>
                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                 <?php if ($documento->tipo == 'Memorandum'){?>FOCOV: <?php echo Form::checkbox('fucov',1,FALSE,array('id'=>'fucov','name'=>'fucov','title'=>'seleccione si quiere habilitar un memoramdum de viaje'))?><?php }?>    
                 <?php if ($documento->tipo == 'Nota Interna'){?>Certificaci&oacute;n POA-PRE: <?php echo Form::checkbox('nota',1,FALSE,array('id'=>'nota','name'=>'nota','title'=>'seleccione si quiere habilitar certificacón POA y Presupuestaria'))?><?php }?>    
                 <div id="otro_nur"><br><br>ASIGNAR NUR: <select id="asignar_nur" name="asignar_nur" ></select></div>
-
-                
             </legend>
             <hr/>
         <?php endif; ?>

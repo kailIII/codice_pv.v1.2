@@ -7,6 +7,7 @@
             <file>file:/var/www/codice_pv2/application/views/documentos/edit.php</file>
             <file>file:/var/www/codice_pv2/application/views/documentos/edit_fucov.php</file>
             <file>file:/var/www/codice_pv2/application/classes/controller/documento.php</file>
+            <file>file:/var/www/codice_pv2/modules/orm/classes/kohana/orm.php</file>
             <file>file:/var/www/codice_pv2/system/classes/kohana/request/client/internal.php</file>
             <file>file:/var/www/codice_pv2/application/classes/model/oficinas.php</file>
         </group>
