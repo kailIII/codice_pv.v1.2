@@ -9,20 +9,20 @@
             $('#grupo5').hide();
             $('#grupo6').hide();
             $('#grupo7').hide();
-            <?php } ?>
+        <?php } ?>
 
-            $('#obj_est').change(function(){
-                var id = $('#obj_est').val();
-                var id_oficina = $('#id_oficina').val();
+        $('#obj_est').change(function(){
+            var id = $('#obj_est').val();
+            var id_oficina = $('#id_oficina').val();
+            
+            $('#det_obj_est').val('');
 
-                $('#det_obj_est').val('');
-
-                $('#obj_gestion').html('');
-                $('#det_obj_gestion').val('');
-                $('#obj_esp').html('');
-                $('#det_obj_esp').val('');
-                $('#actividad').html('');
-                $('#det_act').val('');
+            $('#obj_gestion').html('');
+            $('#det_obj_gestion').val('');
+            $('#obj_esp').html('');
+            $('#det_obj_esp').val('');
+            $('#actividad').html('');
+            $('#det_act').val('');
 
             var act = 'detobjestrategico';///detalle del Objetivo estrategico
             var ctr = $('#det_obj_est');
@@ -32,13 +32,13 @@
             ajaxs(id, act, ctr,id_oficina,0);
         });
 
-            $('#obj_gestion').change(function(){
-                var id = $('#obj_gestion').val();
-                $('#det_obj_gestion').val('');
-                $('#obj_esp').html('');
-                $('#det_obj_esp').val('');
-                $('#actividad').html('');
-                $('#det_act').val('');
+        $('#obj_gestion').change(function(){
+            var id = $('#obj_gestion').val();
+            $('#det_obj_gestion').val('');
+            $('#obj_esp').html('');
+            $('#det_obj_esp').val('');
+            $('#actividad').html('');
+            $('#det_act').val('');
             var act = 'detobjgestion';///detalle del Objetivo de Gestion 
             var ctr = $('#det_obj_gestion');
             ajaxs(id, act, ctr,0,1);
@@ -46,11 +46,11 @@
             ctr = $('#obj_esp');
             ajaxs(id, act, ctr,0,0);
         });
-            $('#obj_esp').change(function(){
-                var id = $('#obj_esp').val();
-                $('#det_obj_esp').val('');
-                $('#actividad').html('');
-                $('#det_act').val('');
+        $('#obj_esp').change(function(){
+            var id = $('#obj_esp').val();
+            $('#det_obj_esp').val('');
+            $('#actividad').html('');
+            $('#det_act').val('');
             var act = 'detobjespecifico';///detalle del Objetivo Especifico 
             var ctr = $('#det_obj_esp');
             ajaxs(id, act, ctr,0,1);
@@ -59,34 +59,34 @@
             ajaxs(id, act, ctr,0,0);
             
         });
-            $('#actividad').change(function(){
-                var id = $('#actividad').val();
-                $('#det_act').val('');
+        $('#actividad').change(function(){
+            var id = $('#actividad').val();
+            $('#det_act').val('');
             var act = 'detactividad';///detalle del Objetivo Especifico 
             var ctr = $('#det_act');
             ajaxs(id, act, ctr,0,1);
             
         });
-
-            function ajaxs(id, accion, control,id_oficina,sel)
-            {        
-                $.ajax({
-                    type: "POST",
-                    data: { id: id, id_oficina: id_oficina},
-                    url: "/pvajax/"+accion,
-                    dataType: "json",
-                    success: function(item)
-                    {
-                        if (sel==1) {
-                            $(control).val(item);
-                        }else{
-                            $(control).html(item);    
-                        }
-
-                    },
-                    error: $(control).html('')
-                });
+        
+function ajaxs(id, accion, control,id_oficina,sel)
+{        
+    $.ajax({
+        type: "POST",
+        data: { id: id, id_oficina: id_oficina},
+        url: "/pvajax/"+accion,
+        dataType: "json",
+        success: function(item)
+        {
+            if (sel==1) {
+                $(control).val(item);
+            }else{
+                $(control).html(item);    
             }
+            
+        },
+        error: $(control).html('')
+    });
+}
 
         // Modificado por Freddy Velasco
         var valor = $('#id_tipocontratacion option:selected').html();
@@ -101,8 +101,8 @@
         }
 
         $('#id_tipocontratacion').change(function(){
-         var valor = $('#id_tipocontratacion option:selected').html();
-         if(valor ==' - Otros'){
+           var valor = $('#id_tipocontratacion option:selected').html();
+           if(valor ==' - Otros'){
             $('#id_label_otro_tc').show();
             $('#id_otro_tipocontracion').show();
             $('#otro_tipocontratacion').attr('class','required');
@@ -134,13 +134,12 @@ $('.autorizar').live('click', function() {
                     <tr>
                         <td><?php echo Form::label('unidad_ejecutora', 'Unidad Ejecutora POA:', array('class' => 'form')); ?></td>
                         <td colspan="2"><?php echo $ue_poa->oficina ?></td>
-                        <td>Nro.: <?php echo Form::input('nro_poa',$poa->nro_poa,array('id'=>'nro_poa')); ?></td>
-                        <?php echo Form::hidden('poa_id',$poa->id,array('id'=>'poa_id')); ?>
+                        <td>Nro.: <?php echo Form::input('nro_poa',$poa->nro_poa); ?></td>
                     </tr>
                     <tr id='grupo1'>
                         <td colspan="4">
-                         <div><b><?php echo Form::label('label_plansectorial', 'PLAN SECTORIAL - POLITICA', array('id' => 'label_plansectorial', 'class' => 'form')); ?> </b></div>   
-                         <table class="classy" border="1">
+                           <div><b><?php echo Form::label('label_plansectorial', 'PLAN SECTORIAL - POLITICA', array('id' => 'label_plansectorial', 'class' => 'form')); ?> </b></div>   
+                           <table class="classy" border="1">
                             <thead>
                                 <tr>
                                     <th><?php echo Form::hidden('id_oficina', $id_oficina,array('id'=>'id_oficina')); ?>
@@ -170,38 +169,50 @@ $('.autorizar').live('click', function() {
 
                 <tr>
                     <td><?php echo Form::label('obj_est', 'C&oacute;digo Objetivo de Estrategico:', array('class' => 'form')); ?></td>
-                    <td colspan="3"><br><?php echo Form::select('obj_est', $obj_est, $poa->id_obj_est, array('class' => 'form', 'name' => 'obj_est', 'id' => 'obj_est', 'class' => 'required')); ?></td>
+                    <td colspan="3"><br>
+                    <?php // echo Form::select('obj_est', $obj_est, $poa->id_obj_est, array('class' => 'form', 'name' => 'obj_est', 'id' => 'obj_est', 'class' => 'required')); ?>
+                    <?php echo Form::input('obj_est', $poa->id_obj_est, array('class' => 'form', 'name' => 'obj_est', 'class'=>'required')); ?>
+                    </td>
                 </tr>
                 <tr>
                     <td><?php echo Form::label('detalle_obj_est', 'Detalle Objetivo Estrategico:', array('class' => 'form')); ?></td>
-                    <td colspan="3"><br><textarea name="det_obj_est" id="det_obj_est" style="width: 600px;"  ><?php echo $det_obj_est; ?></textarea></td>
+                    <td colspan="3"><br><textarea name="det_obj_est" id="det_obj_est" style="width: 600px;" class="required" ><?php echo $poa->obj_est; ?></textarea></td>
                 </tr>
                 <tr>
                     <td><?php echo Form::label('obj_gestion', 'C&oacute;digo Objetivo de Gesti&oacute;n:', array('class' => 'form')); ?></td>
-                    <td colspan="3"><?php echo Form::select('obj_gestion', $obj_gestion, $poa->id_obj_gestion, array('class' => 'form', 'name' => 'obj_gestion', 'id' => 'obj_gestion', 'class' => 'required')); ?></td>
+                    <td colspan="3">
+                    <?php // echo Form::select('obj_gestion', $obj_gestion, $poa->id_obj_gestion, array('class' => 'form', 'name' => 'obj_gestion', 'id' => 'obj_gestion', 'class' => 'required')); ?>
+                    <?php echo Form::input('obj_gestion', $poa->id_obj_gestion, array('class' => 'form', 'name' => 'obj_gestion', 'class'=>'required')); ?>
+                    </td>
                 </tr>
                 <tr>
                     <td><?php echo Form::label('detalle_obj_gestion', 'Detalle Objetivo de Gesti&oacute;n:', array('class' => 'form')); ?></td>
                     <td colspan="3"><br />
-                        <textarea name="det_obj_gestion" id="det_obj_gestion" style="width: 600px;"  rows="2" ><?php echo $det_obj_gestion; ?></textarea>
+                        <textarea name="det_obj_gestion" id="det_obj_gestion" style="width: 600px;"  rows="2" class="required"><?php echo $poa->obj_gestion; ?></textarea>
                     </td>
                 </tr>
                 <tr>
                     <td><?php echo Form::label('obj_esp', 'C&oacute;digo Objetivo Espec&iacute;fico:', array('class' => 'form')); ?></td>
-                    <td colspan="3"><?php echo Form::select('obj_esp', $obj_esp, $poa->id_obj_esp, array('class' => 'form', 'class' => 'required', 'id' => 'obj_esp', 'name' => 'obj_esp')); ?></td>
+                    <td colspan="3">
+                    <?php // echo Form::select('obj_esp', $obj_esp, $poa->id_obj_esp, array('class' => 'form', 'class' => 'required', 'id' => 'obj_esp', 'name' => 'obj_esp')); ?>
+                    <?php echo Form::input('obj_esp', $poa->id_obj_esp, array('class' => 'form', 'name' => 'obj_esp', 'class'=>'required')); ?>
+                    </td>
                 </tr>
                 <tr>
                     <td><?php echo Form::label('det_obj_esp', 'Detalle Objetivo Espec&iacutefico:', array('class' => 'form')); ?></td>
-                    <td colspan="3"><textarea name="det_obj_esp" id="det_obj_esp" style="width: 600px;"  rows="2" ><?php echo $det_obj_esp; ?></textarea></td>
+                    <td colspan="3"><textarea name="det_obj_esp" id="det_obj_esp" style="width: 600px;"  rows="2" class="required"><?php echo $poa->obj_esp; ?></textarea></td>
                 </tr>
                 <tr>
                     <td><b><?php echo Form::label('actividad', 'C&oacute;digo Actividad', array('class' => 'form')); ?></b></td>
-                    <td colspan="3"><?php echo Form::select('actividad', $actividad, $poa->id_actividad, array('class' => 'form', 'class' => 'required', 'id' => 'actividad', 'name' => 'actividad')); ?></td>
+                    <td colspan="3">
+                    <?php // echo Form::select('actividad', $actividad, $poa->id_actividad, array('class' => 'form', 'class' => 'required', 'id' => 'actividad', 'name' => 'actividad')); ?>
+                    <?php echo Form::input('actividad', $poa->id_actividad, array('class' => 'form', 'name' => 'actividad', 'class'=>'required')); ?>
+                    </td>
                 </tr>
                 <tr>
                     <td><b><?php echo Form::label('det_act', 'Detalle:', array('class' => 'form')); ?></b></td>
                     <td colspan="3"><br />
-                        <textarea name="det_act" id="det_act" style="width: 600px;"  rows="2" ><?php echo $det_act; ?></textarea>
+                        <textarea name="det_act" id="det_act" style="width: 600px;"  rows="2" class="required"><?php echo $poa->actividad; ?></textarea>
                     </td>
                 </tr>
                 <tr id="grupo2">
@@ -309,7 +320,7 @@ $('.autorizar').live('click', function() {
 <center>
     <a href="/pdf/poa.php?id=<?php echo $poa->id_documento;?>" class="link pdf" target="_blank" title="Imprimir Certificacion POA">Imprimir POA</a>
     <?php if($poa->auto_poa == 0):?>
-        <a href="#" class="autorizar" title="Aprobar POA" id="aprobarpoa" ><img src="/media/images/tick.png"/>Aprobar POA</a>
+        <a href="/pvplanificacion/aprobarpoa/<?php echo $poa->id; ?>" class="autorizar" title="Aprobar POA" ><img src="/media/images/tick.png"/>Aprobar POA</a>
     <?php endif;?>
     <?php if($poa->auto_poa == 1):?>
         <a href="/hojaruta/derivar/?id_doc=<?php echo $poa->id_documento; ?>" class="link derivar" title="Derivar a partir del documento, si ya esta derivado muestra el seguimiento" >Derivar</a>

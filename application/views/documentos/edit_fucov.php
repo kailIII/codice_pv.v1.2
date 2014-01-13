@@ -858,18 +858,21 @@ function dia_literal($n) {
                         </tr>
                         <tr>
                                 <td><b><?php echo Form::label('obj_est', 'C&oacute;digo Objetivo Estrategico:', array('class' => 'form')); ?></b></td>
-                                <td><?php echo Form::select('obj_est', $obj_est, $poa->id_obj_est, array('class' => 'form', 'name' => 'obj_est', 'id' => 'obj_est', 'class' => 'required')); ?></td>
+                                <td><?php // echo Form::select('obj_est', $obj_est, $poa->id_obj_est, array('class' => 'form', 'name' => 'obj_est', 'id' => 'obj_est')); ?>
+                                    <?php echo Form::input('obj_est', $poa->id_obj_est, array('class' => 'form', 'name' => 'obj_est', 'class'=>'required')); ?>
+                                    </td>
                             </tr>
                             <tr>
                                 <td><b><?php echo Form::label('detalle_obj_est', 'Detalle:', array('class' => 'form')); ?></b>    </td>
-                                <td><br><textarea name="det_obj_est" id="det_obj_est" style="width: 600px;" ><?php echo $det_obj_est; ?></textarea></td>
+                                <td><br><textarea name="det_obj_est" id="det_obj_est" style="width: 600px;" class="required"><?php echo $poa->obj_est; ?></textarea></td>
                             </tr>
                         <tr>
                             <td>
                                 <b><?php echo Form::label('obj_gestion', 'C&oacute;digo Objetivo de Gesti&oacute;n:', array('class' => 'form')); ?></b>
                             </td>
                             <td>
-                                <?php echo Form::select('obj_gestion', $obj_gestion, $poa->id_obj_gestion, array('class' => 'form', 'name' => 'obj_gestion', 'id' => 'obj_gestion', 'class' => 'required')); ?>
+                                <?php // echo Form::select('obj_gestion', $obj_gestion, $poa->id_obj_gestion, array('class' => 'form', 'name' => 'obj_gestion', 'id' => 'obj_gestion')); ?>
+                                <?php echo Form::input('obj_gestion', $poa->id_obj_gestion, array('class' => 'form', 'name' => 'obj_gestion', 'class'=>'required')); ?>
                             </td>
                         </tr>
                         <tr>
@@ -878,7 +881,7 @@ function dia_literal($n) {
                             </td>
                             <td>
                                 <br />
-                                <textarea name="det_obj_gestion" id="det_obj_gestion" style="width: 600px;" ><?php echo $det_obj_gestion; ?></textarea>
+                                <textarea name="det_obj_gestion" id="det_obj_gestion" style="width: 600px;" class="required"><?php echo $poa->obj_gestion; ?></textarea>
                             </td>
                         </tr>
                         <tr>
@@ -889,7 +892,8 @@ function dia_literal($n) {
 <b><?php echo Form::label('obj_esp', 'C&oacute;digo Objetivo Espec&iacute;fico:', array('class' => 'form')); ?></b>
                             </td>
                             <td>
-                    <?php echo Form::select('obj_esp', $obj_esp, $poa->id_obj_esp, array('class' => 'form', 'class' => 'required', 'id' => 'obj_esp', 'name' => 'obj_esp')); ?>
+                    <?php // echo Form::select('obj_esp', $obj_esp, $poa->id_obj_esp, array('class' => 'form', 'id' => 'obj_esp', 'name' => 'obj_esp')); ?>
+                    <?php echo Form::input('obj_esp', $poa->id_obj_esp, array('class' => 'form', 'name' => 'obj_esp', 'class'=>'required')); ?>
                             </td>
                         </tr>
                         <tr>
@@ -897,7 +901,7 @@ function dia_literal($n) {
 <b><?php echo Form::label('det_obj_esp', 'Detalle:', array('class' => 'form')); ?></b>
                             </td>
                             <td><br />
-                                <textarea name="det_obj_esp" id="det_obj_esp" style="width: 600px;" ><?php echo $det_obj_esp; ?></textarea>
+                                <textarea name="det_obj_esp" id="det_obj_esp" style="width: 600px;" class="required" ><?php echo $poa->obj_esp; ?></textarea>
                             </td>
                         </tr>
                         <tr>
@@ -908,7 +912,8 @@ function dia_literal($n) {
 <b><?php echo Form::label('actividad', 'C&oacute;digo Actividad', array('class' => 'form')); ?></b>
                             </td>
                             <td>
-                    <?php echo Form::select('actividad', $actividad, $poa->id_actividad, array('class' => 'form', 'class' => 'required', 'id' => 'actividad', 'name' => 'actividad')); ?>
+                    <?php // echo Form::select('actividad', $actividad, $poa->id_actividad, array('class' => 'form',  'id' => 'actividad', 'name' => 'actividad')); ?>
+                    <?php echo Form::input('actividad', $poa->id_actividad, array('class' => 'form', 'name' => 'actividad', 'class'=>'required')); ?>
                             </td>
                         </tr>
                         <tr>
@@ -916,7 +921,7 @@ function dia_literal($n) {
 <b><?php echo Form::label('det_act', 'Detalle:', array('class' => 'form')); ?></b>
                             </td>
                             <td><br />
-                                <textarea name="det_act" id="det_act" style="width: 600px;" readonly ><?php echo $det_act; ?></textarea>
+                                <textarea name="det_act" id="det_act" style="width: 600px;" class="required"><?php echo $poa->actividad; ?></textarea>
                             </td>
                         </tr>
                     </table>

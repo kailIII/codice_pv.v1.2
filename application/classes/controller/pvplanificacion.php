@@ -453,6 +453,12 @@ class Controller_Pvplanificacion extends Controller_DefaultTemplate {
                     $poa->des_pol_sec = $_POST['des_pol_sec'];
                     $poa->des_est_sec = $_POST['des_est_sec'];
                     $poa->des_prog_sec = $_POST['des_prog_sec'];
+
+                    $poa->obj_est = $_POST['det_obj_est'];
+                    $poa->obj_gestion = $_POST['det_obj_gestion'];
+                    $poa->obj_esp = $_POST['det_obj_esp'];
+                    $poa->actividad = $_POST['det_act'];
+
                     $poa->save();
                 if($poa->id_memo)
                     $this->request->redirect('documento/detalle/'.$poa->id_memo);

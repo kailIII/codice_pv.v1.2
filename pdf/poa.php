@@ -193,7 +193,7 @@ try {
         <table style=\" width: 156px;\"  border=\"1px\">
             <tr>
                 <td style = \" width: 40px;\" colspan = \"3\"><b>N°</b></td>
-                <td style = \" width: 116px;\">$pvobjetivos->nro_poa</td>
+                <td style = \" width: 116px;\"></td>
             </tr>
         </table>";
     $pdf->writeHTML($tabla1, false, false, false,false,'C');
