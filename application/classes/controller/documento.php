@@ -69,7 +69,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                 
                 $contenido = $_POST['descripcion'];
                 if (isset($_POST['fucov'])) {
-                    $contenido = '<p style="text-align: justify;">Por medio del presente Memorándum se autoriza a su persona trasladarse desde: La ciudad ' . $_POST['origen'] . ' hasta la ciudad ' . $_POST['destino'] . ' con el objetivo de asistir a ' . $_POST['detalle_comision'] . '. Desde el ' . $_POST['fecha_inicio'] . ' a Hrs. ' . $_POST['hora_inicio'] . ' hasta el ' . $_POST['fecha_fin'] . ' a Hrs. ' . $_POST['hora_fin'] .'.</p>    
+                    $contenido = '<p style="text-align: justify;">Por medio del presente Memorándum se autoriza a su persona trasladarse desde: La ciudad ' . $_POST['origen'] . ' hasta la ciudad ' . $_POST['destino'] . ' con el objetivo de asistir a ' . strtolower($_POST['detalle_comision']) . '. Desde el ' . $_POST['fecha_inicio'] . ' a Hrs. ' . $_POST['hora_inicio'] . ' hasta el ' . $_POST['fecha_fin'] . ' a Hrs. ' . $_POST['hora_fin'] .'.</p>    
                         <p></p>
                         <p style="text-align: justify;">Sírvase tramitar ante la Dirección General de Asuntos Administrativos la asignación de pasajes y viáticos de acuerdo a escala autorizada para lo cual su persona deberá coordinar la elaboración del FOCOV. Una vez completada la comisión sírvase hacer llegar el informe de descargo dentro de los próximos 8 días hábiles de concluída la comisión de acuerdo al artículo 25 del reglamento de Pasajes y Viáticos del Ministerio de Desarrollo Productivo y Economía Plural.</p>
                         <p></p>
@@ -162,7 +162,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                         $ff = date('Y-m-d', strtotime(substr($_POST['fecha_fin'], 4, 10))) . ' ' . date('H:i:s', strtotime($_POST['hora_fin']));
                         $pvcomision = ORM::factory('pvcomisiones');
                         $pvcomision->id_documento = $documento->id;
-                        $pvcomision->detalle_comision = $_POST['detalle_comision'];
+                        $pvcomision->detalle_comision = strtolower($_POST['detalle_comision']);
                         $pvcomision->origen = $_POST['origen'];
                         $pvcomision->destino = $_POST['destino'];
                         $pvcomision->fecha_inicio = $fi;
@@ -503,10 +503,10 @@ class Controller_documento extends Controller_DefaultTemplate {
                     $sw = 0;
                     $documento = ORM::factory('documentos')->where('id', '=', $id)->and_where('id_user', '=', $this->user->id)->find();
                     $contenido = $_POST['descripcion'];
-                    if ($documento->fucov == 1) {
+                    if ($documento->fucov == 1 || isset($_POST['fucov']) ) {
                         $contenido = '<p style="text-align: justify;">Por medio del presente Memorándum se autoriza a su persona trasladarse desde: La ciudad ' . $_POST['origen'] . ' hasta la ciudad ' . $_POST['destino'] . ' con el objetivo de asistir a ' . $_POST['detalle_comision'] . '. Desde el ' . $_POST['fecha_inicio'] . ' a Hrs. ' . $_POST['hora_inicio'] . ' hasta el ' . $_POST['fecha_fin'] . ' a Hrs. ' . $_POST['hora_fin'] .'.</p>    
                             <br>
-                            <p style="text-align: justify;">Sírvase tramitar ante la Dirección General de Asuntos Administrativos la asignación de pasajes y viáticos de acuerdo a escala autorizada para los cual su persona deberá coordinar la elaboración del FUCOV. Una vez completada la comisión sírvase hacer llegar el informe de descargo dentro de los próximos 8 días hábiles de concluída la comisión de acuerdo al artículo 25 del reglamento de Pasajes y viáticos del Ministerio de Desarrollo Productivo y Economía Plural. </p> 
+                            <p style="text-align: justify;">Sírvase tramitar ante la Dirección General de Asuntos Administrativos la asignación de pasajes y viáticos de acuerdo a escala autorizada para los cual su persona deberá coordinar la elaboración del FOCOV. Una vez completada la comisión sírvase hacer llegar el informe de descargo dentro de los próximos 8 días hábiles de concluída la comisión de acuerdo al artículo 25 del reglamento de Pasajes y viáticos del Ministerio de Desarrollo Productivo y Economía Plural. </p> 
                             <br>
                             <p style="text-align: justify;">Saludo a usted atentamente. </p>';
                     }
@@ -524,6 +524,12 @@ class Controller_documento extends Controller_DefaultTemplate {
                     $documento->cargo_via = $_POST['cargovia'];
                     $documento->titulo = $_POST['titulo'];
                     $documento->id_proceso = $_POST['proceso'];
+
+                    if (isset($_POST['fucov'])){
+                    $documento->fucov = 1;
+                    }else{
+                    $documento->fucov = 0;
+                    }
                     $documento->save();
 
                     //Modificado por Freddy Velasco
@@ -532,12 +538,14 @@ class Controller_documento extends Controller_DefaultTemplate {
                         $fi = date('Y-m-d', strtotime(substr($_POST['fecha_inicio'], 4, 10))) . ' ' . date('H:i:s', strtotime($_POST['hora_inicio']));
                         $ff = date('Y-m-d', strtotime(substr($_POST['fecha_fin'], 4, 10))) . ' ' . date('H:i:s', strtotime($_POST['hora_fin']));
                         $pvcomision = ORM::factory('pvcomisiones')->where('id_documento', '=', $id)->find();
+                        $pvcomision->id_documento = $documento->id;
                         $pvcomision->detalle_comision = $_POST['detalle_comision'];
                         $pvcomision->origen = $_POST['origen'];
                         $pvcomision->destino = $_POST['destino'];
                         $pvcomision->fecha_inicio = $fi;
                         $pvcomision->fecha_fin = $ff;
                         $pvcomision->observacion = $_POST['observacion'];
+                        $pvcomision->estado = 1;
                         $pvcomision->save();
                     }elseif ($documento->id_tipo == 13) {///FOCOV
                         $fi = date('Y-m-d', strtotime(substr($_POST['fecha_salida'], 4, 10))) . ' ' . date('H:i:s', strtotime($_POST['hora_salida']));
@@ -616,12 +624,15 @@ class Controller_documento extends Controller_DefaultTemplate {
                         }
                     }elseif($documento->id_tipo == 15 && $documento->id == $pre->id_documento){///PRE
                         //$pre=ORM::factory('presupuestos')->where('id_memo','=',$pvfucov->id_memo)->find();
+                        if ($_POST['fuente']) {
                         $pre->id_programatica = $_POST['fuente'];
                         $pre->antecedente = $_POST['antecedente'];
                         $pre->fecha_modificacion = date('Y-m-d H:i:s');
                         $pre->save();
                         ///eliminar las partidas actuales
                         $liq = ORM::factory('pvliquidaciones')->where('id_presupuesto','=',$pre->id)->and_where('estado','=',1)->find_all();
+
+                        
                         foreach($liq as $l){
                             $l->delete();
                         }
@@ -643,7 +654,10 @@ class Controller_documento extends Controller_DefaultTemplate {
                             $liq->partida = $partida[$f];
                             $liq->cod_partida = $codigo[$f];
                             $liq->save();
+                        }    
                         }
+
+                        
                     }elseif($documento->id_tipo == 4 && $documento->fucov == 2){///NI
                         $sw = 1;
                         $poa = ORM::factory('poas')->where('id_memo','=',$documento->id)->find();///cambiar a documento POA
@@ -1242,6 +1256,9 @@ class Controller_documento extends Controller_DefaultTemplate {
                 ///documento para presupuesto
                 $documento = ORM::factory('documentos',$pvfucov->id_documento);
                 $user = ORM::factory('users',$documento->id_user);
+
+                $archivo=ORM::factory('archivos')->where('id_documento','=',$pre->id_documento)->find();
+
                 $contenido = View::factory('pvpresupuesto/contenidoppt')
                          ->bind('pre', $pre)
                          ->bind('uejecutorapre',$uejecutorapre)
@@ -1255,8 +1272,8 @@ class Controller_documento extends Controller_DefaultTemplate {
                          ->bind('pvfucov', $pvfucov)
                          ->bind('tipo_cambio', $tipo_cambio)
                         ->bind('documento', $documento)
-                        ->bind('user',$user)
-                        ;
+                        ->bind('archivo', $archivo)
+                        ->bind('user',$user);
             }
         }
         ///aprobar informe de viaje

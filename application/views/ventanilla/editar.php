@@ -30,7 +30,7 @@ $('#crear').click(function(){
 </div>
 <h2 class="subtitulo">Editar: <?php echo $documento->nur;?><br/><span>Recepcion de documentos externos</span></h2>
 <a href="/ventanilla" class="uiButton uiButtonConfirm" title="Recepcionar otro documento" style="color:#fff;"><img src="/media/images/doc.png" align="absmiddle" alt="" /> RECEPCIONAR OTRO</a>
-<a href="/print_hr.php?nur=<?php echo $documento->nur; ?>" class="uiButton" title="Imprimir hoja de ruta" ><img src="/media/images/printer.png" align="absmiddle" alt="" /> HOJA DE RUTA</a>
+<a href="/print_hr.php?nur=<?php echo $documento->nur; ?>" class="uiButton" title="Imprimir hoja de ruta" target="_blank" ><img src="/media/images/printer.png" align="absmiddle" alt=""/> HOJA DE RUTA</a>
 <a href="/hojaruta/derivar/?id_doc=<?php echo $documento->id; ?>" class="uiButton" title="Derivar a partir del documento, si ya esta derivado muestra el seguimiento" ><img src="/media/images/users.png" align="absmiddle" alt="" /> Derivar Doc</a>
 <hr/>
 <?php if(sizeof($error)>0):?>

@@ -957,7 +957,7 @@ function dia_literal($n) {
                             </tr>
                             <tr>
                                 <td style=" width: 35%"><?php echo Form::label('fuente','Fuentes de Financiamiento')?></td>
-                                <td><?php echo Form::select('fuente', $fuente, $pre->id_programatica, array('id' => 'fuente', 'class' => 'required')) ?></td>
+                                <td><?php echo Form::select('fuente', $fuente, $pre->id_programatica, array('id' => 'fuente')) ?></td>
                             </tr>
                         </table>
                 <div id="saldoppt">

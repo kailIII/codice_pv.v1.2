@@ -26,9 +26,16 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             }
             $id_entidad=$rs2->id;
         }
-        if($id_entidad<>2 && $id_entidad<>4){
-        $this->Image($image_file, 89, 5, 40, 23, 'PNG');
+        if($id_entidad<>2 && $id_entidad<>4 && $id_entidad<>5){
+        $this->Image($image_file, 80, 5, 60, 25, 'PNG');
         }
+        if ($id_entidad==5) {
+            $image_file2='../media/logos/logo_MDPyEP.png';
+        $this->Image($image_file, 150, 5, 50, 20, 'PNG');
+        $this->Image($image_file2, 20, 5, 60, 25, 'PNG');
+        }
+
+
         $this->SetFont('helvetica', 'B', 20);
         //$this->Ln(120);
     }
@@ -77,7 +84,7 @@ if($id_entidad==2){
 }
 
 //set margins
-$pdf->SetMargins(20, $margin_top, 20);
+$pdf->SetMargins(25, $margin_top, 20);
 //$pdf->SetMargins(20, PDF_MARGIN_TOP, 20);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
@@ -125,7 +132,8 @@ try {
         $pdf->SetFont('Helvetica', '', 10);
         $pdf->MultiCell(160, 5, utf8_encode($rs->referencia), 0, 'L');
                 
-        $pdf->Ln(8);
+        $pdf->Ln(-5);
+        $pdf->writeHTML('<b><b/>');
         $pdf->writeHTML($rs->contenido);
         $pdf->Ln(10);
         

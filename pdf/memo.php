@@ -26,9 +26,16 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             }
             $id_entidad = $rs2->id;
         }
-        if ($id_entidad <> 2 && $id_entidad <> 4) {
+        if($id_entidad<>2 && $id_entidad<>4 && $id_entidad<>5){
             $this->Image($image_file, 80, 5, 60, 25, 'PNG');
         }
+        if ($id_entidad==5) {
+            $image_file2='../media/logos/logo_MDPyEP.png';
+        $this->Image($image_file, 150, 5, 50, 20, 'PNG');
+        $this->Image($image_file2, 20, 5, 60, 25, 'PNG');
+        }
+
+
         $this->SetFont('helvetica', 'B', 20);
         //$this->Ln(120);
     }
@@ -48,14 +55,14 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
         while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {
             $pie1 = $rs->pie_1;
             $pie2 = $rs->pie_2;
-            $id_entidad = $rs->id;
+            $id_entidad=$rs->id;
         }
         if ($id_entidad <> 2 && $id_entidad <> 4) {
-        
+
             // Position at 15 mm from bottom
         $this->SetY(-15);
         // Set font
-        $this->SetFont('helvetica', 'I', 7);
+            $this->SetFont('helvetica', 'I', 7);
 
         $this->Cell(0, 10, $pie1, 'T', false, 'C', 0, '', 0, false, 'T', 'M');
         $this->Ln(2);
@@ -63,9 +70,6 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
         }
     }
 
-    
-
-    
 }
 
 // create new PDF document

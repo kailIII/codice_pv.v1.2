@@ -26,9 +26,16 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             }
             $id_entidad=$rs2->id;
         }
-        if($id_entidad<>2 && $id_entidad<>4){
-        $this->Image($image_file, 89, 5, 40, 23, 'PNG');
+        if($id_entidad<>2 && $id_entidad<>4 && $id_entidad<>5){
+        $this->Image($image_file, 80, 5, 60, 25, 'PNG');
         }
+        if ($id_entidad==5) {
+            $image_file2='../media/logos/logo_MDPyEP.png';
+        $this->Image($image_file, 150, 5, 50, 20, 'PNG');
+        $this->Image($image_file2, 20, 5, 60, 25, 'PNG');
+        }
+
+
         $this->SetFont('helvetica', 'B', 20);
         //$this->Ln(120);
     }
@@ -50,17 +57,16 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             $pie2 = $rs->pie_2;
             $id_entidad=$rs->id;
         }
-        if($id_entidad<>2 && $id_entidad<>4){
-        // Linea vertical negra
-        $style = array('width' => 1.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0));
-        $this->Line(140, 257, 140, 272, $style);
-        // logo quinua
-        $this->Image('../media/logos/logo_quinua.jpg', 140, 253, 40, 22, 'JPG');
-        // Pie de pagina
+        if ($id_entidad <> 2 && $id_entidad <> 4) {
+        
+            // Position at 15 mm from bottom
+        $this->SetY(-15);
+        // Set font
         $this->SetFont('helvetica', 'I', 7);
-        $this->MultiCell(85, 0, $pie1, 0, 'R', false, 1, 50, 260, true, 0, false, true, 0, 'T', false);
-        $this->MultiCell(90, 0, $pie2, 0, 'R', false, 1, 45, 266, true, 0, false, true, 0, 'T', false);
-        $this->SetY(30);
+
+        $this->Cell(0, 10, $pie1, 'T', false, 'C', 0, '', 0, false, 'T', 'M');
+        $this->Ln(2);
+        $this->Cell(0, 15, $pie2, 0, false, 'C', 0, '', 0, false, 'T', 'M');
         }
     }
 
@@ -179,13 +185,17 @@ try {
         $pdf->Cell(15, 5, 'Ref:');
         $pdf->SetFont('Helvetica', '', 10);
         $pdf->MultiCell(170, 5, utf8_encode($rs->referencia), 0, 'L');
-        $pdf->Ln(10);
+        $pdf->Ln(-5);
+        $pdf->writeHTML('<table></table>');
         $pdf->writeHTML($rs->contenido);
         $pdf->Ln(10);
         $pdf->SetFont('Helvetica', '', 5);
-        $pdf->writeHTML('cc. ' . strtoupper($rs->copias));
-        $pdf->writeHTML('Adj. ' . strtoupper($rs->adjuntos));
-        $pdf->writeHTML(strtoupper($rs->mosca_remitente));
+        if($rs->copias != '')
+            $pdf->writeHTML('cc. ' . strtoupper($rs->copias));
+        if($rs->adjuntos != '')
+            $pdf->writeHTML('Adj. ' . strtoupper($rs->adjuntos));
+        if($rs->mosca_remitente != '')
+            $pdf->writeHTML(strtoupper($rs->mosca_remitente));
         //$pdf->writeHTML();
         /*   $pdf->SetY(-5);
           // Set font

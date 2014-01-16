@@ -328,9 +328,51 @@ public  function action_lista(){
         $pre = ORM::factory('presupuestos')->where('id','=',$id)->find();
         if ($pre->loaded()) {
             if($pre->auto_pre == 0){
-                    $pre->id_programatica = $_POST['fuente'];
-                    $pre->antecedente = $_POST['antecedente'];
-                    $pre->save();
+                    // $pre->id_programatica = $_POST['fuente'];
+                    // $pre->antecedente = $_POST['antecedente'];
+                    // $pre->save();
+
+                    //Cambio Freddy
+                    if($_FILES['archivo']['name']!='')
+                {
+                $post = Validation::factory ( $_FILES )
+                                ->rule('archivo', 'Upload::not_empty')
+                                ->rule('archivo', 'Upload::type', array(':value', array('pdf')))
+                                ->rule('archivo', 'Upload::size', array(':value', '20M'));
+                        //si pasa la validacion guardamamos 
+                    if ($post->check ()) 
+                        {                                  
+                            $path='archivos/'.date('Y_m');
+                            if(!is_dir($path)) 
+                            { 
+                            // Creates the directory 
+                            if(!mkdir($path, 0777, TRUE)) 
+                                { 
+                                // On failure, throws an error 
+                                throw new Exception("No se puedo crear el directorio!");
+                                exit;
+                                } 
+                            }       
+                            $filename = upload::save ( $_FILES ['archivo'],uniqid().substr($pre->id_documento,-10).'.pdf',$path );                                                                     
+                            $archivo = ORM::factory ( 'archivos',$_POST['id_archivo'] ); //intanciamos el modelo proveedor                          
+                            $archivo->nombre_archivo = basename($filename);
+                            $archivo->extension = $_FILES ['archivo'] ['type'];
+                            $archivo->tamanio = $_FILES ['archivo'] ['size'];
+                            $archivo->id_user = $this->user->id;
+                            $archivo->id_documento = $pre->id_documento;
+                            $archivo->sub_directorio = date('Y_m');
+                            $archivo->fecha = date('Y-m-d H:i:s');
+                            $archivo->save ();     
+                            $info['Documento escaneado: ']='Documento subido con exito'; 
+                        }
+                      else{
+                          $error['Documento escaneado: ']='El documento debe ser pdf y de un tamaño no mayor a 20M';                            
+                        }
+               }               
+            $_POST=array();
+            $_FILES=array();
+                    ////////
+
                     ///eliminar las partidas actuales
                     $liq = ORM::factory('pvliquidaciones')->where('id_presupuesto','=',$pre->id)->and_where('estado','=',1)->find_all();
                     foreach($liq as $l){

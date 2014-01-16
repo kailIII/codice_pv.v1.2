@@ -216,46 +216,177 @@ $(function(){
     else
         $moneda = '$us.';
 ?>
-<h2 style="text-align: center;"> REGISTRO DE EJECUCIÓN DE GASTOS</h2>
+<h2 style="text-align: center;"> PRESUPUESTO</h2>
 <div class="formulario">
-<form id="frmEditarPre" action="/pvpresupuesto/modificarpre/<?php echo $pre->id?>" method="post" enctype="multipart/form-data">
-
-
-<b>FOCOV:</b> 
+<form id="frmEditarPre" action="/pvpresupuesto/modificarpre/<?php echo $pre->id?>" method="post">
+    <?php if($pvfucov->id): ?>
+    <b>FOCOV:</b> 
 TOTAL PASAJES: <?php echo Form::input('total_pasaje', $pvfucov->total_pasaje, array('id' => 'total_pasaje', 'size' => 8,'readonly')); echo $moneda?>&nbsp;&nbsp;&nbsp;
 TOTAL VIATICOS: <?php echo Form::input('total_viatico', $pvfucov->total_viatico, array('id' => 'total_viatico', 'size' => 8,'readonly')); echo $moneda?>&nbsp;&nbsp;&nbsp;
 GASTO REP: <?php echo Form::input('gasto_representacion', $pvfucov->gasto_representacion, array('id' => 'gasto_representacion', 'size' => 8,'readonly')); echo $moneda?>
 <?php echo Form::hidden('id_tipoviaje', $pvfucov->id_tipoviaje, array('id' => 'id_tipoviaje'))?>
 <?php echo Form::hidden('tipo_cambio', $tipo_cambio->cambio_venta, array('id' => 'tipo_cambio'))?>
-
+    <table border="0" style=" width: 100%">
+            <tr>
+                <td colspan="2">
+                <?php echo Form::label('referencia','Antecedentes')?>
+                <textarea name="antecedente" id="antecedente" style="width: 98%;" readonly>
+<?php echo 'Mediante Hoja de Seguimiento '.$documento->nur.' se remite el '.$documento->codigo.', '; 
+if($user->genero == 'mujer') echo ' de la Sra. '; else echo ' del Sr. '; echo $documento->nombre_remitente.', '.$documento->cargo_remitente;
+echo ' solicitando vi&aacute;ticos por viaje a realizar a la ciudad de: '.$pvfucov->destino.' con el objeto de: '.$documento->referencia;?></textarea>
+            </td>
+        </tr>
+    </table>
+<?php else:?>
+    <table border="0" style=" width: 100%">
+            <tr>
+                <td colspan="2">
+                <?php echo Form::label('referencia','Antecedentes')?>
+                <textarea name="antecedente" id="antecedente" style="width: 98%;" ><?php echo $pre->antecedente?></textarea>
+            </td>
+        </tr>
+    </table>
+<?php endif; ?>
         <div style="border-bottom: 1px solid #ccc; background: #F2F7FC; display: block; padding: 10px 0;   width: 100%;  ">
         <hr/>
-        <table>
-        <tr>            
-    <?php if(isset($archivo->id)):?>
-    <td>
-        <a href="/descargar.php?id=<?php echo $archivo->id;?>" style="color: #1C4781; text-decoration: underline;  "><?php echo substr($archivo->nombre_archivo,13);?></a>
-        <input type="hidden" value="<?php echo $archivo->id;?>" name="id_archivo"/>    
-    </td>
-    <td colspan="2">        
-        <label for="" style=" font-weight: bold; color:#333;">Cambiar documento escaneado (.pdf < 20M)</label>
-        <input type="file" name="archivo"/>
-    </td>
-    <?php else:?>
-    <td colspan="2">   
-        <input type="hidden" value="0" name="id_archivo"/>
-        <label for="" style=" font-weight: bold; color:#333;">Subir documento escaneado (.pdf < 20M)</label>
-        <input type="file" name="archivo"/>
-    </td>
-    <?php endif;?>    
-    
-        </tr>    
-        </table>
-        
-        <input type="submit" value="Modificar documento" class="uibutton" name="submit" id="crear" title="Actualizar"/>    
+            <fieldset>
+                <table border ="0" style="width:100%">
+                    <tr>
+                        <td colspan="4"><b>Unidad Ejecutora de Presupuesto:&nbsp;</b><?php echo $uejecutorapre->oficina?></td>
+                        <td>Nro.: <?php echo Form::input('nro_pre',$pre->nro_pre,array('size'=>'10')); ?></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5"><b>Fuentes de Financiamiento:</b><?php echo Form::select('fuente', $fuente, $pre->id_programatica, array('id' => 'fuente', 'class' => 'required')) ?></td> 
+                    </tr>
+                    <?php if(!$pvfucov->id):?>
+                    <tr>
+                        <td></td>
+                        <td><?php echo Form::label('partida','Partida')?></td>
+                        <td colspan="3"><?php echo Form::select('partida', $partidas, NULL, array('id' => 'partida')) ?></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><?php echo Form::label('disponible','Saldo Actual Disponible')?></td>
+                        <td colspan="3"><?php echo Form::input('disponible',0,array('size'=>10,'readonly','id'=>'disponible')) ?></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><?php echo Form::label('solicitado','Cantidad Solicitada')?></td>
+                        <td colspan="3"><?php echo Form::input('solicitado',0,array('size'=>10,'id'=>'solicitado')) ?></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><?php echo Form::label('saldo','Nuevo Saldo')?></td>
+                        <td colspan="3"><?php echo Form::input('saldo',0,array('size'=>10,'readonly','id'=>'saldo')) ?></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5"><div style=" text-align: center" id="metaAdd" ><img src="/media/images/mail_ham2.png" style="border: none; cursor: pointer" />Adicionar Partida</div></td>
+                    </tr>
+                    <?php endif;?>
+                    <tr><td colspan="5"><hr /></td></tr>
+                    <tr>
+                        <td colspan="5"><b>Estructura Program&aacute;tica:</b></td>
+                    </tr>
+                    <tr>
+                        <td style="width: 2%"></td>
+                        <td style="width: 20%">Entidad:</td>
+                        <td style="width: 15%"><div id="sigla"><?php echo $detallefuente->sigla?></div></td>
+                        <td><div id="entidad"><?php echo $detallefuente->entidad?></div></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Direccion Administrativa:</td>
+                        <td><div id="cod_da"><?php echo $detallefuente->codigo_da?></div></td>
+                        <td><div id="da"><?php echo $detallefuente->da?></div></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Unidad Ejecutora:</td>
+                        <td><div id="cod_ue"><?php echo $detallefuente->codigo_ue?></div></td>
+                        <td><div id="ue"><?php echo $detallefuente->ue;?></div></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Programa:</td>
+                        <td><div id="cod_programa"><?php echo $detallefuente->codigo_prog?></div></td>
+                        <td><div id="programa"><?php echo $detallefuente->programa;?></div></td>
+                        <td></td>
+                    </tr>
+                    <?php if($detallefuente->codigo_proy != '0000'):?>
+                    <tr>
+                        <td></td>
+                        <td>Proyecto:</td>
+                        <td><div id="cod_proyecto"><?php echo $detallefuente->codigo_proy;?></div></td>
+                        <td><div id="proyecto"><?php echo $detallefuente->proyecto;?></div></td>
+                        <td></td>
+                    </tr>
+                    <?php endif ?>
+                    <tr>
+                        <td></td>
+                        <td>Actividad:</td>
+                        <td><div id="cod_actividad"><?php echo $detallefuente->codigo_act?></div></td>
+                        <td><div id="actividad"><?php echo $detallefuente->actividad?></div></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Fuente:</td>
+                        <td><div id="cod_fte"><?php echo $detallefuente->codigo_fte;?></div></td>
+                        <td><div id="fte"><?php echo $detallefuente->fte;?></div></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Organismo:</td>
+                        <td><div id="cod_org"><?php echo $detallefuente->codigo_org;?></div></td>
+                        <td><div id="org"><?php echo $detallefuente->org;?></div></td>
+                        <td></td>
+                    </tr>
+                    <tr><td colspan="5"><hr /></td></tr>
+                    <tr>
+                        <td colspan="5"><b>Lista de Partidas de Gasto:</b></td>
+                    </tr>
+                    <tr>
+                        <td colspan="5">
+                            <div id="saldoppt">
+                                <table id="x_tableMeta" border="1" class="classy">
+                                    <thead>
+                                        <th>Partida</th>
+                                        <th>Disponible</th>
+                                        <th>Solicitado</th>
+                                        <th>Saldo</th>
+                                    </thead>
+                                    <tbody>
+                                        <?php for($f=0;$f<count($x_partida);$f++):?>
+                                        <tr>
+                                            <td><?php echo Form::hidden('x_id_partida[]',$x_id_partida[$f],array('id'=>'x_id_partida_'.$f,'readonly','size'=>2))?>
+                                            <?php echo Form::input('x_partida[]',$x_partida[$f],array('id'=>'x_partida_'.$f,'readonly','size'=>35))?></td>
+                                            <td><?php echo Form::input('x_disponible[]',$x_disponible[$f],array('id'=>'x_disponible_'.$f,'readonly','size'=>5))?></td>
+                                            <td><?php echo Form::input('x_solicitado[]',$x_solicitado[$f],array('id'=>'x_solicitado_'.$f,'readonly','size'=>5))?></td>
+                                            <td><?php echo Form::input('x_saldo[]',$x_disponible[$f] - $x_solicitado[$f],array('id'=>'x_saldo_'.$f,'readonly','size'=>5))?></td>
+                                        </tr>
+                                        <?php endfor?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    <?php if(!$pvfucov->id): ?>
+                    <tr>
+                        <td colspan="5"><div style="text-align: center;" id="metaDelete" ><img src="/media/images/delete.png" style="border: none; cursor: pointer"/>Eliminar Partida</div></td>
+                    </tr>
+                    <?php endif;?>
+                    <tr><td colspan="5"><hr /></td></tr>
+                    <tr>
+                        <td colspan="5"><div style=" text-align: center"><input type="submit" value="Modificar documento" class="uibutton" name="submit" id="crear" title="Actualizar"/></div></td>
+                    </tr>
+                </table>
+            </fieldset>
         </div>
-        
-</form>
+    </form>
     
     <center>
         <a href="/pdf/pre.php?id=<?php echo $pre->id_documento;?>" class="link pdf" target="_blank" title="Imprimir Certificacion Presupuestaria" >Imprimir Presupuesto</a>

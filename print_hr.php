@@ -111,7 +111,7 @@ try {
     
     $pdf->SetFont('Helvetica', '', 7);
     $pdf->SetXY(70, 20);
-    $pdf->Cell(75, 20, 'Ministerio de Medio Ambiente y Agua', 0,FALSE,'C'); 
+    $pdf->Cell(75, 20, 'Ministerio de Desarrollo Productivo y Economia Plural', 0,FALSE,'C'); 
     
     $pdf->SetXY(145, 15);    
     //objeto->write1DBarcode ( codigo, tipo, x, y, ancho, alto, xres, estilo, alineacion)

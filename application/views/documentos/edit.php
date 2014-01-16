@@ -546,6 +546,8 @@ function dia_literal($n) {
                     ?>        
                     <fieldset> <legend>Proceso: <?php echo Form::select('proceso', $options, $documento->id_proceso); ?>
                             &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                            <?php if ($documento->id_tipo == '2'){?>FOCOV: <?php echo Form::checkbox('fucov',1,FALSE,array('id'=>'fucov','name'=>'fucov','title'=>'seleccione si quiere habilitar un memoramdum de viaje'))?><?php }?>    
+                                &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                             <?php
                             if ($documento->fucov == '1') { ?><b>MEMOR&Aacute;NDUM DE VIAJE </b><?php /*echo Form::checkbox('fucov',1,FALSE,array('id'=>'fucov','name'=>'fucov',$checked,'title'=>'seleccione si quiere habilitar un memoramdum de viaje'))*/?><?php }?>    
                         </legend>

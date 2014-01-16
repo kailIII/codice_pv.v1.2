@@ -33,9 +33,16 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             }
             $id_entidad=$rs2->id;
         }
-        if($id_entidad<>2 && $id_entidad<>4){
-        $this->Image($image_file, 89, 5, 40, 23, 'PNG');
+        if($id_entidad<>2 && $id_entidad<>4 && $id_entidad<>5){
+        $this->Image($image_file, 80, 5, 60, 25, 'PNG');
         }
+        if ($id_entidad==5) {
+            $image_file2='../media/logos/logo_MDPyEP.png';
+        $this->Image($image_file, 150, 5, 50, 20, 'PNG');
+        $this->Image($image_file2, 20, 5, 60, 25, 'PNG');
+        }
+
+
         $this->SetFont('helvetica', 'B', 20);
         //$this->Ln(120);
     }
@@ -57,17 +64,16 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             $pie2 = $rs->pie_2;
             $id_entidad=$rs->id;
         }
-        if($id_entidad<>2 && $id_entidad<>4){
-        // Linea vertical negra
-        $style = array('width' => 1.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0));
-        $this->Line(140, 257, 140, 272, $style);
-        // logo quinua
-        $this->Image('../media/logos/logo_quinua.jpg', 140, 253, 40, 22, 'JPG');
-        // Pie de pagina
+        if ($id_entidad <> 2 && $id_entidad <> 4) {
+        
+            // Position at 15 mm from bottom
+        $this->SetY(-15);
+        // Set font
         $this->SetFont('helvetica', 'I', 7);
-        $this->MultiCell(85, 0, $pie1, 0, 'R', false, 1, 50, 260, true, 0, false, true, 0, 'T', false);
-        $this->MultiCell(90, 0, $pie2, 0, 'R', false, 1, 45, 266, true, 0, false, true, 0, 'T', false);
-        $this->SetY(30);
+
+        $this->Cell(0, 10, $pie1, 'T', false, 'C', 0, '', 0, false, 'T', 'M');
+        $this->Ln(2);
+        $this->Cell(0, 15, $pie2, 0, false, 'C', 0, '', 0, false, 'T', 'M');
         }
     }
     
@@ -154,12 +160,12 @@ try {
     while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {
         $pdf->SetFont('Helvetica', '', 10);
         if (isset($rs->fecha_creacion)) {
-            $pdf->Write(0, $pdf->get_fecha($rs->fecha_creacion), '', 0, 'R');
+            $pdf->Write(0, $pdf->get_fecha($rs->fecha_creacion), '', 0, 'L');
         }
         
         $pdf->Ln();
         $pdf->SetFont('Helvetica', 'B', 11);
-        $pdf->Write(0, strtoupper($rs->codigo), '', 0, 'R');
+        $pdf->Write(0, strtoupper($rs->codigo), '', 0, 'L');
         $pdf->Ln(20);
 
         $pdf->SetFont('Helvetica', '', 10);

@@ -1,78 +1,18 @@
 <script type="text/javascript">
 
-// function calculo_viaticos(){
-//     var porcentaje = $("#porcentaje_viatico").val();
-//     var impuesto = $("#impuesto").val(); //impuesto iva
-//     var representacion = $("#representacion").val(); 
-//     var viatico_dia = $('#viatico_dia').val();
-//     var nro_dias = $('#nro_dias').val();
-// //calculo
-//     var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*parseFloat(nro_dias);
-//     var desc_iva=0;
-//     if(impuesto == 'Si'){
-//         desc_iva = (13*parseFloat(monto_parcial))/100;
-//     }
-//     var gastos_rep=0;
-//             if(representacion == 'Si'){
-//                 gastos_rep = (25*parseFloat(monto_parcial))/100;
-//             }
-//             var total_viatico=parseFloat(monto_parcial)-parseFloat(desc_iva);
-//             $('#gasto_imp').val(desc_iva.toFixed(2));
-//             $('#gasto_representacion').val(gastos_rep.toFixed(2));
-//             $('#total_viatico').val(total_viatico.toFixed(2));
-//             //$("#porcentaje_viatico").val(porcentaje);
-//     }
-  
- function calculo_viaticos(){
-
-            var porcentaje = $("#porcentaje_viatico").val();
-            var impuesto = $("#impuesto").val(); //impuesto iva
-            var representacion =  $("#representacion").val(); 
-            var viatico_dia = $('#viatico_dia').val();
-            var nro_dias = $('#nro_dias').val();
-            var tipo_moneda = $('#tipo_moneda').val();
-            var h_arribo = $('#hora_arribo').val();
-
-            if(tipo_moneda==0)
-                tipo_moneda=' Bs.'
-            else
-                tipo_moneda=' $us.'
-
-            var porcentaje_pv=0;
-            if(nro_dias==1){
-                //porcentaje_pv = 100;  // Porcentaje segun reglamento
-                var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*1;
-            } else if(nro_dias>10){
-                var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*10;
-                nro_dias = nro_dias-10;
-                //calculo de dias luego de los 10 dias
-                if (h_arribo>'12:00:00') {nro_dias--;}
-                var viatico_dia2=parseFloat(viatico_dia)*parseFloat(0.7);
-                
-                monto_parcial += (parseFloat(porcentaje)*parseFloat(viatico_dia2)/100)*parseFloat(nro_dias);
-                if(h_arribo>'12:00:00' && h_arribo<'18:30:01'){
-                     monto_parcial+= (((parseFloat(porcentaje)*parseFloat(viatico_dia2))/100)*70)/100; 
-                }
-                if(h_arribo>'18:30:00'){
-                   monto_parcial+= (parseFloat(porcentaje)*parseFloat(viatico_dia2))/100;  
-                }
-            }else{
-                if (h_arribo>'12:00:00') {nro_dias--;}
-                var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*parseFloat(nro_dias);
-                 if(h_arribo>'12:00:00' && h_arribo<'18:30:01'){
-                     monto_parcial+= (((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*70)/100; 
-                 }
-                 if(h_arribo>'18:30:00'){
-                     monto_parcial+= (parseFloat(porcentaje)*parseFloat(viatico_dia))/100;  
-                 }
-            }
-            //calculo
-            //var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*parseFloat(nro_dias);
-            var desc_iva=0;
-            if(impuesto == 'Si'){
-                desc_iva = (13*parseFloat(monto_parcial))/100;
-            }
-            var gastos_rep=0;
+function calculo_viaticos(){
+    var porcentaje = $("#porcentaje_viatico").val();
+    var impuesto = $("#impuesto").val(); //impuesto iva
+    var representacion = $("#representacion").val(); 
+    var viatico_dia = $('#viatico_dia').val();
+    var nro_dias = $('#nro_dias').val();
+//calculo
+    var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*parseFloat(nro_dias);
+    var desc_iva=0;
+    if(impuesto == 'Si'){
+        desc_iva = (13*parseFloat(monto_parcial))/100;
+    }
+    var gastos_rep=0;
             if(representacion == 'Si'){
                 gastos_rep = (25*parseFloat(monto_parcial))/100;
             }
@@ -80,7 +20,67 @@
             $('#gasto_imp').val(desc_iva.toFixed(2));
             $('#gasto_representacion').val(gastos_rep.toFixed(2));
             $('#total_viatico').val(total_viatico.toFixed(2));
-        }
+            //$("#porcentaje_viatico").val(porcentaje);
+    }
+  
+ // function calculo_viaticos(){
+
+ //            var porcentaje = $("#porcentaje_viatico").val();
+ //            var impuesto = $("#impuesto").val(); //impuesto iva
+ //            var representacion =  $("#representacion").val(); 
+ //            var viatico_dia = $('#viatico_dia').val();
+ //            var nro_dias = $('#nro_dias').val();
+ //            var tipo_moneda = $('#tipo_moneda').val();
+ //            var h_arribo = $('#hora_arribo').val();
+
+ //            if(tipo_moneda==0)
+ //                tipo_moneda=' Bs.'
+ //            else
+ //                tipo_moneda=' $us.'
+
+ //            var porcentaje_pv=0;
+ //            if(nro_dias==1){
+ //                //porcentaje_pv = 100;  // Porcentaje segun reglamento
+ //                var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*1;
+ //            } else if(nro_dias>10){
+ //                var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*10;
+ //                nro_dias = nro_dias-10;
+ //                //calculo de dias luego de los 10 dias
+ //                if (h_arribo>'12:00:00') {nro_dias--;}
+ //                var viatico_dia2=parseFloat(viatico_dia)*parseFloat(0.7);
+                
+ //                monto_parcial += (parseFloat(porcentaje)*parseFloat(viatico_dia2)/100)*parseFloat(nro_dias);
+ //                if(h_arribo>'12:00:00' && h_arribo<'18:30:01'){
+ //                     monto_parcial+= (((parseFloat(porcentaje)*parseFloat(viatico_dia2))/100)*70)/100; 
+ //                }
+ //                if(h_arribo>'18:30:00'){
+ //                   monto_parcial+= (parseFloat(porcentaje)*parseFloat(viatico_dia2))/100;  
+ //                }
+ //            }else{
+ //                if (h_arribo>'12:00:00') {nro_dias--;}
+ //                var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*parseFloat(nro_dias);
+ //                 if(h_arribo>'12:00:00' && h_arribo<'18:30:01'){
+ //                     monto_parcial+= (((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*70)/100; 
+ //                 }
+ //                 if(h_arribo>'18:30:00'){
+ //                     monto_parcial+= (parseFloat(porcentaje)*parseFloat(viatico_dia))/100;  
+ //                 }
+ //            }
+ //            //calculo
+ //            //var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*parseFloat(nro_dias);
+ //            var desc_iva=0;
+ //            if(impuesto == 'Si'){
+ //                desc_iva = (13*parseFloat(monto_parcial))/100;
+ //            }
+ //            var gastos_rep=0;
+ //            if(representacion == 'Si'){
+ //                gastos_rep = (25*parseFloat(monto_parcial))/100;
+ //            }
+ //            var total_viatico=parseFloat(monto_parcial)-parseFloat(desc_iva);
+ //            $('#gasto_imp').val(desc_iva.toFixed(2));
+ //            $('#gasto_representacion').val(gastos_rep.toFixed(2));
+ //            $('#total_viatico').val(total_viatico.toFixed(2));
+ //        }
 
     
     

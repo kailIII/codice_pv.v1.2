@@ -26,9 +26,16 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             }
             $id_entidad=$rs2->id;
         }
-        if($id_entidad<>2 && $id_entidad<>4){
-        $this->Image($image_file, 89, 5, 40, 23, 'PNG');
+        if($id_entidad<>2 && $id_entidad<>4 && $id_entidad<>5){
+        $this->Image($image_file, 80, 5, 60, 25, 'PNG');
         }
+        if ($id_entidad==5) {
+            $image_file2='../media/logos/logo_MDPyEP.png';
+        $this->Image($image_file, 150, 5, 50, 20, 'PNG');
+        $this->Image($image_file2, 20, 5, 60, 25, 'PNG');
+        }
+
+
         $this->SetFont('helvetica', 'B', 20);
         //$this->Ln(120);
     }
@@ -50,18 +57,16 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             $pie2 = $rs->pie_2;
             $id_entidad=$rs->id;
         }
-        if($id_entidad<>2 && $id_entidad<>4){
-        // Linea vertical negra
-            
-        $style = array('width' => 1.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0));
-        $this->Line(140, 257, 140, 272, $style);
-        // logo quinua
-        $this->Image('../media/logos/logo_quinua.jpg', 140, 253, 40, 22, 'JPG');
-        // Pie de pagina
+        if ($id_entidad <> 2 && $id_entidad <> 4) {
+        
+            // Position at 15 mm from bottom
+        $this->SetY(-15);
+        // Set font
         $this->SetFont('helvetica', 'I', 7);
-        $this->MultiCell(85, 0, $pie1, 0, 'R', false, 1, 50, 260, true, 0, false, true, 0, 'T', false);
-        $this->MultiCell(90, 0, $pie2, 0, 'R', false, 1, 45, 266, true, 0, false, true, 0, 'T', false);
-        $this->SetY(30);
+
+        $this->Cell(0, 10, $pie1, 'T', false, 'C', 0, '', 0, false, 'T', 'M');
+        $this->Ln(2);
+        $this->Cell(0, 15, $pie2, 0, false, 'C', 0, '', 0, false, 'T', 'M');
         }
     }
 
@@ -103,8 +108,9 @@ if($id_entidad==2){
 }
 
 //set margins
-$pdf->SetMargins(20, $margin_top, 20);
+//$pdf->SetMargins(20, $margin_top, 20);
 //$pdf->SetMargins(20, PDF_MARGIN_TOP, 20);
+$pdf->SetMargins(25, $margin_top, 20);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
@@ -144,23 +150,45 @@ try {
         $pdf->SetFont('Helvetica', 'B', 10);
         $pdf->Cell(15, 5, 'A:');
         $pdf->SetFont('Helvetica', '', 10);
-        $pdf->Write(0, utf8_encode($rs->nombre_destinatario), '', 0, 'L');
+        /*$pdf->Write(0, utf8_encode($rs->nombre_destinatario), '', 0, 'L');
         $pdf->Ln();
         $pdf->Cell(15, 5, '');
         $pdf->SetFont('Helvetica', 'B', 10);
         $pdf->Write(0, utf8_encode($rs->cargo_destinatario), '', 0, 'L');
-        $pdf->Ln(10);
+        $pdf->Ln(10);*/
+        $destinatario = explode(',',$rs->nombre_destinatario);
+        $cargo_dest = explode(',',$rs->cargo_destinatario);
+        $i = 0;
+        $pdf->SetFont('Helvetica', '', 10);
+        $pdf->Write(0, utf8_encode($rs->titulo), '', 0, 'L');
+        $html='<table>';
+        foreach( $destinatario as $dest) {
+            $html .= '<tr><td>'.ltrim(utf8_encode($dest)).'</td></tr><tr><td><b>'.ltrim(utf8_encode($cargo_dest[$i])).'</b></td></tr>';
+            $i++;
+        }
+        $html .='</html>';
+        $pdf->writeHTML($html);
         if (($rs->via != 0) && (trim($rs->nombre_via) != '')) {
             $pdf->SetFont('Helvetica', 'B', 10);
-            $pdf->Cell(15, 5, 'Via:');
-            $pdf->SetFont('Helvetica', '', 10);
-            $pdf->Write(0, utf8_encode($rs->nombre_via), '', 0, 'L');
-            $pdf->Ln();
-            $pdf->Cell(15, 5, '');
-            $pdf->SetFont('Helvetica', 'B', 10);
-            $pdf->Write(0, utf8_encode($rs->cargo_via), '', 0, 'L');
             $pdf->Ln(10);
+            $pdf->Cell(15, 5, 'Via:');
+                $vias = explode(',',$rs->nombre_via);
+                $cargo_vias = explode(',',$rs->cargo_via);
+                $i = 0;
+                $pdf->SetFont('Helvetica', '', 10);
+                $html='<table border = "0">';
+                foreach( $vias as $v) {
+                    if( $i != 0)
+                        $salto = '<br /><br /><br /><br /> ';
+                    else
+                        $salto = '';
+                    $html .= '<tr><td>'.$salto.ltrim(utf8_encode($v)).'</td></tr><tr><td><b>'.ltrim(utf8_encode($cargo_vias[$i])).'</b></td></tr>';
+                    $i++;
+                }
+                $html .='</table>';
+                $pdf->writeHTML($html);
         }
+        $pdf->Ln(5);
         $pdf->SetFont('Helvetica', 'B', 10);
         $pdf->Cell(15, 5, 'De:');
         $pdf->SetFont('Helvetica', '', 10);
@@ -180,8 +208,9 @@ try {
         $pdf->SetFont('Helvetica', 'B', 10);
         $pdf->Cell(15, 5, 'Ref:');
         $pdf->SetFont('Helvetica', '', 10);
-        $pdf->MultiCell(170, 5, utf8_encode($rs->referencia), 0, 'L');
-        $pdf->Ln(10);
+        $pdf->MultiCell(155, 5, utf8_encode($rs->referencia), 0, 'L');
+        $pdf->Ln(-5);
+        $pdf->writeHTML('<table></table>');
         $pdf->writeHTML($rs->contenido);
         $pdf->Ln(10);
         $pdf->SetFont('Helvetica', '', 5);
