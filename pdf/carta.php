@@ -166,7 +166,7 @@ try {
         $pdf->Ln();
         $pdf->SetFont('Helvetica', 'B', 11);
         $pdf->Write(0, strtoupper($rs->codigo), '', 0, 'L');
-        $pdf->Ln(20);
+        $pdf->Ln(10);
 
         $pdf->SetFont('Helvetica', '', 10);
         //$pdf->Cell(15, 5, $rs->titulo);
@@ -188,17 +188,15 @@ try {
         $pdf->Cell(15, 5, 'REF.:');
         $pdf->SetFont('Helvetica', '', 10);
         $pdf->MultiCell(170, 5, utf8_encode($rs->referencia), 0, 'L');
-        $pdf->Ln(20);
+        $pdf->Ln(-5);
 
         $pdf->writeHTML($rs->contenido);
-//        $pdf->Ln(40);
-
-
-//        $pdf->SetFont('Helvetica', '', 10);
-//        $pdf->Write(0, utf8_encode($rs->nombre_remitente), '', 0, 'C');
-//        $pdf->Ln();
-//        $pdf->SetFont('Helvetica', 'B', 10);
-//        $pdf->Write(0, utf8_encode($rs->cargo_remitente), '', 0, 'C');
+        $pdf->Ln(10);
+        $pdf->SetFont('Helvetica', '', 5);
+        $pdf->writeHTML('cc. ' . strtoupper($rs->copias));
+        $pdf->writeHTML('Adj. ' . strtoupper($rs->adjuntos));
+        $pdf->writeHTML(strtoupper($rs->mosca_remitente));
+        //$pdf->writeHTML();
         /*   $pdf->SetY(-5);
           // Set font
           $pdf->SetFont('helvetica', 'I', 7);

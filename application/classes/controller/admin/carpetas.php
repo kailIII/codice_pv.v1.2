@@ -36,7 +36,7 @@ class Controller_Admin_Carpetas extends Controller_AdminTemplate {
     // lista de carpetas
     public function action_index() {
         $oCarpetas = New Model_Carpetas();
-        $carpetas = $oCarpetas->lista_carpetas();
+        $carpetas = $oCarpetas->lista_carpetas(0);
         $this->template->title.=' | Carpetas';
         $this->template->content = View::factory('admin/lista_carpetas')
                 ->bind('carpetas', $carpetas);
@@ -82,10 +82,12 @@ class Controller_Admin_Carpetas extends Controller_AdminTemplate {
     
     public function action_delete($id = ''){
         if($id){
-        ORM::Factory('carpetas', $id)->delete();    
+        $carpeta = ORM::factory('carpetas',$id);
+        $carpeta->nivel = 1;
+        $carpeta->save();
         }
         
-        $this->request->redirect('admin/carpetas');
+        $this->request->redirect('bandeja/createcarpetas');
     }
 
 //    public function action_create() {

@@ -23,10 +23,15 @@ class Model_Carpetas extends ORM{
         return $this->_db->query(Database::SELECT,$sql,TRUE);
     }
     
-    public function lista_carpetas()
+    public function lista_carpetas($id_oficina)
     {
+        $where = '';
+        if ($id_oficina > 0) {
+            $where = ' AND car.id_oficina = '.$id_oficina;
+        }
+
         $sql="SELECT car.id,car.carpeta,car.fecha_creacion,car.nivel,ofi.sigla,ofi.oficina
-FROM carpetas AS car LEFT JOIN oficinas AS ofi ON car.id_oficina = ofi.id";
+FROM carpetas AS car LEFT JOIN oficinas AS ofi ON car.id_oficina = ofi.id WHERE car.nivel=2 ". $where;
         return db::query(Database::SELECT, $sql)->execute();
     }
 }

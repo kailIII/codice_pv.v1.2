@@ -546,7 +546,7 @@ class Controller_Bandeja extends Controller_DefaultTemplate{
     public function action_agrupados()
     {
         $count=ORM::factory('agrupaciones')->where('id_user','=',$this->user->id)->count_all();
-            $pagination = Pagination::factory(array(
+        $pagination = Pagination::factory(array(
   		'total_items'    => $count,
                 'current_page'   => array('source' => 'query_string', 'key' => 'page'),
                 'items_per_page' => 50,
@@ -557,14 +557,77 @@ class Controller_Bandeja extends Controller_DefaultTemplate{
         $agrupados=$oDocumentos->agrupaciones($this->user->id,$pagination->offset,$pagination->items_per_page);
         $this->template->title.='| Agrupados';
         $this->template->styles=array('media/css/tablas.css'=>'all','media/css/modal.css'=>'screen');
-             $this->template->scripts    = array('media/js/jquery.tablesorter.min.js');
+        $this->template->scripts    = array('media/js/jquery.tablesorter.min.js');
         $this->template->content=View::factory('bandeja/agrupados')
                                 ->bind('result',$agrupados)
                                 ->bind('count',$count)
                                 ->bind('page_links',$page_links);
     }
+
+
+    public function action_createcarpetas()
+    {
+        $oCarpetas = New Model_Carpetas();
+        $carpetas = $oCarpetas->lista_carpetas($this->user->id_oficina);
+        $this->template->title.=' | Carpetas';
+        $this->template->styles=array('media/css/tablas.css'=>'all','media/css/modal.css'=>'screen');
+        $this->template->scripts    = array('media/js/jquery.tablesorter.min.js');
+        $this->template->content = View::factory('bandeja/lista_carpetas')
+                ->bind('carpetas', $carpetas);
+    }
     
+    public function action_form($id = '') {
+        $options = array();
+        if ($this->user->nivel == 5) {
+            $oficinas = ORM::factory('oficinas')->find_all();
+        }else{
+            $oficinas = ORM::factory('oficinas')->where('id','=',$this->user->id_oficina)->find_all();    
+        }
+
+        foreach ($oficinas as $o) {
+            $options[$o->id] = $o->oficina . ' | ' . $o->sigla;
+        }
+        $valor = ORM::factory('carpetas', $id);
+        $this->template->title.=' | Crear Carpeta';
+        $this->template->content = View::factory('bandeja/add_carpeta')
+                ->bind('options', $options)
+                ->bind('carpeta', $valor)
+                ->bind('error', $error)
+                ->bind('info', $info);
+        
+    }
+
+    public function action_savecarpeta(){
+        //echo "todo esta bien";
+        //$error = array();
+        $info = array();
+        if (isset($_POST['create'])) {
+            $carpeta = ORM::factory('carpetas',$_POST['id']);
+            unset($_POST['id']);
+            $carpeta->id_oficina = $_POST['id_oficina'];
+            $carpeta->carpeta = $_POST['carpeta'];
+            $carpeta->fecha_creacion = date("Y-m-d H:i:s");
+            $carpeta->nivel = 2;
+            $carpeta->save();
+            if ($carpeta->id) {
+                //ahora guardamos por defecto el cite para los tipos de documentos
+                $info['Exito!'] = 'Se creo correctamente la carpeta <b>' . $carpeta->carpeta . '</b>';
+                //$_POST = array();
+            }
+        }
+        
+        $this->request->redirect('bandeja/createcarpetas');
+    }
     
+    public function action_delete($id = ''){
+        if($id){
+        $carpeta = ORM::factory('carpetas',$id);
+        $carpeta->nivel = 1;
+        $carpeta->save();
+        }
+        
+        $this->request->redirect('bandeja/createcarpetas');
+    }
     
 }
 ?>
