@@ -372,6 +372,12 @@ class Controller_documento extends Controller_DefaultTemplate {
             }
         }
         $documento = ORM::factory('documentos')->where('id', '=', $id)->find();
+        
+        $documento_aux = ORM::factory('documentos')->where('nur','=',$documento->nur)->and_where('fucov','=','1')->find();
+            if($documento_aux->loaded()){
+                $documento = $documento_aux;
+            }
+        
         if ($documento->loaded()) {
             $ok = true;
             $estado = 0;
@@ -401,7 +407,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                 /////////////////
 
                 // Modifica Freddy Velasco
-                $contenido_doc = $this->contenido_documento($id,$documento->id_tipo,$documento->id_oficina,$estado,$this->user->nivel);
+                $contenido_doc = $this->contenido_documento($documento->id,$documento->id_tipo,$documento->id_oficina,$estado,$this->user->nivel);
                 ////////end//////////////
 
 
@@ -1135,8 +1141,14 @@ class Controller_documento extends Controller_DefaultTemplate {
                  $tipo_cambio = $c;
         if ($nivel == 6) {
             $memo = ORM::factory('documentos')->where('id','=',$id)->find();
+            
+//            $memo_aux = ORM::factory('documentos')->where('nur','=',$memo->nur)->and_where('fucov','=','1')->find();
+//            if($memo_aux->loaded()){
+//                $memo = $memo_aux;
+//            }
+                        
             if($estado =='2' && $memo->fucov == '1' && $memo->loaded()){
-                $pvfucov = ORM::factory('pvfucovs')->where('id_memo','=',$id)->find();
+                $pvfucov = ORM::factory('pvfucovs')->where('id_memo','=',$memo->id)->find();
                 $pasajes = ORM::factory('pvpasajes')->where('id_fucov', '=', $pvfucov->id)->order_by('id', 'asc')->find_all();
                 $contenido = View::factory('pvpasajes/detalle')
                                 ->bind('pvfucov', $pvfucov)

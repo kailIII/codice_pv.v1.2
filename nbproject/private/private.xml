@@ -8,8 +8,8 @@
             <file>file:/var/www/codice_pv2/modules/database/classes/kohana/database/mysql.php</file>
             <file>file:/var/www/codice_pv2/application/classes/controller/documento.php</file>
             <file>file:/var/www/codice_pv2/modules/orm/classes/kohana/orm.php</file>
+            <file>file:/var/www/codice_pv2/application/classes/controller/hojaruta.php</file>
             <file>file:/var/www/codice_pv2/pdf/carta.php</file>
-            <file>file:/var/www/codice_pv2/application/classes/model/documentos.php</file>
             <file>file:/var/www/codice_pv2/pdf/informe.php</file>
         </group>
     </open-files>

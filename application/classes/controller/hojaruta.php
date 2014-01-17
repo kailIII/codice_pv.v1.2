@@ -72,17 +72,28 @@ class Controller_Hojaruta extends Controller_DefaultTemplate {
             $id_seg = Arr::get($_POST, 'id_seg');
             $nur = Arr::get($_POST, 'nur');
             $id_tipo = Arr::get($_POST, 'documento');
-            $fucov = Arr::get($_POST, 'fucov');
-            $id_memo = Arr::get($_POST, 'id_documento');
-
+            
+            
+            $doc_idmemo = ORM::factory('documentos')->where('nur','=',$nur)->and_where('fucov','=',1)->find();
+            if ($doc_idmemo->loaded() and  $id_tipo==13) {
+                $id_memo = $doc_idmemo->id;
+                $fucov = 1;
+            }  else {
+                $id_memo = Arr::get($_POST, 'id_documento');
+                $fucov = Arr::get($_POST, 'fucov');
+            }
+            
             $seguimiento = ORM::factory('seguimiento', $id_seg);
             if ($seguimiento->loaded()) {
                 //Freddy Validamos si el memo ya tiene un fucov asignado
 
                 $pvfucov = ORM::factory('pvfucovs')->where('id_memo', '=', $id_memo)->find();
-                if ($pvfucov->loaded() && $id_tipo==13) {
+                // $doc_fucov = ORM::factory('documentos')->where('id','=',$id_memo)->find();
+                
+                // if ($pvfucov->loaded() && $id_tipo==13 && $doc_fucov->fucov=='0') {
+                if ($pvfucov->loaded() && $id_tipo==13 ) {
 
-                    $info['info'] = '<b>Mensaje!: </b>El siguiente documento ' . $nur . ' ya tiene asignado un fucov';
+                    $info['info'] = '<b>Mensaje!: </b>El siguiente documento ' . $nur . ' ya tiene asignado un fucov o No es un memorandum de viaje';
                     $oSeg = New Model_Seguimiento();
                     $entrada = $oSeg->pendiente($this->user->id);
                     $carpetas = ORM::factory('carpetas')->where('id_oficina', '=', $this->user->id_oficina)->find_all();

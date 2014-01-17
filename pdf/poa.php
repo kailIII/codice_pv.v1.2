@@ -556,7 +556,7 @@ $tabla1 .=" <tr>
                             <td style=\"width: 15%;\" bgcolor = \"$color\">Responsable Verificación POA</td>
                             <td style=\"width: 35%;\"><span style=\"color:#DADADA; text-align:center; font-size: 60%;\"><br /><br /><br /><br /><span style=\"color:#000000; text-align:center; font-size: 120%;\">$autoriza</span><br />FIRMA</span></td>
                             <td style=\"width: 35%;\"><span style=\"color:#DADADA; text-align:center; font-size: 60%;\"><br /><br /><br /><br /><br />SELLO</span></td>
-                            <td style=\"width: 15%;\" bgcolor = \"$color\">FECHA $fecha_aprobado</td>
+                            <td style=\"width: 15%;\" bgcolor = \"$color\">FECHA </td>
                         </tr>
                         <tr>
                             <td bgcolor = \"$color\">Dirección General de Planificación</td>

@@ -210,7 +210,7 @@ try {
     // }              
 
     $pdf->Cell(30, 5, 'ADJUNTO:', 1,FALSE,'L');    
-    $pdf->Cell(145, 5, $rs->adjuntos, 'BLR',FALSE,'L');
+    $pdf->Cell(145, 5, utf8_encode($rs->adjuntos), 'BLR',FALSE,'L');
     $pdf->Cell(15, 5, 'HOJAS', 'BLR',FALSE,'L');
     $pdf->Cell(10, 5, $rs->hojas, 'BLR',FALSE,'C');
     $pdf->Ln();
@@ -222,13 +222,13 @@ try {
     $pdf->Cell(20, 7, 'Para:', 1,FALSE,'L',true);    
     $pdf->SetFontSize(8);
     $pdf->SetFillColor(0);
-    $pdf->Cell(60, 7, $nombre_receptor, 1,FALSE,'L');    
+    $pdf->Cell(60, 7, utf8_encode($nombre_receptor), 1,FALSE,'L');    
     $pdf->SetFontSize(10);
     $pdf->SetFillColor(240,245,255);
     $pdf->Cell(10, 7, 'CC:', 1,FALSE,'L',true);
     $pdf->SetFillColor(0);
     $pdf->SetFontSize(8);
-    $pdf->Cell(110, 7, $copias, 1,FALSE,'L');
+    $pdf->Cell(110, 7, utf8_encode($copias), 1,FALSE,'L');
     $pdf->ln();
     $pdf->SetFontSize(4);
     $pdf->Cell(26, 5, 'ACCION NECESARIA Y RESPUESTA', 1,FALSE,'L');
@@ -297,7 +297,7 @@ try {
     $pdf->Ln();
     //proveido
         $pdf->SetXY(10,92);
-        $pdf->MultiCell(144, 39, $proveido, 1, 'L', 0, 0, '', '', true, 0, false, true, 40, 'M');
+        $pdf->MultiCell(144, 39, utf8_encode($proveido), 1, 'L', 0, 0, '', '', true, 0, false, true, 40, 'M');
         //$pdf->Cell(144, 40, $proveido, 1,FALSE,'L');
     $pdf->SetTextColor(243,249,255);
     $pdf->SetFontSize(20);
