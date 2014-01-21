@@ -53,7 +53,7 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
 
         $id = $_GET['id'];
         $dbh = New db();
-        $stmt = $dbh->prepare("SELECT e.pie_1,e.pie_2,e.id FROM documentos d 
+        $stmt = $dbh->prepare("SELECT e.pie_1,e.pie_2,e.id,d.nur FROM documentos d 
                                INNER JOIN tipos t ON d.id_tipo=t.id
                                INNER JOIN oficinas o ON d.id_oficina=o.id
                                INNER JOIN entidades e ON o.id_entidad=e.id
@@ -63,6 +63,7 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             $pie1 = $rs->pie_1;
             $pie2 = $rs->pie_2;
             $id_entidad=$rs->id;
+            $nur=$rs->nur;
         }
         if ($id_entidad <> 2 && $id_entidad <> 4) {
         
@@ -71,9 +72,22 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
         // Set font
         $this->SetFont('helvetica', 'I', 7);
 
-        $this->Cell(0, 10, $pie1, 'T', false, 'C', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 10, utf8_encode($pie1), 'T', false, 'C', 0, '', 0, false, 'T', 'M');
         $this->Ln(2);
-        $this->Cell(0, 15, $pie2, 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        $this->Cell(0, 15, utf8_encode($pie2), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+
+        ////////////////////////////////////
+        $this->setFillColor(255,255,255);
+        $this->SetFont('Helvetica', '', 7);
+        $this->setTextColor(63,62,60);
+        $this->SetFont('Helvetica', '', 6);
+        $this->SetXY(15,275);
+        $this->setCellPaddings(0, 0, 0, 0);
+        $comentario=utf8_encode($nur);
+        $this->StartTransform();
+        $this->Rotate(90);
+        $this->Multicell(30,0,$comentario,0,'C',1);
+        $this->StopTransform(); 
         }
     }
     

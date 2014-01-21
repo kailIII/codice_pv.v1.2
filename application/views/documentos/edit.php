@@ -547,7 +547,7 @@ function dia_literal($n) {
                     $checked = 'checked';
                 }
 
-                if ($documento->id_tipo == 5):
+                if ($documento->id_tipo == 5 || $documento->id_tipo==16):
                     echo Form::hidden('proceso', 1);
                 else:
                     ?>        
@@ -561,7 +561,7 @@ function dia_literal($n) {
                     <table width="100%">
                         <tr>
                             <td style=" border-right:1px dashed #ccc; padding-left: 5px;">
-                                <?php if ($documento->id_tipo == '5'): ?>
+                                <?php if ($documento->id_tipo == '5' || $documento->id_tipo == '16'): ?>
                                     <p>
                                         <label>Titulo:</label>
                                         <select name="titulo" class="required">
@@ -597,7 +597,7 @@ function dia_literal($n) {
                                 <p>
                                     <?php
                                     echo Form::label('destinatario', 'Cargo Destinatario:', array('class' => 'form'));
-                                    echo Form::input('cargo_des', $documento->cargo_destinatario, array('id' => 'cargo_des', 'size' => 45, 'class' => 'required'));
+                                    echo Form::input('cargo_des', $documento->cargo_destinatario, array('id' => 'cargo_des', 'size' => 45));
                                     ?>
                                 </p> 
                                 <?php if ($tipo->via == 0): ?>

@@ -40,7 +40,7 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
 
     // Page footer
     public function Footer() {
-        $id = $_GET['id'];
+        /*$id = $_GET['id'];
         $dbh = New db();
         $stmt = $dbh->prepare("SELECT e.pie_1,e.pie_2,e.id FROM documentos d 
                                INNER JOIN tipos t ON d.id_tipo=t.id
@@ -53,7 +53,7 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             $pie2 = $rs->pie_2;
             $id_entidad=$rs->id;
         }
-        /*if($id_entidad<>2){
+        if($id_entidad<>2){
         // Linea vertical negra
             
         $style = array('width' => 1.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0));

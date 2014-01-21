@@ -72,8 +72,8 @@ $contenido='';  //strip_tags(html_entity_decode(''.$rs->contenido));       // or
 $data=array();
 $data[]=array('number'=>'../media/logos/'.$rs->logo);
 //pie de pagina
-$pie_1=''.$rs->pie_1;
-$pie_2=''.$rs->pie_2;
+$pie_1=''.utf8_encode($rs->pie_1);
+$pie_2=''.utf8_encode($rs->pie_2);
 // Load the template
 //$TBS->LoadTemplate($template);
 $TBS->LoadTemplate($template,OPENTBS_ALREADY_UTF8);

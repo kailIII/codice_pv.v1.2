@@ -165,7 +165,7 @@ $('#hora_inicio,#hora_fin').timeEntry({show24Hours: true, showSeconds: true});
     <form action="/documento/crear/<?php echo $documento->action;?>" method="post" id="frmCreate">
         <br/>
         <fieldset>
-            <?php if($tipo->tipo=='Carta'):
+            <?php if($tipo->tipo=='Carta' || $tipo->id == '16'):
             echo Form::hidden('proceso',1);
             ?>
             <div id="otro_nur"><br><br>ASIGNAR NUR: <select id="asignar_nur" name="asignar_nur" ></select></div>
@@ -178,11 +178,101 @@ $('#hora_inicio,#hora_fin').timeEntry({show24Hours: true, showSeconds: true});
             </legend>
             <hr/>
         <?php endif; ?>
-        
+        <?php 
+        $referencia='';
+        $contenidoRH='';
+        if ($tipo->id==16) {
+            $referencia = 'DOCUMENTACIÓN QUE DEBE ADJUNTAR PARA SU FILE PERSONAL';
+            $contenidoRH = '<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<p align="JUSTIFY"><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">De mi mayor consideraci&oacute;n:</span></p>
+<p style="text-align: justify;"><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Con la finalidad de dar cumplimiento al Registro de Personal del Sistema de Administraci&oacute;n de Personal (SAP), la Unidad de Recursos Humanos solicita que en el plazo de 5 d&iacute;as, remita a esta Unidad la documentaci&oacute;n esencial para conformar su file personal de acuerdo al siguiente detalle:</span></p>
+<ul>
+<li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Hoja de Vida actualizada, con sus respectivos respaldos.</span></li>
+<li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Fotocopia de Cedula de Identidad</span></li>
+<li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Fotocopia de Libreta de Servicio Militar (varones)</span></li>
+<li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Fotocopia de N&uacute;mero de Cuenta (Banco Uni&oacute;n)</span></li>
+<li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Registro/Carnet de N&uacute;mero &Uacute;nico de Afiliado AFP (NUA)</span></li>
+<li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Documentaci&oacute;n para afiliaci&oacute;n Caja Nacional de Salud</span><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;"><br /></span></li>
+</ul>
+<table style="height: 124px;" border="1" width="730" cellspacing="0" cellpadding="7"><colgroup><col width="310" /> <col width="268" /> </colgroup>
+<tbody>
+<tr valign="TOP">
+<td width="310">
+<p align="CENTER"><em><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">AFILIACI&Oacute;N - PRIMERA VEZ</span></em></p>
+</td>
+<td width="268">
+<p align="CENTER"><em><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">AFILIACI&Oacute;N - REINGRESO</span></em></p>
+</td>
+</tr>
+<tr valign="TOP">
+<td width="310" height="13">
+<p align="JUSTIFY"><span style="font-family: arial,helvetica,sans-serif; font-size: 8pt;">Certificado de Nacimiento Original<br /></span></p>
+</td>
+<td width="268">
+<p><span style="font-family: arial,helvetica,sans-serif; font-size: 8pt;">Formulario AVC 04 de afiliaci&oacute;n y AVC 07 de baja anterior instituci&oacute;n (original) </span></p>
+</td>
+</tr>
+<tr valign="TOP">
+<td width="310">
+<p><span style="font-family: arial,helvetica,sans-serif; font-size: 8pt;">Fotocopia &uacute;ltima boleta de pago o memor&aacute;ndum de designaci&oacute;n</span></p>
+</td>
+<td width="268">
+<p><span style="font-family: arial,helvetica,sans-serif; font-size: 8pt;">Fotocopia &uacute;ltima boleta de pago o memor&aacute;ndum de designaci&oacute;n</span></p>
+</td>
+</tr>
+<tr valign="TOP">
+<td width="310" height="8">
+<p><span style="font-family: arial,helvetica,sans-serif; font-size: 8pt;">Fotocopia Carnet de Identidad</span></p>
+</td>
+<td width="268">
+<p><span style="font-family: arial,helvetica,sans-serif; font-size: 8pt;">Fotocopia Carnet de Identidad</span></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p align="JUSTIFY">&nbsp;</p>
+<p align="JUSTIFY"><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Al mismo tiempo se deben llenar los formularios de:</span></p>
+<ul>
+<li>Registro de Ficha Personal con fotograf&iacute;a 4x4 fondo azul</li>
+<li>Declaraci&oacute;n de Incompatibilidad y Conflictos de Intereses</li>
+<li>Declaraci&oacute;n Jurada de Incompatibilidad por la Funci&oacute;n P&uacute;blica</li>
+<li>Declaraci&oacute;n Jurada de Incompatibilidad por la Funci&oacute;n P&uacute;blica para abogados</li>
+</ul>
+<p align="JUSTIFY">&nbsp;<span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">(Disponibles en la p&aacute;gina web: intranet.produccion.gob.bo)</span></p>
+<p><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Sin otro particular saludo a usted con la mayor atenci&oacute;n.</span></p>
+<hr />
+<p align="JUSTIFY"><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;"><strong><span lang="es-MX">REF.: &nbsp; &nbsp; </span></strong><span lang="es-MX">COMUNICACI&Oacute;N INTERNA</span></span></p>
+<p style="text-align: justify;"><span lang="es-MX" style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">A efecto de dar cumplimiento con el Art&iacute;culo 15 del Reglamento Espec&iacute;fico del Sistema de Administraci&oacute;n de Personal, referente al Proceso de Inducci&oacute;n o Integraci&oacute;n, mediante la presente se le comunica que de forma OBLIGATORIA debe informarse sobre:</span></p>
+<p><span lang="es-MX" style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">1. Objetivos y funciones del Ministerio de Desarrollo Productivo en los siguientes enl&aacute;celes:</span></p>
+<p><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;"><a href="http://www.produccion.gob.bo/contenido/id/4">http://www.produccion.gob.bo/contenido/id/4</a></span></p>
+<p align="JUSTIFY"><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;"><a href="http://www.produccion.gob.bo/contenido/id/3"><span style="text-decoration: underline;">http://www.produccion.gob.bo/contenido/id/3</span></a></span></p>
+<p style="text-align: justify;" align="JUSTIFY"><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;"><span lang="es-MX">2. L</span><span lang="es-MX">a Normativa especifica de la Entidad en el enlace <a href="http://www.produccion.gob.bo/documentos/reglamentos">http://www.produccion.gob.bo/documentos/reglamentos</a> con el siguiente contenido:</span></span></p>
+<ul>
+<li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Procedimiento para el Cumplimiento Oportuno de la Declaraci&oacute;n Jurada de Bienes y Rentas (PCO-DJBR)</span></li>
+<li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Reglamento Interno de Personal</span></li>
+<li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Reglamento interno de pasant&iacute;as profesionales, universitarias y de trabajos dirigidos</span></li>
+<li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Reglamento de Pasajes y Vi&aacute;ticos</span></li>
+<li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Reglamento Especifico del Sistema de Administraci&oacute;n de Bienes y Servicios</span></li>
+<li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Reglamento Espec&iacute;fico del Sistema de Tesorer&iacute;a</span></li>
+<li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Reglamento Espec&iacute;fico del Sistema de Programaci&oacute;n de Operaciones</span></li>
+<li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Reglamento Espec&iacute;fico del Sistema de Presupuesto</span></li>
+<li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Reglamento Espec&iacute;fico del Sistema de Organizaci&oacute;n Administrativa</span></li>
+<li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Reglamento Espec&iacute;fico del Sistema de Contabilidad Integrada</span></li>
+<li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Reglamento Espec&iacute;fico del Sistema de Administraci&oacute;n de Personal</span></li>
+</ul>
+<p style="text-align: justify;" align="JUSTIFY"><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Asimismo, adjunto a la presente el POAI correspondiente al puesto de trabajo designado, para el conocimiento de las funciones a desarrollar y su respectiva suscripci&oacute;n.</span></p>
+<p><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Sin otro particular, saludo a usted atentamente.<br /></span></p>
+</body>
+</html>';
+        } ?>
         <table width="100%">
             <tr>
                 <td style=" border-right:1px dashed #ccc; padding-left: 5px;">
-                    <?php if($documento->tipo=='Carta'):?>
+                    <?php if($documento->tipo=='Carta' || $documento->id==16):?>
                     <p>
                         <label>Titulo:</label>
                         <select name="titulo" class="required">
@@ -204,7 +294,7 @@ $('#hora_inicio,#hora_fin').timeEntry({show24Hours: true, showSeconds: true});
             <p>
                 <?php
                 echo Form::label('destinatario', 'Cargo Destinatario:',array('class'=>'form'));
-                echo Form::input('cargo_des','',array('id'=>'cargo_des','size'=>40,'class'=>'required'));
+                echo Form::input('cargo_des','',array('id'=>'cargo_des','size'=>40));
                 ?>
             </p>   
             <?php if($tipo->via==0):?>
@@ -283,7 +373,7 @@ $('#hora_inicio,#hora_fin').timeEntry({show24Hours: true, showSeconds: true});
     <td colspan="2" style="padding-left: 5px;">
         <?php
         echo Form::label('referencia', 'Referencia:',array('id'=>'label_referencia','class'=>'form'));?> 
-        <textarea name="referencia" id="referencia" style="width: 500px;" class="required"></textarea>
+        <textarea name="referencia" id="referencia" style="width: 500px;" class="required"><?php echo $referencia ?></textarea>
 
     </td>
 </tr>
@@ -294,7 +384,7 @@ $('#hora_inicio,#hora_fin').timeEntry({show24Hours: true, showSeconds: true});
             <?php echo Form::label('contenido', 'Contenido:',array('id'=>'label_contenido','class'=>'form'));?> 
             <div id='contenido1'>
              <?php
-            echo Form::textarea('descripcion','',array('id'=>'descripcion','cols'=>50,'rows'=>10,'name'=>'descripcion'));
+            echo Form::textarea('descripcion',$contenidoRH,array('id'=>'descripcion','cols'=>50,'rows'=>10,'name'=>'descripcion'));
             ?>
             </div>
             <div id='contenido2' style="width: 780px;">

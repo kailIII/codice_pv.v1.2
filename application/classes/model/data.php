@@ -13,7 +13,7 @@ class Model_data extends Kohana_Model{
         $sql="SELECT u.id as id_d, u.nombre,u.cargo,w.id as id_v, w.nombre as via, w.cargo as cargo_via,u.genero from users u 
              INNER JOIN vias v ON v.id_destinatario=u.id
              LEFT JOIN users w ON v.id_via=w.id
-             WHERE v.id_usuario='$id'";
+             WHERE v.id_usuario='$id' ORDER BY nombre ASC";
         return DB::query(1, $sql)->execute();
     }
     //codigo de freddy

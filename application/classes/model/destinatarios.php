@@ -32,7 +32,7 @@ class Model_Destinatarios extends ORM{
             INNER JOIN users u ON u.id=d.id_destinatario
             INNER JOIN oficinas o ON u.id_oficina=o.id
             INNER JOIN entidades e ON e.id=o.id_entidad
-            WHERE d.id_usuario='$id_user'";
+            WHERE d.id_usuario='$id_user' ORDER BY oficina ";
         return $this->_db->query(database::SELECT, $sql, TRUE);
     }
     
@@ -41,7 +41,7 @@ class Model_Destinatarios extends ORM{
         $sql="SELECT u.id,u.nombre,u.cargo,u.genero,o.oficina,e.entidad FROM users u             
             INNER JOIN oficinas o ON u.id_oficina=o.id
             INNER JOIN entidades e ON e.id=o.id_entidad
-            WHERE u.superior='$id_user'";
+            WHERE u.superior='$id_user' ORDER BY oficina ";
         return DB::query(1, $sql)->execute();
     }
     public function superior($id_user)
@@ -50,7 +50,7 @@ class Model_Destinatarios extends ORM{
             FROM users u             
             INNER JOIN oficinas o ON u.id_oficina=o.id
             INNER JOIN entidades e ON e.id=o.id_entidad
-            WHERE u.id='$id_user'";
+            WHERE u.id='$id_user' ORDER BY oficina ";
         return DB::query(1, $sql)->execute();
     }
     /*public function destinos_nuevos($id_user)
