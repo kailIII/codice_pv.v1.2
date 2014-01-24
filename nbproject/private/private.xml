@@ -7,6 +7,8 @@
             <file>file:/var/www/codice_pv2/index.php</file>
             <file>file:/var/www/codice_pv2/application/classes/controller/documento.php</file>
             <file>file:/var/www/codice_pv2/application/classes/model/data.php</file>
+            <file>file:/var/www/codice_pv2/system/classes/kohana/request/client/internal.php</file>
+            <file>file:/var/www/codice_pv2/application/classes/controller/bandeja.php</file>
             <file>file:/var/www/codice_pv2/application/classes/controller/hojaruta.php</file>
             <file>file:/var/www/codice_pv2/pdf/notarrhh.php</file>
             <file>file:/var/www/codice_pv2/modules/database/classes/kohana/database/mysql/result.php</file>

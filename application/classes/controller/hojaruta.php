@@ -205,6 +205,7 @@ class Controller_Hojaruta extends Controller_DefaultTemplate {
 <li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Reglamento Espec&iacute;fico del Sistema de Organizaci&oacute;n Administrativa</span></li>
 <li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Reglamento Espec&iacute;fico del Sistema de Contabilidad Integrada</span></li>
 <li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Reglamento Espec&iacute;fico del Sistema de Administraci&oacute;n de Personal</span></li>
+<li><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Manual de Uso del Sistema CODICE de Correspondencia, (<a href="http://intranet.produccion.gob.bo/">http://intranet.produccion.gob.bo/</a>) carpeta <br />Manuales&nbsp;</span></li>
 </ul>
 <p style="text-align: justify;" align="JUSTIFY"><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Asimismo, adjunto a la presente el POAI correspondiente al puesto de trabajo designado, para el conocimiento de las funciones a desarrollar y su respectiva suscripci&oacute;n.</span></p>
 <p><span style="font-family: arial,helvetica,sans-serif; font-size: 10pt;">Sin otro particular, saludo a usted atentamente.<br /></span></p>
