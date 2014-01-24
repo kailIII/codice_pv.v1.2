@@ -503,7 +503,13 @@ public function action_generar_doc() {
                 $acciones = $this->acciones();
                 $destinatarios = $this->destinatarios($this->user->id, $this->user->superior);
                 $id_seguimiento = 0;
+                
                 $oficial = 1;
+//                $seguimiento = ORM::factory('seguimiento')->where('id','=',$documento->id_seguimiento)->find();
+//                if($seguimiento->loaded()){
+//                    $oficial=$seguimiento->oficial;
+//                }
+//                
                 $hijo = 0;
                 $this->template->title.=' | Derivar';
                 $this->template->styles = array('media/css/tablas.css' => 'screen', 'media/css/fcbk.css' => 'screen', 'media/css/modal.css' => 'screen');

@@ -69,7 +69,16 @@ class Controller_Ajax extends Controller {
 //                        $seguimiento_actual->save();
 //                    }
                     $id_seg = $documentos->id_seguimiento;
+                    //Modificado por Freddy
+                    $seg = ORM::factory('seguimiento')->where('id', '=', $id_seg)->find();
+                    if($documentos->estado==0 && $documentos->id_seguimiento>0 && $seg->oficial==0){
+                      $oficial2=0;   
+                    }                    
+                    ///////////////////////
                 }
+                
+                
+                
             }
             //////////////////////
 
@@ -82,6 +91,7 @@ class Controller_Ajax extends Controller {
                 if ($seguimiento_actual->oficial == 1) {
                     $seguimiento_actual->oficial = 2;
                 }
+                
                 $seguimiento_actual->save();
                 //incrementado por freddy
                 if (isset($usuario['oficial'])) {
@@ -107,7 +117,11 @@ class Controller_Ajax extends Controller {
             $seguimiento->cargo_receptor = $destino->cargo;
             $seguimiento->estado = 1;
             $seguimiento->accion = $accion;
-            $seguimiento->oficial = $oficial;
+            if (isset($oficial2)){
+                $seguimiento->oficial = $oficial2;
+            }else{
+                $seguimiento->oficial = $oficial;
+            }
             $seguimiento->hijo = $hijo;
             $seguimiento->proveido = $proveido;
             $seguimiento->adjuntos = $adjunto;
@@ -133,7 +147,8 @@ class Controller_Ajax extends Controller {
                 'receptor_cargo' => $seguimiento->cargo_receptor,
                 'a_oficina' => $seguimiento->a_oficina,
                 'proveido' => $seguimiento->proveido,
-                'oficial' => $seguimiento->oficial,
+                //'oficial' => $seguimiento->oficial,
+                'oficial' => $oficial,
                 'id_destino' => $seguimiento->derivado_a,
                 'adjunto' => json_decode($seguimiento->adjuntos),
             );
