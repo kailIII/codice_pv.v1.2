@@ -80,11 +80,17 @@ class Controller_Busqueda extends Controller_DefaultTemplate{
             $text=$_GET['texto'];
             $where=" WHERE ";
             $campos= New ArrayIterator($_GET['campo']);
+            $where.=" ( ";
             foreach ($campos as $c)
             {
                 $where.="d.".$c." LIKE '%$text%' OR ";
             }
             $where = substr($where,0,-3);            
+            $where .= ")";
+            $entidad=$this->user->id_entidad;
+            if($this->user->prioridad==0)
+            $where.= " and d.id_entidad='".$entidad."'";
+            
             $oDocumento=New Model_Documentos();                        
             $count= $oDocumento->contar2($where);            
             $count=$count[0]['count'];

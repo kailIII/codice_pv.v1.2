@@ -131,7 +131,7 @@ class Controller_ventanilla extends Controller_DefaultTemplate{
                 $documento->fecha_creacion = date('Y-m-d H:i:s');
                 $documento->id_user=$this->user->id;                
                 $documento->id_oficina=$this->user->id_oficina;                
-                $documento->id_proceso=4;                
+                $documento->id_proceso=1;                
                 $documento->id_entidad=$this->user->id_entidad;                
                 $documento->save();
                 if($documento->id){
@@ -265,7 +265,7 @@ class Controller_ventanilla extends Controller_DefaultTemplate{
                 $documento->adjuntos=$_POST['adjunto'];
                 $documento->hojas=$_POST['hojas'];
                // $documento->id_proceso=Arr::get($_POST,'proceso',1);
-                $documento->id_proceso=4;                
+                $documento->id_proceso=1;                
                 $documento->save();     
                 if($_FILES['archivo']['name']!='')
                 {
