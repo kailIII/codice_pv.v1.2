@@ -73,7 +73,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                         <p></p>
                         <p style="text-align: justify;">Sírvase tramitar ante la Dirección General de Asuntos Administrativos la asignación de pasajes y viáticos de acuerdo a escala autorizada para lo cual su persona deberá coordinar la elaboración del FOCOV. Una vez completada la comisión sírvase hacer llegar el informe de descargo dentro de los próximos 8 días hábiles de concluída la comisión de acuerdo al artículo 25 del reglamento de Pasajes y Viáticos del Ministerio de Desarrollo Productivo y Economía Plural.</p>
                         <p></p>
-                        <p style="text-align: justify;">Saludo a usted atentamente. </p>';
+                        <p style="text-align: justify;">Saludo a usted atentamente, </p>';
                 }
                 $proceso = $_POST['proceso'];
                 $destinatario = $_POST['destinatario'];
@@ -512,9 +512,9 @@ class Controller_documento extends Controller_DefaultTemplate {
                     if ($documento->fucov == 1 || isset($_POST['fucov']) ) {
                         $contenido = '<p style="text-align: justify;">Por medio del presente Memorándum se autoriza a su persona trasladarse desde: La ciudad ' . $_POST['origen'] . ' hasta la ciudad ' . $_POST['destino'] . ' con el objetivo de asistir a ' . $_POST['detalle_comision'] . '. Desde el ' . $_POST['fecha_inicio'] . ' a Hrs. ' . $_POST['hora_inicio'] . ' hasta el ' . $_POST['fecha_fin'] . ' a Hrs. ' . $_POST['hora_fin'] .'.</p>    
                             <br>
-                            <p style="text-align: justify;">Sírvase tramitar ante la Dirección General de Asuntos Administrativos la asignación de pasajes y viáticos de acuerdo a escala autorizada para los cual su persona deberá coordinar la elaboración del FOCOV. Una vez completada la comisión sírvase hacer llegar el informe de descargo dentro de los próximos 8 días hábiles de concluída la comisión de acuerdo al artículo 25 del reglamento de Pasajes y viáticos del Ministerio de Desarrollo Productivo y Economía Plural. </p> 
+                            <p style="text-align: justify;">Sírvase tramitar ante la Dirección General de Asuntos Administrativos la asignación de pasajes y viáticos de acuerdo a escala autorizada para lo cual su persona deberá coordinar la elaboración del FOCOV. Una vez completada la comisión sírvase hacer llegar el informe de descargo dentro de los próximos 8 días hábiles de concluída la comisión de acuerdo al artículo 25 del reglamento de Pasajes y viáticos del Ministerio de Desarrollo Productivo y Economía Plural. </p> 
                             <br>
-                            <p style="text-align: justify;">Saludo a usted atentamente. </p>';
+                            <p style="text-align: justify;">Saludo a usted atentamente, </p>';
                     }
                     $documento->nombre_destinatario = $_POST['destinatario'];
                     $documento->cargo_destinatario = $_POST['cargo_des'];
@@ -745,10 +745,17 @@ class Controller_documento extends Controller_DefaultTemplate {
                 $pvcomision = ORM::factory('pvcomisiones')->where('id_documento', '=', $documento->id)->find();
                 $pvfucov = ORM::factory('pvfucovs')->where('id_documento', '=', $documento->id)->find();
                 $pvtipoviaje = ORM::factory('pvtipoviajes')->where('estado', '=', '1')->find_all();
+                $pvcategoria = ORM::factory('pvcategorias')->where('estado', '=', '1')->find_all();
                 $opt_tv = array();
                 $opt_tv[''] = "(Seleccionar)";
                 foreach ($pvtipoviaje as $tv) {
                     $opt_tv[$tv->id] = $tv->tipoviaje;
+                }
+
+                $opt_cat = array();
+                //$opt_cat[''] = "(Seleccionar)";
+                foreach ($pvcategoria as $cat) {
+                    $opt_cat[$cat->id] = $cat->categoria;
                 }
 
                 ///Modificado Freddy Velasco POA
@@ -824,6 +831,7 @@ class Controller_documento extends Controller_DefaultTemplate {
                         ->bind('archivos', $archivos)
                         ->bind('destinatarios', $destinatarios)
                         ->bind('opt_tv', $opt_tv)
+                        ->bind('opt_cat', $opt_cat)
                         ->bind('pvfucov', $pvfucov)
                         ->bind('tipo_cambio', $tipo_cambio)
                         // POA

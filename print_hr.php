@@ -133,7 +133,7 @@ try {
     $pdf->Cell(30, 10, 'PROCEDENCIA:', 1,FALSE,'L');
     if(trim($rs->institucion_remitente)!='')
     {
-        if(strlen($rs->institucion_remitente)>100)
+        if(strlen($rs->institucion_remitente)>80)
         {
             $pdf->MultiCell(115, 10, utf8_encode($rs->institucion_remitente), 1,'L'); 
         }

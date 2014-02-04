@@ -68,7 +68,7 @@
             return false;
         });
         //Modificado por Freddy//
-        $('#id_tipoviaje').change(function(){
+        $('#id_tipoviaje, #id_categoria').change(function(){
             var id_tipoviaje = $('#id_tipoviaje').val();
             var id_categoria = $('#id_categoria').val();
             //viaje al exterio habilitamos gastos de representacion
@@ -285,7 +285,8 @@
             yearSuffix: ''
         };   
         $.datepicker.setDefaults($.datepicker.regional['es']);
-        var pickerOpts  = { changeMonth: true, minDate: 0, changeYear: true, yearRange: "-10:+1", dateFormat: 'D yy-mm-dd',onSelect: function(){ calculo_dias();calculo_viaticos();}};
+        //var pickerOpts  = { changeMonth: true, minDate: 0, changeYear: true, yearRange: "-10:+1", dateFormat: 'D yy-mm-dd',onSelect: function(){ calculo_dias();calculo_viaticos();}};
+        var pickerOpts  = { changeMonth: true, changeYear: true, yearRange: "-10:+1", dateFormat: 'D yy-mm-dd',onSelect: function(){ calculo_dias();calculo_viaticos();}};
         $('#fecha_salida,#fecha_arribo').datepicker(pickerOpts,$.datepicker.regional['es']);
         $('#hora_salida,#hora_arribo').timeEntry({show24Hours: true, showSeconds: true});
 
@@ -553,7 +554,7 @@ function dia_literal($n) {
                 echo Form::select('id_tipoviaje', $opt_tv, $pvfucov->id_tipoviaje, array('id' => 'id_tipoviaje','class'=>'required'));
                 echo Form::hidden('proceso', 1);
                 echo Form::hidden('id_tipo', $documento->id_tipo);
-                echo Form::hidden('id_categoria', $user->id_categoria, array('id' => 'id_categoria'));
+                // echo Form::hidden('id_categoria', $user->id_categoria, array('id' => 'id_categoria'));
                 echo Form::hidden('titulo', '');
                 echo Form::hidden('tipo_cambio', $tipo_cambio,array('id'=>'tipo_cambio'));
                 echo Form::hidden('tipo_moneda', $pvfucov->tipo_moneda,array('id' => 'tipo_moneda'));
@@ -563,6 +564,10 @@ function dia_literal($n) {
                     $tipo_moneda = '$us.';
                 
                     ?>
+                        </legend>
+
+                        <legend>
+                            Categoria: <?php echo Form::select('id_categoria', $opt_cat, $pvfucov->id_categoria, array('id' => 'id_categoria','class'=>'required')); ?>
                         </legend>
                     <?php endif; ?>
                     <table width="100%">

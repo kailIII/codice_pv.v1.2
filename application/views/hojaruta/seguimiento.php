@@ -16,6 +16,17 @@
        }
     });
 </script>
+
+<script type="text/javascript">
+    $(function(){
+        $('table.classy tbody tr:odd').addClass('odd'); 
+        $("#imprime").click(function(){
+            window.print();
+            return false;
+        });
+    });
+</script>
+
 <style>
     #content{background-color: #fff;}
 </style>
@@ -62,6 +73,8 @@
 
 <h2 class="subtitulo">Seguimiento<br/><span>Seguimiento del proceso</span></h2>
 
+<p style="float: right;"><a href="javascript:void(0)" id="imprime" class="uibutton"><img src="/media/images/printer.png" align="absmiddle" alt=""/>Imprimir</a></p><br/>
+
 <div id="agrupado" style="display:none; text-align: center;" >
     <p><img src="/media/images/agrupado.png" alt="" /><h2>AGRUPADO</h2>
         <a href="/print_agrupado.php?nur=<?php echo $detalle['nur'];?>" class="uiButton" style="float: right;" target='_blank'><img src="/media/images/print.png" alt=""/>Imprimir</a>
@@ -74,7 +87,7 @@
 <?php endif;?>
 <?php $hijo=0; foreach($seguimiento as $s): ?>
     
-<table id="seguimiento" class="oficial<?php echo $s->oficial;?> estado<?=$s->id_estado;?>">
+<table id="seguimiento" class="oficial<?php echo $s->oficial;?> estado<?=$s->id_estado;?>" class="classy">
     <tbody class="oficial<?php echo $s->oficial;?>">
         <tr>
             <td width="23%" id="<?php if($s->oficial==1)

@@ -135,8 +135,8 @@ $.datepicker.regional['es'] = {
             showMonthAfterYear: false,
             yearSuffix: ''};
 $.datepicker.setDefaults($.datepicker.regional['es']);
-
- var pickerOpts = { changeMonth: true, minDate: 0, changeYear: true, yearRange: "-10:+1", dateFormat: 'D yy-mm-dd',onSelect: function(){ calculo_dias();calculo_viaticos();}};
+// var pickerOpts = { changeMonth: true, minDate: 0, changeYear: true, yearRange: "-10:+1", dateFormat: 'D yy-mm-dd',onSelect: function(){ calculo_dias();calculo_viaticos();}};
+var pickerOpts = { changeMonth: true, changeYear: true, yearRange: "-10:+1", dateFormat: 'D yy-mm-dd',onSelect: function(){ calculo_dias();calculo_viaticos();}};
     $('#fecha_ida, #fecha_llegada,#fecha_salida,#fecha_arribo').datepicker(pickerOpts,$.datepicker.regional['es']);
     $('#hora_ida,#hora_llegada,#hora_salida,#hora_arribo').timeEntry({show24Hours: true, showSeconds: true});
     
