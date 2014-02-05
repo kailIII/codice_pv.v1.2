@@ -84,7 +84,7 @@ $('#label_contenido').hide();
 $('#contenido2').hide();
 $('#fucov').click(function(){
     if($('#fucov').is(':checked')) {
-            $('#label_referencia').text('Motivo');
+            //$('#label_referencia').text('Motivo');
             $('#label_contenido').show();
             $('#contenido1').hide();
             $('#contenido2').show();
@@ -98,7 +98,7 @@ $('#fucov').click(function(){
             $("#detalle_comision").attr("class","required");
             $('#otro_nur').hide();
         } else {
-            $('#label_referencia').text('Referencia');
+            //$('#label_referencia').text('Referencia');
             $('#label_contenido').hide();
             $('#contenido1').show();
             $('#contenido2').hide();
@@ -397,7 +397,7 @@ $('#hora_inicio,#hora_fin').timeEntry({show24Hours: true, showSeconds: true});
                 <?php echo Form::input('origen','',array('id'=>'origen')); ?> 
                 hasta la ciudad (destino)
                 <?php echo Form::input('destino','',array('id'=>'destino')); ?></p><br>
-                <p>con el objetivo de asistir a (detalle de comision)</p>
+                <p>con el objeto de (detalle de comision)</p>
                 <p>
                     <textarea name="detalle_comision" id="detalle_comision" style="width: 775px;" ></textarea>
                 </p>

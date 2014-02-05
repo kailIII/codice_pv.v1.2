@@ -36,7 +36,7 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
         }
 
 
-        $this->SetFont('helvetica', 'B', 20);
+        $this->SetFont('Helvetica', 'B', 20);
         //$this->Ln(120);
     }
 
@@ -98,7 +98,7 @@ $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 //set some language-dependent strings
 $pdf->setLanguageArray($l);
 
-$pdf->SetFont('Helvetica', 'B', 18);
+$pdf->SetFont('tahoma', 'B', 18);
 
 // add a page
 $pdf->AddPage();
@@ -114,16 +114,16 @@ try {
     //$pdf->Ln(7);
     while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {
         $pdf->Ln(1);
-        $pdf->SetFont('Helvetica', '', 10);
+//        $pdf->SetFont('tahoma', '', 10);
         //$pdf->Cell(15, 5, 'La Paz, ');
 //        $mes = (int) date('m', strtotime($rs->fecha_creacion));
 //        $meses = array(1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre');
 //        $fecha = date('d', strtotime($rs->fecha_creacion)) . ' de ' . $meses[$mes] . ' de ' . date('Y', strtotime($rs->fecha_creacion));
 //        $pdf->Write(0, 'La Paz, '.$fecha, '', 0, 'L');
-        $pdf->SetFont('Helvetica', 'B', 13);
+        $pdf->SetFont('tahoma', 'B', 14);
         $pdf->Write(0, strtoupper($rs->referencia), '', 0, 'L');
         $pdf->Ln();
-        $pdf->SetFont('Helvetica', '', 11);
+        $pdf->SetFont('tahoma', '', 11);
         $pdf->Ln(3);
         $pdf->Write(0, 'N°  '. strtoupper($rs->codigo), '', 0, 'R');
         
@@ -134,7 +134,7 @@ try {
         //$pdf->writeHTML();
         /*   $pdf->SetY(-5);
           // Set font
-          $pdf->SetFont('helvetica', 'I', 7);
+          $pdf->SetFont('tahoma', 'I', 7);
           $pdf->Write(0, $fecha,'',0,'L');
          * */
 

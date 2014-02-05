@@ -35,7 +35,7 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
         }
 
 
-        $this->SetFont('Helvetica', 'B', 20);        
+        $this->SetFont('helvetica', 'B', 20);        
     }
 
     // Page footer
@@ -61,7 +61,7 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
         // logo quinua
         $this->Image('../media/logos/logo_quinua.jpg', 140, 253, 40, 22, 'JPG');
         // Pie de pagina
-        $this->SetFont('tahoma', 'I', 7);
+        $this->SetFont('helvetica', 'I', 7);
         $this->MultiCell(85, 0, $pie1, 0, 'R', false, 1, 50, 260, true, 0, false, true, 0, 'T', false);
         $this->MultiCell(90, 0, $pie2, 0, 'R', false, 1, 45, 266, true, 0, false, true, 0, 'T', false);
         $this->SetY(30);
@@ -106,7 +106,7 @@ $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 //set some language-dependent strings
 $pdf->setLanguageArray($l);
 
-$pdf->SetFont('tahoma', 'B', 18);
+$pdf->SetFont('Helvetica', 'B', 18);
 
 // add a page
 $pdf->AddPage();
@@ -150,17 +150,18 @@ where ofi.id = '$rs->id_oficina'");
         $ue = $stmt->fetch(PDO::FETCH_OBJ);
     }
     $color = "#CBCBCB";
-        $pdf->SetFont('tahoma', 'B', 15);
+        $pdf->SetFont('Helvetica', 'B', 15);
         $pdf->write(0,'CERTIFICACIÓN PRESUPUESTARIA '.date("Y", strtotime($rs->fecha_creacion)),'',0,'C');
         
         $pdf->Ln();
-        $pdf->SetFont('tahoma', '', 13);
+        $pdf->SetFont('Helvetica', '', 13);
         $pdf->write(0,$rs->nur,'',0,'C');
             $tabla1 = "
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <table style=\" width: 156px;\"  border=\"1px\">
             <tr>
                 <td style = \" width: 40px;\" colspan = \"3\"><b>N°</b></td>
@@ -169,26 +170,26 @@ where ofi.id = '$rs->id_oficina'");
         </table>";
     $pdf->writeHTML($tabla1, false, false, false,false,'C');
         $pdf->Ln(1);
-        $pdf->SetFont('tahoma', 'U', 12);
+        $pdf->SetFont('Helvetica', 'U', 12);
         $pdf->Write(0, 'ANTECEDENTES: ' ,'', 0, 'L');
         $pdf->Ln(10);
 
-        $pdf->SetFont('tahoma', '', 10);
+        $pdf->SetFont('Helvetica', '', 10);
         //$antecedentes = "<p style=\"text-align: justify;\">Mediante Hoja de Seguimiento $doc->nur, se remite el FUCOV $doc->codigo, del Sr(a). $doc->nombre_remitente,  $doc->cargo_remitente, solicitando viaticos por viaje a realizar a la ciudad de $fucov->destino, con el objeto de: $doc->referencia.</p>";
         //$pdf->write(0, $antecedentes, '', 0, 'L');
         $pdf->writeHTML(utf8_encode($pre->antecedente), false, false, false);
         $pdf->Ln(10);
 
-        $pdf->SetFont('tahoma', 'U', 12);
+        $pdf->SetFont('Helvetica', 'U', 12);
         $pdf->write(0, 'ANALISIS Y/O VERIFICACION:', '', 0, 'L');
         $pdf->Ln(10);
 
-        $pdf->SetFont('tahoma', '', 10);
+        $pdf->SetFont('Helvetica', '', 10);
         $antecedentes = "<p style=\"text-align: justify;\">Analizada la Presente Solicitud se CERTIFICA que existe el requerimiento de inscripción en el Presupuesto de la Gestión ".date("Y", strtotime($rs->fecha_creacion))." para llevar adelante esta actividad, con cargo a:</p>";
         $pdf->writeHTML($antecedentes, false, false, false);
         $pdf->Ln(10);
 
-        $pdf->SetFont('tahoma', 'U', 12);
+        $pdf->SetFont('Helvetica', 'U', 12);
         $pdf->write(0, 'ESTRUCTURA PROGRAMATICA', '', 0, 'L');
         $pdf->Ln(10);
         $stmt = $dbh->prepare("select prog.codigo cod_programa, prog.programa programa, proy.codigo cod_proyecto, proy.proyecto proyecto, act.codigo cod_actividad, act.actividad actividad, fte.codigo cod_fuente, 
@@ -217,7 +218,7 @@ where p.id = $pre->id_programatica");
                 <td>:$ppt->cod_actividad</td>
                 <td>$ppt->actividad</td>
             </tr>";
-    $pdf->SetFont('tahoma', '', 8);
+    $pdf->SetFont('Helvetica', '', 8);
     $html = "
         <table style=\" width: 100%;\"  border=\"0px\" cellpadding=\"1\">
             <tr>
@@ -275,14 +276,14 @@ where p.id = $pre->id_programatica");
         }
         else{
             $pdf->Ln(3);
-            $pdf->SetFont('tahoma', 'B', 12);        
+            $pdf->SetFont('Helvetica', 'B', 12);        
             $pdf->Write(0, 'El documento no fue aprobado', '', 0, 'C');
             $pdf->Ln(10);
         }
         $pdf->Ln(5);
-        $pdf->SetFont('tahoma', 'U', 12);
+        $pdf->SetFont('Helvetica', 'U', 12);
         $pdf->Write(0, 'CONCLUSION:', '', 0, 'L');
-        $pdf->SetFont('tahoma', '', 10);
+        $pdf->SetFont('Helvetica', '', 10);
         $mes = (int) date('m', strtotime(date("d-m-Y")));
         $meses = array(1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre');
         $fecha_certificacion = date('d', strtotime(date("d-m-Y"))) . ' de ' . $meses[$mes] . ' de ' . date('Y', strtotime(date("d-m-Y")));

@@ -43,7 +43,7 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
         }
 
 
-        $this->SetFont('helvetica', 'B', 20);
+        $this->SetFont('Helvetica', 'B', 20);
         //$this->Ln(120);
     }
 
@@ -70,7 +70,7 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             // Position at 15 mm from bottom
         $this->SetY(-15);
         // Set font
-        $this->SetFont('helvetica', 'I', 7);
+        $this->SetFont('Helvetica', 'I', 7);
 
         $this->Cell(0, 10, utf8_encode($pie1), 'T', false, 'C', 0, '', 0, false, 'T', 'M');
         $this->Ln(2);
@@ -157,7 +157,7 @@ $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 //set some language-dependent strings
 $pdf->setLanguageArray($l);
 
-$pdf->SetFont('Helvetica', 'B', 18);
+$pdf->SetFont('tahoma', 'B', 18);
 
 // add a page
 $pdf->AddPage();
@@ -172,17 +172,17 @@ try {
     //echo "<B>outputting...</B><BR>";
     //$pdf->Ln(7);
     while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {
-        $pdf->SetFont('Helvetica', '', 10);
+        $pdf->SetFont('tahoma', '', 11);
         if (isset($rs->fecha_creacion)) {
             $pdf->Write(0, $pdf->get_fecha($rs->fecha_creacion), '', 0, 'L');
         }
         
         $pdf->Ln();
-        $pdf->SetFont('Helvetica', 'B', 11);
+        $pdf->SetFont('tahoma', 'B', 12);
         $pdf->Write(0, strtoupper($rs->codigo), '', 0, 'L');
         $pdf->Ln(10);
 
-        $pdf->SetFont('Helvetica', '', 10);
+        $pdf->SetFont('tahoma', '', 11);
         //$pdf->Cell(15, 5, $rs->titulo);
         //$r = utf8_encode($rs->titulo);
         $pdf->Ln();
@@ -190,30 +190,30 @@ try {
         $pdf->Ln();
         $pdf->Write(0, utf8_encode($rs->nombre_destinatario), '', 0, 'L');
         $pdf->Ln();
-        $pdf->SetFont('Helvetica', 'B', 10);
+        $pdf->SetFont('tahoma', 'B', 11);
         $pdf->Write(0, utf8_encode($rs->cargo_destinatario), '', 0, 'L');
         $pdf->Ln();
         $pdf->Write(0, utf8_encode($rs->institucion_destinatario), '', 0, 'L');
         $pdf->Ln(7);
-        $pdf->SetFont('Helvetica', '', 10);
+        $pdf->SetFont('tahoma', '', 11);
         $pdf->Write(0, 'Presente:', '', 0, 'L');
         $pdf->Ln(10);
-        $pdf->SetFont('Helvetica', 'B', 10);
+        $pdf->SetFont('tahoma', 'B', 11);
         $pdf->Cell(15, 5, 'REF.:');
-        $pdf->SetFont('Helvetica', '', 10);
+        $pdf->SetFont('tahoma', '', 11);
         $pdf->MultiCell(170, 5, utf8_encode($rs->referencia), 0, 'L');
         $pdf->Ln(-5);
 
         $pdf->writeHTML($rs->contenido);
         $pdf->Ln(10);
-        $pdf->SetFont('Helvetica', '', 5);
+        $pdf->SetFont('tahoma', '', 6);
         $pdf->writeHTML('cc. ' . strtoupper($rs->copias));
         $pdf->writeHTML('Adj. ' . strtoupper($rs->adjuntos));
         $pdf->writeHTML(strtoupper($rs->mosca_remitente));
         //$pdf->writeHTML();
         /*   $pdf->SetY(-5);
           // Set font
-          $pdf->SetFont('helvetica', 'I', 7);
+          $pdf->SetFont('tahoma', 'I', 7);
           $pdf->Write(0, $fecha,'',0,'L');
          * */
 

@@ -2,13 +2,20 @@
 
 require_once('../libs/tcpdf/config/lang/eng.php');
 require_once('../libs/tcpdf/tcpdf.php');
-require_once('../db/dbclass.php');
+include('../db/dbclass.php');
 $id = $_GET['id'];
 
 // Extend the TCPDF class to create custom Header and Footer
 class MYPDF extends TCPDF {
 
-    //Page header
+    public $datatime;
+    public $meses;
+    public $dias;
+    public $dia;
+    public $mes;
+
+    // codigo de Freddy
+
     public function Header() {
 
         // codigo de freddy
@@ -24,10 +31,10 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             if ($rs2->logo) {
                 $image_file = '../media/logos/' . $rs2->logo;
             }
-            $id_entidad = $rs2->id;
+            $id_entidad=$rs2->id;
         }
         if($id_entidad<>2 && $id_entidad<>4 && $id_entidad<>5 && $id_entidad<>6){
-            $this->Image($image_file, 80, 5, 60, 25, 'PNG');
+        $this->Image($image_file, 80, 5, 60, 25, 'PNG');
         }
         if ($id_entidad==5 || $id_entidad==6) {
             $image_file2='../media/logos/logo_MDPyEP.png';
@@ -36,7 +43,7 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
         }
 
 
-        $this->SetFont('Helvetica', 'B', 20);
+        $this->SetFont('helvetica', 'B', 20);
         //$this->Ln(120);
     }
 
@@ -46,7 +53,7 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
 
         $id = $_GET['id'];
         $dbh = New db();
-        $stmt = $dbh->prepare("SELECT e.pie_1,e.pie_2,e.id FROM documentos d 
+        $stmt = $dbh->prepare("SELECT e.pie_1,e.pie_2,e.id,d.nur FROM documentos d 
                                INNER JOIN tipos t ON d.id_tipo=t.id
                                INNER JOIN oficinas o ON d.id_oficina=o.id
                                INNER JOIN entidades e ON o.id_entidad=e.id
@@ -56,19 +63,48 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             $pie1 = $rs->pie_1;
             $pie2 = $rs->pie_2;
             $id_entidad=$rs->id;
+            $nur=$rs->nur;
         }
         if ($id_entidad <> 2 && $id_entidad <> 4) {
-
+        
             // Position at 15 mm from bottom
         $this->SetY(-15);
         // Set font
-            $this->SetFont('Helvetica', 'I', 7);
+        $this->SetFont('helvetica', 'I', 7);
 
         $this->Cell(0, 10, utf8_encode($pie1), 'T', false, 'C', 0, '', 0, false, 'T', 'M');
         $this->Ln(2);
         $this->Cell(0, 15, utf8_encode($pie2), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+
+        ////////////////////////////////////
+        $this->setFillColor(255,255,255);
+        $this->SetFont('Helvetica', '', 7);
+        $this->setTextColor(63,62,60);
+        $this->SetFont('Helvetica', '', 6);
+        $this->SetXY(15,275);
+        $this->setCellPaddings(0, 0, 0, 0);
+        $comentario=utf8_encode($nur);
+        $this->StartTransform();
+        $this->Rotate(90);
+        $this->Multicell(30,0,$comentario,0,'C',1);
+        $this->StopTransform(); 
         }
     }
+    
+     public function get_fecha($fecha)
+        {
+            $this->datatime=strtotime($fecha);
+            $this->meses=array(1=>'Enero',2=>'Febrero',3=>'Marzo',4=>'Abril',5=>'Mayo',6=>'Junio',7=>'Julio',8=>'Agosto',9=>'Septiembre',10=>'Octubre',11=>'Noviembre',12=>'Diciembre');            
+            $this->dias=array(1=>'Lunes',2=>'Martes',3=>'Miercoles',4=>'Jueves',5=>'Viernes',6=>'Sabado',0=>'Domingo');
+            $this->mes=(int)date('m',$this->datatime);                       
+            $this->mes=$this->meses[$this->mes]; 
+            //dia
+            $this->dia=(int)date('w',$this->datatime);                       
+            $this->dia=$this->dias[$this->dia];                        
+            //retornamos
+            return $this->dia.', '.date('d',$this->datatime).' de '.$this->mes.' de '.date('Y',$this->datatime);  
+        }
+
 
 }
 
@@ -89,22 +125,21 @@ $pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PD
 $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
 $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
 
-
 // set default monospaced font
 $pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
 $dbh = New db();
-$sql = "SELECT d.id_entidad FROM documentos d WHERE d.id='$id'";
+$sql="SELECT d.id_entidad FROM documentos d WHERE d.id='$id'";
 $stmt = $dbh->prepare($sql);
 $stmt->execute();
 while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {
-    $id_entidad = $rs->id_entidad;
-}
-$margin_top = 33;
-if ($id_entidad == 2) {
-    $margin_top = 33;
-} elseif ($id_entidad == 4) {
-    $margin_top = 60;
+            $id_entidad=$rs->id_entidad;
+        } 
+$margin_top=33;
+if($id_entidad==2){
+    $margin_top=33;
+}elseif ($id_entidad==4) {
+    $margin_top=60;
 }
 
 //set margins
@@ -122,97 +157,68 @@ $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 //set some language-dependent strings
 $pdf->setLanguageArray($l);
 
-$pdf->SetFont('tahoma', 'B', 18);
+$pdf->SetFont('Helvetica', 'B', 18);
 
 // add a page
 $pdf->AddPage();
-$nombre = 'memorandum';
+$nombre = 'Carta';
 try {
     $dbh = New db();
-    $stmtp = $dbh->prepare("SELECT d.*,t.tipo, t.via FROM documentos d 
+    $stmt = $dbh->prepare("SELECT * FROM documentos d 
                                INNER JOIN tipos t ON d.id_tipo=t.id
                                WHERE d.id='$id'");
     // call the stored procedure
-    $stmtp->execute();
+    $stmt->execute();
     //echo "<B>outputting...</B><BR>";
     //$pdf->Ln(7);
-    while ($rs = $stmtp->fetch(PDO::FETCH_OBJ)) {
-        if($rs->fucov == 1)
-            $focov = ' DE VIAJE';
-        else
-            $focov = '';
-        $pdf->SetFont('tahoma', 'B', 16);
-        $pdf->Write(0, strtoupper($rs->tipo).$focov, '', 0, 'C');
+    while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {
+        $pdf->SetFont('Helvetica', '', 10);
+        if (isset($rs->fecha_creacion)) {
+            $pdf->Write(0, $pdf->get_fecha($rs->fecha_creacion), '', 0, 'L');
+        }
+        
         $pdf->Ln();
-        $pdf->SetFont('tahoma', '', 12);
-        $pdf->Write(0, strtoupper($rs->codigo), '', 0, 'C');
-        $pdf->Ln();
-        $pdf->SetFont('tahoma', 'B', 14);
-        $pdf->Write(0, strtoupper($rs->nur), '', 0, 'C');
+        $pdf->SetFont('Helvetica', 'B', 11);
+        $pdf->Write(0, strtoupper($rs->codigo), '', 0, 'L');
         $pdf->Ln(10);
-        $pdf->SetFont('tahoma', 'B', 11);
-        $pdf->Cell(15, 5, 'A:');
-        $pdf->SetFont('tahoma', '', 11);
+
+        $pdf->SetFont('Helvetica', '', 10);
+        //$pdf->Cell(15, 5, $rs->titulo);
+        //$r = utf8_encode($rs->titulo);
+        $pdf->Ln();
+        $pdf->Write(0, utf8_encode($rs->titulo), '', 0, 'L');
+        $pdf->Ln();
         $pdf->Write(0, utf8_encode($rs->nombre_destinatario), '', 0, 'L');
         $pdf->Ln();
-        $pdf->Cell(15, 5, '');
-        $pdf->SetFont('tahoma', 'B', 11);
+        $pdf->SetFont('Helvetica', 'B', 10);
         $pdf->Write(0, utf8_encode($rs->cargo_destinatario), '', 0, 'L');
-        $pdf->Ln(10);
-        if (($rs->via != 0) && (trim($rs->nombre_via) != '')) {
-            $pdf->SetFont('tahoma', 'B', 11);
-            $pdf->Cell(15, 5, 'Via:');
-            $pdf->SetFont('tahoma', '', 11);
-            $pdf->Write(0, utf8_encode($rs->nombre_via), '', 0, 'L');
-            $pdf->Ln();
-            $pdf->Cell(15, 5, '');
-            $pdf->SetFont('tahoma', 'B', 11);
-            $pdf->Write(0, utf8_encode($rs->cargo_via), '', 0, 'L');
-            $pdf->Ln(10);
-        }
-        $pdf->SetFont('tahoma', 'B', 11);
-        $pdf->Cell(15, 5, 'De:');
-        $pdf->SetFont('tahoma', '', 11);
-        $pdf->Write(0, utf8_encode($rs->nombre_remitente), '', 0, 'L');
         $pdf->Ln();
-        $pdf->Cell(15, 5, '');
-        $pdf->SetFont('tahoma', 'B', 11);
-        $pdf->Write(0, utf8_encode($rs->cargo_remitente), '', 0, 'L');
+        $pdf->Write(0, utf8_encode($rs->institucion_destinatario), '', 0, 'L');
+        $pdf->Ln(7);
+        $pdf->SetFont('Helvetica', '', 10);
+        $pdf->Write(0, 'Presente:', '', 0, 'L');
         $pdf->Ln(10);
-        $pdf->Cell(15, 5, 'Fecha:');
-        $pdf->SetFont('tahoma', '', 11);
-        $mes = (int) date('m', strtotime($rs->fecha_creacion));
-        $meses = array(1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre');
-        $fecha = date('d', strtotime($rs->fecha_creacion)) . ' de ' . $meses[$mes] . ' de ' . date('Y', strtotime($rs->fecha_creacion));
-        $pdf->Write(0, $fecha, '', 0, 'L');
-        $pdf->Ln(10);
-        $pdf->SetFont('tahoma', 'B', 11);
-        /*if ($rs->fucov == 1)
-            $pdf->Cell(15, 5, 'Motivo:');
-        else*/
-            $pdf->Cell(15, 5, 'Ref:');
-
-        $pdf->SetFont('tahoma', '', 11);
+        $pdf->SetFont('Helvetica', 'B', 10);
+        $pdf->Cell(15, 5, 'REF.:');
+        $pdf->SetFont('Helvetica', '', 10);
         $pdf->MultiCell(170, 5, utf8_encode($rs->referencia), 0, 'L');
-        $pdf->Ln(10);
-        
-        $pdf->writeHTML(utf8_encode($rs->contenido));
-        
+        $pdf->Ln(-5);
 
+        $pdf->writeHTML($rs->contenido);
         $pdf->Ln(10);
-        $pdf->SetFont('tahoma', '', 6);
+        $pdf->SetFont('Helvetica', '', 5);
         $pdf->writeHTML('cc. ' . strtoupper($rs->copias));
         $pdf->writeHTML('Adj. ' . strtoupper($rs->adjuntos));
         $pdf->writeHTML(strtoupper($rs->mosca_remitente));
         //$pdf->writeHTML();
         /*   $pdf->SetY(-5);
-          
+          // Set font
+          $pdf->SetFont('helvetica', 'I', 7);
           $pdf->Write(0, $fecha,'',0,'L');
          * */
 
         $nombre.='_' . substr($rs->cite_original, -10, 6);
     }
-    //echo "<BR><B>".date("r")."</B>";
 } catch (PDOException $e) {
     print "Error!: " . $e->getMessage() . "<br/>";
     die();

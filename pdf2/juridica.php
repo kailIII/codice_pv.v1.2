@@ -36,15 +36,15 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
         }
 
 
-        $this->SetFont('Helvetica', 'B', 20);
+        $this->SetFont('helvetica', 'B', 20);
         //$this->Ln(120);
     }
 
-    // Page footer
-    // public function Footer() {
-
-
-    // }
+//    // Page footer
+//    public function Footer() {
+//
+//
+//    }
 
 }
 
@@ -84,7 +84,7 @@ if($id_entidad==2){
 }
 
 //set margins
-$pdf->SetMargins(25, $margin_top, 20);
+$pdf->SetMargins(20, $margin_top, 20);
 //$pdf->SetMargins(20, PDF_MARGIN_TOP, 20);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 $pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
@@ -98,11 +98,11 @@ $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 //set some language-dependent strings
 $pdf->setLanguageArray($l);
 
-$pdf->SetFont('tahoma', 'B', 18);
+$pdf->SetFont('Helvetica', 'B', 18);
 
 // add a page
 $pdf->AddPage();
-$nombre = 'Administrativa';
+$nombre = 'Juridica';
 try {
     $dbh = New db();
     $stmt = $dbh->prepare("SELECT * FROM documentos d 
@@ -114,33 +114,27 @@ try {
     //$pdf->Ln(7);
     while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {
         $pdf->Ln(1);
-        $pdf->SetFont('tahoma', '', 11);
+        $pdf->SetFont('Helvetica', '', 10);
         //$pdf->Cell(15, 5, 'La Paz, ');
-        $mes = (int) date('m', strtotime($rs->fecha_creacion));
-        $meses = array(1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre');
-        $fecha = date('d', strtotime($rs->fecha_creacion)) . ' de ' . $meses[$mes] . ' de ' . date('Y', strtotime($rs->fecha_creacion));
-        $pdf->Write(0, 'La Paz, '.$fecha, '', 0, 'L');
-        $pdf->SetFont('tahoma', 'B', 14);
-        $pdf->Write(0, strtoupper($rs->tipo), '', 0, 'R');
+//        $mes = (int) date('m', strtotime($rs->fecha_creacion));
+//        $meses = array(1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre');
+//        $fecha = date('d', strtotime($rs->fecha_creacion)) . ' de ' . $meses[$mes] . ' de ' . date('Y', strtotime($rs->fecha_creacion));
+//        $pdf->Write(0, 'La Paz, '.$fecha, '', 0, 'L');
+        $pdf->SetFont('Helvetica', 'B', 13);
+        $pdf->Write(0, strtoupper($rs->referencia), '', 0, 'L');
         $pdf->Ln();
-        $pdf->SetFont('tahoma', '', 12);
-        $pdf->Write(0, strtoupper($rs->codigo), '', 0, 'R');
+        $pdf->SetFont('Helvetica', '', 11);
+        $pdf->Ln(3);
+        $pdf->Write(0, 'N°  '. strtoupper($rs->codigo), '', 0, 'R');
         
-        $pdf->Ln(10);
-        $pdf->SetFont('tahoma', 'B', 11);
-        $pdf->Cell(15, 5, 'TEMA:');
-        $pdf->SetFont('tahoma', '', 11);
-        $pdf->MultiCell(160, 5, utf8_encode($rs->referencia), 0, 'L');
-                
-        $pdf->Ln(-5);
-        $pdf->writeHTML('<b><b/>');
+        $pdf->Ln(0);
         $pdf->writeHTML($rs->contenido);
         $pdf->Ln(10);
         
         //$pdf->writeHTML();
         /*   $pdf->SetY(-5);
           // Set font
-          $pdf->SetFont('tahoma', 'I', 7);
+          $pdf->SetFont('helvetica', 'I', 7);
           $pdf->Write(0, $fecha,'',0,'L');
          * */
 

@@ -90,7 +90,7 @@
 //Modificaod por freddy Velasco
 <?php if($documento->fucov==1){ ?>
 $('#contenido1').hide();
-$('#label_referencia').text('Motivo');
+//$('#label_referencia').text('Motivo');
 //adicionar atributos
 $("#origen").attr("class", "required");
 $("#destino").attr("class", "required");
@@ -105,7 +105,7 @@ $("#detalle_comision").attr("class","required");
 <?php } ?>    
     $('#fucov').click(function(){
     if($('#fucov').is(':checked')) {
-            $('#label_referencia').text('Motivo');
+            //$('#label_referencia').text('Motivo');
             $('#label_contenido').show();
             $('#contenido1').hide();
             $('#contenido2').show();
@@ -118,7 +118,7 @@ $("#detalle_comision").attr("class","required");
             $("#hora_fin").attr("class", "required");
             $("#detalle_comision").attr("class","required");
         } else {
-            $('#label_referencia').text('Referencia');
+            //$('#label_referencia').text('Referencia');
             $('#label_contenido').hide();
             $('#contenido1').show();
             $('#contenido2').hide();
@@ -706,7 +706,7 @@ function dia_literal($n) {
                             <?php echo Form::input('origen', $origen, array('id' => 'origen')); ?> 
                             hasta la ciudad (destino)
                             <?php echo Form::input('destino', $destino, array('id' => 'destino')); ?><br>
-                            con el objetivo de asistir a (detalle de comision)
+                            con el objeto de (detalle de comision)
                             <p>
                                 <textarea name="detalle_comision" id="detalle_comision" style="width: 775px;" ><?php echo $detalle_comision; ?></textarea>
                             </p>

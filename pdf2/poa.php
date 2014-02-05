@@ -35,7 +35,7 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
         }
 
 
-        $this->SetFont('Helvetica', 'B', 20);        
+        $this->SetFont('helvetica', 'B', 20);        
         //$this->Ln(120);
     }
 
@@ -59,7 +59,7 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             // Position at 15 mm from bottom
         $this->SetY(-15);
         // Set font
-        $this->SetFont('Helvetica', 'I', 7);
+        $this->SetFont('helvetica', 'I', 7);
 
         $this->Cell(0, 10, utf8_encode($pie1), 'T', false, 'C', 0, '', 0, false, 'T', 'M');
         $this->Ln(2);
@@ -105,7 +105,7 @@ $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 //set some language-dependent strings
 $pdf->setLanguageArray($l);
 
-$pdf->SetFont('tahoma', 'B', 18);
+$pdf->SetFont('Helvetica', 'B', 18);
 
 // add a page
 $pdf->AddPage();
@@ -182,20 +182,20 @@ try {
         $fecha_aprobado = "";
     }
     //$pdf->Ln(0);
-    $pdf->SetFont('tahoma', 'B', 14);
+    $pdf->SetFont('Helvetica', 'B', 14);
     $pdf->write(0,'CERTIFICACIÓN POA '.$pvobjetivos->gestion,'',0,'C');
     //$pdf->Cell(5, 6, 'D.N.I.:',0,0,'',$valign='M');
-    //$pdf->SetFont('tahoma', 'B', 9);
+    //$pdf->SetFont('Helvetica', 'B', 9);
     $pdf->Ln();
-    $pdf->SetFont('tahoma', '', 12);
+    $pdf->SetFont('Helvetica', '', 13);
     $pdf->write(0,$rs->nur,'',0,'C');
-    //$pdf->SetFont('tahoma', 'B', 14);
+    //$pdf->SetFont('Helvetica', 'B', 14);
     $tabla1 = "
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <table style=\" width: 156px;\"  border=\"1px\">
             <tr>
                 <td style = \" width: 40px;\" colspan = \"3\"><b>N°</b></td>
@@ -203,7 +203,7 @@ try {
             </tr>
         </table>";
     $pdf->writeHTML($tabla1, false, false, false,false,'C');
-    $pdf->SetFont('tahoma', '', 7);
+    $pdf->SetFont('Helvetica', '', 7);
     $color = "#CBCBCB";
     $altura = "18 px";
     $altura2 = "16 px";
@@ -579,12 +579,12 @@ $tabla1 .=" <tr>
     //$pdf->Ln(5);
     $pdf->writeHTML($tabla2, false, false, false);
     
-    $pdf->SetFont('tahoma', '', 5);
+    $pdf->SetFont('Helvetica', '', 5);
     $pdf->writeHTML('cc. ' . strtoupper($rs->copias));
     $pdf->writeHTML('Adj. ' . strtoupper($rs->adjuntos));
     }
     else{         
-        $pdf->SetFont('tahoma', '', 10);
+        $pdf->SetFont('Helvetica', '', 10);
         $pdf->writeHTML('ERROR AL GENERAR EL DOCUMENTO.', false, false, false);
     }
 } catch (PDOException $e) {
