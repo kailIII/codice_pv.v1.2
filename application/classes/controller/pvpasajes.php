@@ -83,6 +83,11 @@ class Controller_Pvpasajes extends Controller_DefaultTemplate {
             $pasajes->costo = $_POST['costo'];
             $pasajes->origen = $_POST['origen'];
             $pasajes->destino = $_POST['destino'];
+            if (isset($_POST['ida_vuelta'])){
+                    $pasajes->ida_vuelta = 1;
+            }else{
+                    $pasajes->ida_vuelta = 0;
+            }
             $pasajes->save();
             $this->request->redirect('documento/detalle/'.$fucov->id_memo);
         }

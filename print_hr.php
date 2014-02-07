@@ -133,7 +133,7 @@ try {
     $pdf->Cell(30, 10, 'PROCEDENCIA:', 1,FALSE,'L');
     if(trim($rs->institucion_remitente)!='')
     {
-        if(strlen($rs->institucion_remitente)>80)
+        if(strlen($rs->institucion_remitente)>60)
         {
             $pdf->MultiCell(115, 10, utf8_encode($rs->institucion_remitente), 1,'L'); 
         }
@@ -176,16 +176,32 @@ try {
     $pdf->SetXY(155, 45);   
     $pdf->Cell(13, 5, 'HORA:', 1,FALSE,'R');    
     //$pdf->Cell(42, 5, date('h:i:s A',$rs->fecha_creacion), 1,FALSE,'C');  
-            $pdf->Cell(42, 5, substr($rs[16],11,8), 1,FALSE,'C'); 
+    $pdf->Cell(42, 5, substr($rs[16],11,8), 1,FALSE,'C'); 
 
      //REMITENTE
     $pdf->SetXY(10, 50);
     $pdf->Cell(30, 10, 'REMITENTE:', 1,FALSE,'L');    
-    $pdf->Cell(105, 6, utf8_encode($rs->nombre_remitente), 0,FALSE,'L');
+    
+    //$pdf->Cell(105, 3, utf8_encode($rs->cargo_remitente), 0,FALSE,'L');
 
-    $pdf->SetFont('helvetica', 'B', 9);   
-    $pdf->SetXY(40, 55);
-    $pdf->Cell(105, 3, utf8_encode($rs->cargo_remitente), 0,FALSE,'L');
+    if(strlen(trim($rs->cargo_remitente))>60)
+    {
+            $pdf->SetFont('helvetica', '', 8);
+            $pdf->Cell(115, 3, utf8_encode($rs->nombre_remitente), 0,FALSE,'L');
+            $pdf->SetFont('helvetica', 'B', 8);
+            $pdf->SetXY(40, 53);
+            $pdf->MultiCell(115, 3, utf8_encode(trim($rs->cargo_remitente)), 0,'L'); 
+    }
+        else
+    {
+            $pdf->SetFont('helvetica', '', 9);
+            $pdf->Cell(115, 6, utf8_encode($rs->nombre_remitente), 0,FALSE,'L');
+            $pdf->SetFont('helvetica', 'B', 9);
+            $pdf->SetXY(40, 55);
+            $pdf->Cell(115, 3, utf8_encode(trim($rs->cargo_remitente)), 0,'L'); 
+    }
+
+
     $pdf->SetFont('helvetica', '', 9);    
     //proceso
     //fecha

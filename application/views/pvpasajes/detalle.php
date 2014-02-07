@@ -283,6 +283,7 @@ else{
                         <br />
                         <table id="x_tableMeta" class="classy" border="1">
                             <thead>
+                                <th>IDA Y<br/>VUELTA</th>
                                 <th>ORIGEN</th>
                                 <th>DESTINO</th>
                                 <th>FECHA Y HORA<br /> DE SALIDA</th>
@@ -293,6 +294,7 @@ else{
                                 <th>EMPRESA</th>
                             </thead>
                                 <tr>
+                                    <td><?php echo Form::checkbox('ida_vuelta',1,FALSE,array('id'=>'id_vuelta','name'=>'id_vuelta','title'=>'Seleccione si el registro de viaje es de ida y vuelta','checked'))?></td>
                                     <td><?php echo Form::input('origen','',array('id'=>'origen','size'=>'11','class'=>'required'));?></td>
                                     <td><?php echo Form::input('destino','',array('id'=>'destino','size'=>'11','class'=>'required'));?></td>
                                     <td><?php echo Form::input('fecha_ida',dia_literal(date("w")).' '.date("Y-m-d"),array('id'=>'fecha_ida','size'=>'14','class'=>'required'));?><br /> <?php echo Form::input('hora_ida','00:00:00',array('id'=>'hora_ida','size'=>'10','class'=>'required'));?></td>
@@ -303,7 +305,7 @@ else{
                                     <td><?php echo Form::input('empresa','',array('id'=>'empresa','size'=>'5','class'=>'required'));?></td>
                                 </tr>
                                 <tr>
-                                    <td colspan="8" style="text-align: center;"><button id="adicionar">Adicionar</button><button id="cancelar" class="uibutton">Cancelar</button></td>
+                                    <td colspan="9" style="text-align: center;"><button id="adicionar">Adicionar</button><button id="cancelar" class="uibutton">Cancelar</button></td>
                                 </tr>
                         </table>
                     <?php endif;?>
@@ -317,6 +319,7 @@ else{
                     <table class="classy">
                         <thead>
                             <th>TRAMO</th>
+                            <th>IDA Y <br />VUELTA</th>
                             <th>ORIGEN</th>
                             <th>DESTINO</th>
                             <th>FECHA Y HORA<br /> DE SALIDA</th>
@@ -328,9 +331,16 @@ else{
                             <th>OPCIONES</th>
                         </thead>
                         <tbody>
-                        <?php $c=1; foreach($pasajes as $p):?>
+                        <?php $c=1; foreach($pasajes as $p):
+                        if ($p->ida_vuelta==1) {
+                            $iv='Si';
+                        }else{
+                            $iv='No';
+                        }
+                        ?>
                         <tr>
                             <td><?php echo $c; $c++;?></td>
+                            <td><?php echo $iv;?></td>
                             <td><?php echo $p->origen;?></td>
                             <td><?php echo $p->destino;?></td>
                             <td><?php echo $p->fecha_salida;?></td>

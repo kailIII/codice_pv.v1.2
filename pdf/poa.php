@@ -141,7 +141,11 @@ try {
     $stmt = $dbh->prepare($sql);
     $stmt->execute();
     $oficina2 = $stmt->fetch(PDO::FETCH_OBJ);
-    $sw=0;
+    if($oficina2->padre==0)
+        $sw=1;
+    else
+        $sw=0;
+    
     while(($oficina2->ppt_unid_ejecutora == NULL || $oficina2->ppt_unid_ejecutora == 0) && $sw==0){
         $stmt = $dbh->prepare("SELECT * FROM oficinas WHERE id=$oficina2->padre");
         $stmt->execute();

@@ -189,8 +189,8 @@ try {
                         <td>'.$rs->fecha_creacion.'</td>
                     </tr>
                     <tr>
-                        <td ><span style="color:#DADADA; text-align:center; font-size: 80%;"><br /><br /><br /><br /><br />SELLO</span></td>
-                        <td><span style="color:#DADADA; text-align:center; font-size: 80%;"><br /><br /><br /><br /><br />FIRMA</span></td>
+                        <td ><span style="color:#6A6B6A; text-align:center; font-size: 80%;"><br /><br /><br /><br /><br />SELLO</span></td>
+                        <td><span style="color:#6A6B6A; text-align:center; font-size: 80%;"><br /><br /><br /><br /><br />FIRMA</span></td>
                     </tr>
                     <tr style="text-align:left;background-color: #F4F4F4;">
                         <td colspan="2"><b>PARTE II. IDENTIFICACION DEL AREA QUE AUTORIZA EL VIAJE</b></td>
