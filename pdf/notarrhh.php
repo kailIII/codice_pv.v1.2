@@ -198,12 +198,13 @@ try {
         $pdf->Write(0, strtoupper($rs->codigo), '', 0, 'L');
         $pdf->Ln(7);
 
-        $pdf->SetFont('tahoma', '', 10);
+        $pdf->SetFont('Helvetica', '', 10);
         //$pdf->Cell(15, 5, $rs->titulo);
         //$r = utf8_encode($rs->titulo);
         $pdf->Ln();
         $pdf->Write(0, utf8_encode($rs->titulo), '', 0, 'L');
         $pdf->Ln();
+        $pdf->SetFont('tahoma', '', 10);
         $pdf->Write(0, utf8_encode($rs->nombre_destinatario), '', 0, 'L');
         $pdf->Ln();
         $pdf->SetFont('tahoma', 'B', 10);

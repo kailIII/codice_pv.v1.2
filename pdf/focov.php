@@ -356,7 +356,17 @@ try {
                                 <td width="85%">'.$categoria.'</td>
                             </tr>
                         </table>';
+
         
+        if ($rs->id_tipoviaje>=4) {
+            $lp_bs=($rs->total_viatico + $rs->gasto_representacion)*$rs->tipo_cambio;
+            $lp_dolar=$rs->total_viatico + $rs->gasto_representacion;
+        }else{
+            $lp_bs=$rs->total_viatico + $rs->gasto_representacion;
+            $lp_dolar=0;
+        }
+
+
         $contenido .='<table border="1" width="100%" cellpadding="'.$padding.'">
                         <tr  style="text-align:center;background-color: #666666;color: #FFFFFF;">
                             <td>Nro Dias</td>
@@ -377,7 +387,17 @@ try {
                             <td>'.$rs->gasto_representacion. ' '.$tipo_moneda.'</td>
                             <td>'.$rs->tipo_cambio.'</td>
                             <td>'.$rs->total_pasaje.'</td>
-                        </tr></table>';
+                        </tr>
+                        <tr style="text-align:left;">
+                            <td colspan="8"><b>LIGUIDO PAGABLE:</b> '.number_format($lp_bs,2).' Bs. </td>
+                        </tr>';
+        if ($rs->id_tipoviaje>=4) {
+        $contenido .='<tr style="text-align:left;">
+                            <td colspan="8"><b>LIGUIDO PAGABLE DOLAR:</b> '.number_format($lp_dolar,2).' $us. </td>
+                      </tr>';
+                        }                
+        
+        $contenido .= '</table>';
         if ($rs->justificacion_finsem != '')
             $contenido .='<table border="1" cellpadding="'.$padding.'">
                             <tr><td colspan = "2"></td></tr>

@@ -56,10 +56,10 @@ class Controller_Bandeja extends Controller_DefaultTemplate{
         if($_POST){
             if($_POST['accion']==0) // 0 = archivar correspondencia
             {
-               $carpetas=ORM::factory('carpetas')
-                        ->where('nivel','=',$this->user->nivel)
-                        ->find_all();
-                $arrCarpetas=array();
+               $carpetas=ORM::factory('carpetas')->where('id_oficina','=',$this->user->id_oficina)->or_where('id_oficina','=','0')->find_all();
+                
+               //$carpetas=ORM::factory('carpetas')->find_all();
+               $arrCarpetas=array();
                 foreach($carpetas as $c)
                 {
                     $arrCarpetas[$c->id]=$c->carpeta;

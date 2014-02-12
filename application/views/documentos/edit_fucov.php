@@ -173,15 +173,20 @@
             }*/
             //calculo
             //var monto_parcial = ((parseFloat(porcentaje)*parseFloat(viatico_dia))/100)*parseFloat(nro_dias);
-            var desc_iva=0;
-            if(impuesto == 'Si'){
-                desc_iva = (13*parseFloat(monto_parcial))/100;
-            }
             var gastos_rep=0;
             if(representacion == 'Si'){
                 gastos_rep = (25*parseFloat(monto_parcial))/100;
             }
-            var total_viatico=parseFloat(monto_parcial)-parseFloat(desc_iva);
+            var desc_iva_mp=0;
+            var desc_iva_gr=0;
+            if(impuesto == 'Si'){
+                desc_iva_mp = (13*parseFloat(monto_parcial))/100;
+                desc_iva_gr = ((13*parseFloat(gastos_rep))/100);
+            }
+            var desc_iva = parseFloat(desc_iva_mp)+parseFloat(desc_iva_gr);
+            
+            var total_viatico=parseFloat(monto_parcial)-parseFloat(desc_iva_mp);
+            gastos_rep = parseFloat(gastos_rep)-parseFloat(desc_iva_gr);
             $('#gasto_imp').val(desc_iva.toFixed(2));
             $('#id_gasto_imp').text(desc_iva.toFixed(2)+tipo_moneda);
             $('#gasto_representacion').val(gastos_rep.toFixed(2));
