@@ -5,10 +5,14 @@
         <group>
             <file>file:/var/www/codice_pv2/index.php</file>
             <file>file:/var/www/codice_pv2/application/classes/controller/busqueda.php</file>
+            <file>file:/var/www/codice_pv2/word/print.php</file>
+            <file>file:/var/www/codice_pv2/application/classes/controller/index.php</file>
             <file>file:/var/www/codice_pv2/modules/orm/classes/kohana/orm.php</file>
             <file>file:/var/www/codice_pv2/pdf/poa.php</file>
+            <file>file:/var/www/codice_pv2/application/classes/controller/user.php</file>
             <file>file:/var/www/codice_pv2/application/classes/controller/bandeja.php</file>
             <file>file:/var/www/codice_pv2/application/classes/model/documentos.php</file>
+            <file>file:/var/www/codice_pv2/application/views/user/inicio.php</file>
             <file>file:/var/www/codice_pv2/modules/database/classes/kohana/database/query/builder/select.php</file>
         </group>
     </open-files>

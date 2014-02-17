@@ -194,7 +194,12 @@ try {
 
         $pdf->SetFont('tahoma', '', 11);
         $pdf->MultiCell(170, 5, utf8_encode($rs->referencia), 0, 'L');
-        $pdf->Ln(10);
+        
+        if($rs->fucov == 1)
+            $pdf->Ln(5);
+        else
+            $focov = '';
+        
         
         $pdf->writeHTML(utf8_encode($rs->contenido));
         

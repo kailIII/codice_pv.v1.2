@@ -213,7 +213,7 @@ try {
         $pdf->Write(0, utf8_encode($rs->institucion_destinatario), '', 0, 'L');
         $pdf->Ln(4);
         $pdf->SetFont('tahoma', '', 10);
-        $pdf->Write(0, 'Presente:', '', 0, 'L');
+        $pdf->Write(0, 'Presente.-', '', 0, 'L');
         $pdf->Ln(8);
         $pdf->SetFont('tahoma', 'B', 10);
         $pdf->Cell(15, 5, 'REF.:');

@@ -182,12 +182,13 @@ try {
         $pdf->Write(0, strtoupper($rs->codigo), '', 0, 'L');
         $pdf->Ln(10);
 
-        $pdf->SetFont('tahoma', '', 11);
+        $pdf->SetFont('Helvetica', '', 11);
         //$pdf->Cell(15, 5, $rs->titulo);
         //$r = utf8_encode($rs->titulo);
         $pdf->Ln();
         $pdf->Write(0, utf8_encode($rs->titulo), '', 0, 'L');
         $pdf->Ln();
+        $pdf->SetFont('tahoma', '', 11);
         $pdf->Write(0, utf8_encode($rs->nombre_destinatario), '', 0, 'L');
         $pdf->Ln();
         $pdf->SetFont('tahoma', 'B', 11);
@@ -196,7 +197,7 @@ try {
         $pdf->Write(0, utf8_encode($rs->institucion_destinatario), '', 0, 'L');
         $pdf->Ln(7);
         $pdf->SetFont('tahoma', '', 11);
-        $pdf->Write(0, 'Presente:', '', 0, 'L');
+        $pdf->Write(0, 'Presente.-', '', 0, 'L');
         $pdf->Ln(10);
         $pdf->SetFont('tahoma', 'B', 11);
         $pdf->Cell(15, 5, 'REF.:');

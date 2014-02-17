@@ -24,7 +24,8 @@ class Model_Documentos extends ORM{
         ),
     );
     public function agrupados($id){
-        $sql="SELECT id_tipo, COUNT(*) as n FROM documentos WHERE id_user='$id' GROUP BY id_tipo";
+        //$sql="SELECT id_tipo, COUNT(*) as n FROM documentos WHERE id_user='$id' GROUP BY id_tipo";
+        $sql = "SELECT d.id_tipo, COUNT(*) as n FROM usertipo ut, documentos d WHERE ut.id_user = '$id' AND d.id_user='$id' AND d.id_tipo = ut.id_tipo GROUP BY d.id_tipo";
         return DB::query(1, $sql)->execute();
     }
     public function agrupaciones($id,$o,$i)

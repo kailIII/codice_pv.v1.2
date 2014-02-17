@@ -27,7 +27,7 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             $id_entidad=$rs2->id;
         }
         if($id_entidad<>2 && $id_entidad<>4 && $id_entidad<>5 && $id_entidad<>6){
-        $this->Image($image_file, 80, 5, 60, 25, 'PNG');
+        $this->Image($image_file, 25, 5, 60, 25, 'PNG');
         }
         if ($id_entidad==5 || $id_entidad==6) {
             $image_file2='../media/logos/logo_MDPyEP.png';
@@ -116,24 +116,30 @@ try {
         $pdf->Ln(1);
         $pdf->SetFont('tahoma', '', 11);
         //$pdf->Cell(15, 5, 'La Paz, ');
+        /*
         $mes = (int) date('m', strtotime($rs->fecha_creacion));
         $meses = array(1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre');
         $fecha = date('d', strtotime($rs->fecha_creacion)) . ' de ' . $meses[$mes] . ' de ' . date('Y', strtotime($rs->fecha_creacion));
-        $pdf->Write(0, 'La Paz, '.$fecha, '', 0, 'L');
-        $pdf->SetFont('tahoma', 'B', 14);
-        $pdf->Write(0, strtoupper($rs->tipo), '', 0, 'R');
-        $pdf->Ln();
-        $pdf->SetFont('tahoma', '', 12);
-        $pdf->Write(0, strtoupper($rs->codigo), '', 0, 'R');
+        */
+        // $pdf->Write(0, 'La Paz, '.$fecha, '', 0, 'L');
+        $pdf->Write(0, 'La Paz, ', '', 0, 'L');
+        $pdf->Ln(10);
+        $pdf->SetFont('tahoma', 'B', 12);
+        $pdf->Write(0, strtoupper($rs->tipo), '', 0, 'L');
+        //$pdf->Ln();
+        $pdf->SetFont('tahoma', '', 10);
+        $codigo = substr($rs->codigo, -11);
+        $codigo = str_replace('/', '.', $codigo);
+        $pdf->Write(0, strtoupper($codigo), '', 0, 'R');
         
         $pdf->Ln(10);
-        $pdf->SetFont('tahoma', 'B', 11);
+        $pdf->SetFont('tahoma', 'B', 10);
         $pdf->Cell(15, 5, 'TEMA:');
-        $pdf->SetFont('tahoma', '', 11);
+        $pdf->SetFont('tahoma', '', 10);
         $pdf->MultiCell(160, 5, utf8_encode($rs->referencia), 0, 'L');
                 
         $pdf->Ln(-5);
-        $pdf->writeHTML('<b><b/>');
+        //$pdf->writeHTML('<b><b/>');
         $pdf->writeHTML($rs->contenido);
         $pdf->Ln(10);
         
