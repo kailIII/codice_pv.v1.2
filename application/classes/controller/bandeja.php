@@ -62,7 +62,10 @@ class Controller_Bandeja extends Controller_DefaultTemplate{
                $arrCarpetas=array();
                 foreach($carpetas as $c)
                 {
-                    $arrCarpetas[$c->id]=$c->carpeta;
+                    if ($c->nivel==2) {
+                    $arrCarpetas[$c->id]=$c->carpeta;    
+                    }
+                    
                 }
                 //nurs
                 $nurs=array();

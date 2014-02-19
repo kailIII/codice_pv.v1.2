@@ -40,11 +40,12 @@ tinymce.init({
     
     
         $('#frmEditar').validate();
-        var config={
+/*        var config={
             toolbar : [ ['Maximize','Preview','SelectAll','Cut', 'Copy','Paste', 'Pagebreak','PasteFromWord','PasteText','-','Bold','Italic','Underline','FontSize','Font','TextColor','BGColor',,'NumberedList','BulletedList'],
                 ['Undo','Redo','-','SpellChecker','Scayt','-','Find','Replace','-','Table','-','JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock']]
         }
         $('textarea#descripcion').ckeditor(config);
+*/        
         $('#insertarImagen').click(function(){
             var left=screen.availWidth;
             var top=screen.availHeight;

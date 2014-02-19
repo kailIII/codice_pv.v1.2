@@ -60,8 +60,8 @@ $padre =  $stmt->fetch(PDO::FETCH_OBJ);
     $pdf->SetX(20);
     $pdf->SetFont('Arial', '', 7);   
     $pdf->SetFillColor(240,245,255);
-    $pdf->Cell(25, 5, 'HOJA  RUTA', 1,FALSE,'C',TRUE); 
-    $pdf->Cell(28, 5, 'F. CREACION', 1,FALSE,'C',TRUE); 
+    $pdf->Cell(33, 5, 'HOJA  RUTA', 1,FALSE,'C',TRUE); 
+    $pdf->Cell(20, 5, 'F. CREACION', 1,FALSE,'C',TRUE); 
     $pdf->Cell(74, 5, 'CREADO POR', 1,FALSE,'C',TRUE);     
     $pdf->Cell(28, 5, 'F. RECEPCION', 1,FALSE,'C',TRUE);     
     $pdf->Cell(20, 5, 'OFICIAL', 1,FALSE,'C',TRUE); 
@@ -81,8 +81,8 @@ $padre =  $stmt->fetch(PDO::FETCH_OBJ);
         {            
             $pdf->Ln();
             $pdf->SetX(20);
-            $pdf->Cell(25, 5, $hijo->nur, 1,FALSE,'C'); 
-            $pdf->Cell(28, 5, date('d-m-Y',  strtotime($hijo->fecha_creacion)), 1,FALSE,'C'); 
+            $pdf->Cell(33, 5, $hijo->nur, 1,FALSE,'C'); 
+            $pdf->Cell(20, 5, date('d-m-Y',  strtotime($hijo->fecha_creacion)), 1,FALSE,'C'); 
             $pdf->Cell(74, 5, $hijo->username, 1,FALSE,'C');     
             $pdf->Cell(28, 5, date('d-m-Y',  strtotime($hijo->fecha_recepcion)), 1,FALSE,'C');                 
             if($hijo->oficial==1)

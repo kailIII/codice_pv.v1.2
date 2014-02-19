@@ -75,6 +75,10 @@ class Controller_documento extends Controller_DefaultTemplate {
                         <p></p>
                         <p style="text-align: justify;">Saludo a usted atentamente, </p>';
                 }
+                if (isset($_POST['viaje_semana'])) {
+                    $contenido = $_POST['descripcion3'];
+                }
+                
                 $proceso = $_POST['proceso'];
                 $destinatario = $_POST['destinatario'];
                 $cargo_des = $_POST['cargo_des'];

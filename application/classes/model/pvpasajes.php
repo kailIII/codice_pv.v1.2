@@ -91,5 +91,28 @@ class Model_Pvpasajes extends ORM{
         return $this->_db->query(Database::SELECT, $sql, TRUE);
     }
             
+    public function rep_boletos_focov($f1, $f2, $id_entidad){
+        $sql = "SELECT d.id,d.codigo,d.nur,f.id as id_focov, p.* 
+FROM pvfucovs f 
+INNER JOIN documentos d ON f.id_documento= d.id 
+LEFT JOIN pvpasajes p ON f.id = p.id_fucov 
+WHERE f.fecha_salida BETWEEN '$f1' AND '$f2' AND d.id_entidad = '$id_entidad'
+ORDER BY nur ASC";
+        return $this->_db->query(Database::SELECT, $sql, TRUE);
+    }
+
+/*
+    public function recepcionado($oficina,$id_user,$fecha1,$fecha2)
+    {
+        $sql="SELECT s.nur,s.nombre_receptor,s.cargo_receptor,s.nombre_emisor,s.cargo_emisor,s.fecha_emision, s.fecha_recepcion,s.proveido,d.codigo FROM seguimiento s
+        INNER JOIN documentos d ON s.nur=d.nur
+        WHERE s.id_de_oficina='$oficina'
+        AND s.derivado_a='$id_user'
+        AND s.estado BETWEEN '2' and '4'   
+        and d.original=1
+        AND s.fecha_recepcion BETWEEN '$fecha1' AND '$fecha2'";
+        return db::query(Database::SELECT, $sql)->execute();
+    }
+*/
 }
 ?>

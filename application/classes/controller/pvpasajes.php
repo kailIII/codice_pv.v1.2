@@ -253,5 +253,33 @@ class Controller_Pvpasajes extends Controller_DefaultTemplate {
             $this->request->redirect('documento/detalle/'.$memo->id);
         }
     }
+
+    public function action_rep_boletos(){
+        if (isset($_POST['submit'])) {
+            $fecha1=$_POST['fecha1'].' 00:00:00';
+            $fecha2=$_POST['fecha2'].' 23:59:59';            
+            if(strtotime($fecha1)>strtotime($fecha1))
+            {   
+                $fecha1=$_POST['fecha2'].' 23:59:00';
+                $fecha2=$_POST['fecha1'].' 00:00:00';
+            }
+            $o_pvpasaje=New Model_Pvpasajes();            
+            
+            $results=$o_pvpasaje->rep_boletos_focov($fecha1,$fecha2,$this->user->id_entidad);
+            
+            $this->template->styles=array('media/css/tablas.css'=>'screen');
+            $this->template->content=View::factory('pvpasajes/rep_boletos_vista')
+                                        ->bind('results',$results)
+                                        ->bind('fecha1',$fecha1)
+                                        ->bind('fecha2',$fecha2);
+        }else{
+            $fecha_inicio=date('Y-m-d');
+            $this->template->title.='| Reporte Registro de Boletos';
+            $this->template->styles=array('media/css/jquery-ui-1.8.16.custom.css'=>'screen');
+            $this->template->scripts=array('media/js/jquery-ui-1.8.16.custom.min.js');
+            $this->template->content=View::factory('pvpasajes/rep_boletos')
+                                ->bind('fecha_inicio',$fecha_inicio);
+        }
+    }
 }
 ?>

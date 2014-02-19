@@ -33,7 +33,14 @@ $debug=2;
 $suffix='';
 $tipo=strtoupper($rs->tipo);
 //$cite=html_entity_decode('<!DOCTYPE html><html><head></head><body><p>'.$rs->cite_original.'</p></body></html>');
-$cite=utf8_encode(''.$rs->cite_original);
+if($rs->id_tipo=='11'){
+  $codigo = substr($rs->cite_original, -10);
+  $codigo = str_replace('/', '.', $codigo);
+  $cite=utf8_encode(''.$codigo);  
+}else{
+  $cite=utf8_encode(''.$rs->cite_original);
+}
+
 $titulo=utf8_encode(''.$rs->titulo);
 $institucion_destinatario=utf8_encode(''.$rs->institucion_destinatario);
 

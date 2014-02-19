@@ -7,12 +7,14 @@ $fecha2=$_GET['fecha2'];
 /** PHPExcel */
 require_once 'libs/phpExcel/PHPExcel.php';
 require_once 'libs/phpExcel/PHPExcel/IOFactory.php';
+require_once '../db/dbclass.php';
+$dbh=New db();
 // Check prerequisites
 if (!file_exists("plantilla1.xlsx")) {
 	exit("No se encontro la plantilla.\n");
 }
 $objPHPExcel = PHPExcel_IOFactory::load("plantilla1.xlsx");
-$objPHPExcel->getProperties()->setCreator("Ivan Marcelo Chacolla")
+$objPHPExcel->getProperties()->setCreator("Freddy Velasco Poma")
 							 ->setLastModifiedBy("")
 							 ->setTitle("Office 2007 XLSX Test Document")
 							 ->setSubject("Office 2007 XLSX Test Document")
@@ -75,7 +77,7 @@ else
         and d.original=1
         AND s.fecha_emision BETWEEN '$fecha1' AND '$fecha2'";
 }
-$dbh = new PDO('mysql:host=localhost;port=3306;dbname=correspondencia', 'correspondencia', 'c0rr3sp0nd3nc14', array( PDO::ATTR_PERSISTENT => false));
+//$dbh = new PDO('mysql:host=localhost;port=3306;dbname=correspondencia_pv2', 'correspondencia', 'c0rr3sp0nd3nc14', array( PDO::ATTR_PERSISTENT => false));
 $stmt = $dbh->prepare($sql);        
 $stmt->execute();        
 while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) 
