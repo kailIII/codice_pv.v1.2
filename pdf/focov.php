@@ -432,7 +432,8 @@ try {
         $pdf->SetFont('tahoma', '', 9);
         $pdf->writeHTML(utf8_decode($contenido));
 
-        $con='<p style="text-align: justify;">Una vez completada la comisión sírvase hacer llegar el informe de descargo dentro de los próximos 8 días hábiles de acuerdo al artículo 25 del reglamento de Pasajes y Viáticos del Ministerio de Desarrollo Productivo y Economía Plural y el Artículo N° 7 del Decreto Supremo 1788.</p>';
+        //$con='<p style="text-align: justify;">Una vez completada la comisión sírvase hacer llegar el informe de descargo dentro de los próximos 8 días hábiles de acuerdo al artículo 25 del reglamento de Pasajes y Viáticos del Ministerio de Desarrollo Productivo y Economía Plural y el Artículo N° 7 del Decreto Supremo 1788.</p>';
+        $con='<p style="text-align: justify;">Una vez completada la comisión sirvase hacer llegar el informe de descargo dentro los proximos 8 dias hábiles de acuerdo al Art. 28 del Reglamento Interno de pasajes y viaticos del Ministerio de Desarrollo Productivo y Economía Plural, aprobado mediante Resolución Ministerial MDPYEP/DESPACHO/N° 255.2013 y el Art. N° 7 del Decreto Supremo 1788.</p>';
         $contenido2='<table border="0" cellpadding="'.$padding.'">
                     <tr style="text-align:left;background-color: #F4F4F4;">
                         <td colspan="2">'.utf8_decode($con).'</td>

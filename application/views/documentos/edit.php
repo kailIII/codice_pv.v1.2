@@ -1,6 +1,6 @@
 <script>
     tinymce.init({
-        selector: "textarea#descripcion",
+        selector: "textarea#descripcion, #descripcion3",
         theme: "modern",
         language : "es",
         // width: 595,
@@ -102,6 +102,7 @@ $("#detalle_comision").attr("class","required");
 <?php } else { ?>
     $('#label_contenido').hide();
     $('#contenido2').hide();
+    
 <?php } ?>    
     $('#fucov').click(function(){
     if($('#fucov').is(':checked')) {
@@ -130,6 +131,19 @@ $("#detalle_comision").attr("class","required");
              $("#hora_inicio").removeAttr("class");
              $("#hora_fin").removeAttr("class");
              $("#detalle_comision").removeAttr("class");
+        }  
+});
+$('#contenido3').hide();
+$('#viaje_semana').click(function(){
+    if($('#viaje_semana').is(':checked')) {
+            $('#contenido1').hide();
+            $('#contenido3').show();
+
+            $('#referencia').text('AUTORIZAR EL PAGO DE VIÁTICOS DE FIN DE SEMANA, A FAVOR DEL SEÑOR [...INGRESE NOMBRE...], [...INGRESE CARGO...] DEL MINISTERIO DE DESARROLLO PRODUCTIVO Y ECONOMÍA PLURAL.');
+        } else {
+            $('#contenido1').show();
+            $('#contenido3').hide();
+            $('#referencia').text('');
         }  
 });
 
@@ -497,6 +511,30 @@ function dia_literal($n) {
         case 0: return 'Dom'; break;
     }
 }
+
+$contenido_ra = '';
+if ($tipo->id==11) {
+$contenido_ra = '<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<p lang="es-ES" align="JUSTIFY"><strong>VISTOS:</strong></p>
+<p lang="es-ES" align="JUSTIFY">La solicitud del <span style="color: #ff0000;">[ingrese cargo del superior]</span>, <span style="color: #ff0000;">[ingrese nombre del superior]</span>, de autorizaci&oacute;n de pago de vi&aacute;ticos en fin de semana a favor del se&ntilde;or <span style="color: #ff0000;">[ingrese nombre del funcionario en comision]</span>, emitida mediante Memor&aacute;ndum de Viaje <span style="color: #ff0000;">[ingrese cite del memorandum]</span>, de <span style="color: #ff0000;">[ingrese fecha]</span> y todo lo que convino ver y se tuvo presente.</p>
+<p lang="es-ES" align="JUSTIFY"><strong>CONSIDERANDO:</strong></p>
+<p lang="es-ES" align="JUSTIFY">Que el Decreto Supremo N&deg; 29894, de 7 de febrero de 2009, aprueba la Estructura Organizativa del &Oacute;rgano Ejecutivo del Estado Plurinacional, disponiendo en su art&iacute;culo 118, la estructura com&uacute;n de apoyo a los Ministerios, integrada por las Direcciones y Unidades, entre ellas la Direcci&oacute;n General de Asuntos Administrativos, la cual por disposici&oacute;n del art&iacute;culo 122 inciso e) de la citada norma, tiene la funci&oacute;n de emitir Resoluciones Administrativas para resolver asuntos de su competencia.</p>
+<p lang="es-ES" align="JUSTIFY">Que el Decreto Supremo N&deg; 1788, de 6 de noviembre de 2013, tiene por objeto establecer la escala de vi&aacute;ticos, categor&iacute;as y pasajes para los servidores p&uacute;blicos, acorde a la nueva estructura del Estado Plurinacional; definiendo en su art&iacute;culo 4, la escala de vi&aacute;ticos al interior y exterior del pa&iacute;s seg&uacute;n la categor&iacute;a del servidor p&uacute;blico. Asimismo, el art&iacute;culo 6 Par&aacute;grafo I, proh&iacute;be el pago de vi&aacute;ticos correspondientes a fin de semana o feriado, excepto cuando: las actividades p&uacute;blicas justifiquen la presencia y funci&oacute;n espec&iacute;fica de un servidor p&uacute;blico en fin de semana o feriado; por razones de itinerario que demande la presencia del servidor p&uacute;blico, previo al evento; cuando la comisi&oacute;n exceda los seis 6 d&iacute;as h&aacute;biles y continuos de trabajo; los mismos que ser&aacute;n autorizados mediante Resoluci&oacute;n expresa de la autoridad competente.</p>
+<p lang="es-ES" align="JUSTIFY">Que el Reglamento Interno de Pasajes y Vi&aacute;ticos del Ministerio de Desarrollo Productivo y Econom&iacute;a Plural,aprobado mediante Resoluci&oacute;n Ministerial MDPyEP/DESPACHO/N&deg; 255.2013, de 7 de noviembre de 2013,concordante con lo establecido en el Decreto Supremo N&deg; 1788, de 6 de noviembre de 2013, establece las causas de excepcionalidad a la prohibici&oacute;n de pago de vi&aacute;ticos de fin de semana o feriado, cuya aprobaci&oacute;n deber&aacute; ser autorizada a trav&eacute;s de Resoluci&oacute;n expresa.</p>
+<p lang="es-ES" align="JUSTIFY">Que mediante el Formulario de Comisi&oacute;n de Viaje (FOCOV) <span style="color: #ff0000;">[ingrese cite focov]</span>, de <span style="color: #ff0000;">[ingrese fecha FOCOV]</span>, del <span style="color: #ff0000;">[ingrese cargo superior]</span>, <span style="color: #ff0000;">[ingrese nombre superior]</span>, declara en comisi&oacute;n y autoriza el viaje del se&ntilde;or <span style="color: #ff0000;">[ingrese Nombre Funcionario en comision]</span>, <span style="color: #ff0000;">[ingrese cargo funcionario en comusion]</span>, a la ciudad de <span style="color: #ff0000;">[ingrese nombre de la ciudad]</span>, los d&iacute;as <span style="color: #ff0000;">[ingrese fecha inicial a fecha final]</span>; a objeto <span style="color: #ff0000;">[ingrese objetivo del viaje]</span>.</p>
+<p lang="es-ES" align="JUSTIFY"><strong>POR TANTO:</strong></p>
+<p lang="es-ES" align="JUSTIFY">El Director General de Asuntos Administrativos del Ministerio de Desarrollo Productivo y Econom&iacute;a Plural, en ejercicio de sus funciones conferidas por ley;</p>
+<p lang="es-ES" align="JUSTIFY"><strong>RESUELVE: </strong></p>
+<p lang="es-ES" align="JUSTIFY"><strong>ART&Iacute;CULO &Uacute;NICO.-</strong> Autorizar el pago de vi&aacute;ticos de fin de semana, a favor del se&ntilde;or <span style="color: #ff0000;">[ingrese nombre del funcionario en comision]</span>, <span style="color: #ff0000;">[ingrese cargo del funsionario en comision]</span>, correspondiente al d&iacute;a <span style="color: #ff0000;">[ingrese fecha]</span>, de conformidad a lo establecido en el Formulario de Comisi&oacute;n de Viaje (FOCOV) <span style="color: #ff0000;">[ingrese cite FOCOV]</span>, de <span style="color: #ff0000;">[ingrese fecha FOCOV]</span>.</p>
+<p lang="es-ES" align="JUSTIFY">Reg&iacute;strese, comun&iacute;quese, c&uacute;mplase y arch&iacute;vese.</p>
+</body>
+</html>';}
+
+
 ?>
 
 <h2 class="subtitulo">Editar <?php echo $documento->codigo; ?> - <b><?php echo $documento->nur; ?></b><br/><span> Editar documento <?php echo $documento->codigo; ?> </span></h2>
@@ -554,6 +592,7 @@ function dia_literal($n) {
                     <fieldset> <legend>Proceso: <?php echo Form::select('proceso', $options, $documento->id_proceso); ?>
                             &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                             <?php if ($documento->id_tipo == '2'){?>FOCOV: <?php echo Form::checkbox('fucov',1,FALSE,array('id'=>'fucov','name'=>'fucov','title'=>'seleccione si quiere habilitar un memoramdum de viaje',$checked))?><?php }?>    
+                            <?php if ($tipo->id == '11'){?>Viaje Fin Semana: <?php echo Form::checkbox('viaje_semana',1,FALSE,array('id'=>'viaje_semana','name'=>'viaje_semana','title'=>'seleccione si quiere habilitar Resolucion Administrativa viaje fin de semana'))?><?php }?>    
                                 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
                             <?php echo $mv; ?>
                         </legend>
@@ -719,6 +758,14 @@ function dia_literal($n) {
                             <?php echo Form::label('observacion', 'Observacion:', array('id' => 'label_observacion', 'class' => 'form')); ?> 
                             <textarea name="observacion" id="observacion" style="width: 775px;" ><?php echo $obs; ?></textarea>
                         </div>
+
+                        <div id='contenido3'>
+                        <?php
+                        echo Form::textarea('descripcion3',$contenido_ra,array('id'=>'descripcion3','cols'=>50,'rows'=>10,'name'=>'descripcion3'));
+                        ?>
+                        </div>
+
+
                     </div>  
                     <div id="op">
                         <!-- <a href="#" class="link imagen">Insertar Imagen</a>

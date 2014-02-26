@@ -102,7 +102,7 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             $this->dia=(int)date('w',$this->datatime);                       
             $this->dia=$this->dias[$this->dia];                        
             //retornamos
-            return $this->dia.', '.date('d',$this->datatime).' de '.$this->mes.' de '.date('Y',$this->datatime);  
+            return 'La Paz, '.$this->dia.' '.date('d',$this->datatime).' de '.$this->mes.' de '.date('Y',$this->datatime);  
         }
 
 

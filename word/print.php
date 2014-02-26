@@ -54,13 +54,22 @@ $cargo_remitente=utf8_encode(''.$rs->cargo_remitente);
 
 //$imagen_file = $imagen_file2;
 
-$xfecha=Date('Y-m-d');
+//$xfecha=Date('Y-m-d');
+$xfecha=date('Y-m-d', strtotime($rs->fecha_creacion));
 $meses=array(1=>'Enero',2=>'Febrero',3=>'Marzo',4=>'Abril',5=>'Mayo',6=>'Junio',7=>'Julio',8=>'Agosto',9=>'Septiembre',10=>'Octubre',11=>'Noviembre',12=>'Diciembre');
+$dias=array(1=>'Lunes',2=>'Martes',3=>'Miercoles',4=>'Jueves',5=>'Viernes',6=>'Sabado',0=>'Domingo');
 $xdia = substr($xfecha, 8, 2);
+$ydia = date('w',strtotime($xfecha));
 $xmes   = substr($xfecha, 5, 2);
 $xmes = (int)($xmes);
 $xanio = substr($xfecha,0,4);
-$fecha = $xdia. ' de '. $meses[$xmes] . ' de '. $xanio;
+if ($rs->id_tipo==5) {
+  $fecha = 'La Paz, '. $dias[$ydia].' '.$xdia. ' de '. $meses[$xmes] . ' de '. $xanio;
+}else{
+  $fecha = ' '.$xdia. ' de '. $meses[$xmes] . ' de '. $xanio;
+}
+
+
 
 //$fecha=Date('Y-m-d');
 
