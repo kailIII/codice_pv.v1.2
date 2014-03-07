@@ -76,7 +76,7 @@ class Model_Reportes extends ORM{
     }
     public function v_recepcion($id_user,$fecha1,$fecha2)
     {
-        $sql="SELECT d.nur,d.cite_original,d.nombre_destinatario,d.cargo_destinatario,d.nombre_remitente,d.cargo_remitente,d.referencia,d.adjuntos,d.fecha_creacion,d.hojas,d.estado
+        $sql="SELECT d.nur,d.cite_original,d.nombre_destinatario,d.cargo_destinatario,d.nombre_remitente,d.cargo_remitente,d.institucion_remitente,d.referencia,d.adjuntos,d.fecha_creacion,d.hojas,d.estado
         FROM documentos d
         WHERE id_user='$id_user'
         AND d.original=1

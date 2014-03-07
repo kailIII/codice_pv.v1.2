@@ -18,6 +18,7 @@
             <th>CITE ORIGINAL</th>
             <th>Destinatario</th>
             <th>Remitente</th>
+            <th>Institucion Remitente</th>
             <th>Referencia</th>
             <th>Adjunto</th>            
             <th>hojas</th>            
@@ -36,6 +37,7 @@
             <td><?php echo $r['nombre_remitente'];?><br/>
                 <b><?php echo $r['cargo_remitente'];?></b>
             </td>
+            <td><?php echo $r['institucion_remitente'];?></td>            
             <td><?php echo $r['referencia'];?></td>            
             <td><?php echo $r['adjuntos'];?></td>            
             <td><?php echo $r['hojas'];?></td>            
