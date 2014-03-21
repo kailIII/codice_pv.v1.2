@@ -27,7 +27,9 @@ class Controller_Reportes extends Controller_DefaultTemplate{
         $this->template->menutop = View::factory('templates/menutop')->bind('menus',$this->menus)->set('controller', 'reportes');
         $oSM=New Model_menus();
         $submenus=$oSM->submenus('reportes');
-        $this->template->submenu = View::factory('templates/submenu')->bind('smenus',$submenus)->set('titulo','Menu de reportes');        
+        $this->template->submenu = View::factory('templates/submenu')
+                                        ->bind('smenus',$submenus)
+                                        ->set('titulo','Menu de reportes');        
         parent::after();
     }      
     public function action_index()
@@ -301,7 +303,75 @@ class Controller_Reportes extends Controller_DefaultTemplate{
             $oficinas[$e->id]=$e->oficina;            
         }
         return $oficinas;
-    }    
+    } 
+
+    public function action_rep_usuarios(){
+
+      if (isset($_POST['submit'])) {
+        $fecha1=$_POST['fecha1'].' 00:00:00';
+        $fecha2=$_POST['fecha2'].' 23:59:00'; 
+
+            if(strtotime($fecha1)>strtotime($fecha2))
+            {   
+                $fecha1=$_POST['fecha2'].' 23:59:00';
+                $fecha2=$_POST['fecha1'].' 00:00:00';
+            }
+             $o_reporte=New Model_Reportes();            
+             $oficina=ORM::factory('oficinas',$_POST['id_oficina']);
+             $id_oficina=$oficina->id;
+             $oficina=$oficina->oficina;             
+             $id_estado=$_POST['estado'];
+             $estado=ORM::factory('estados',$id_estado);
+             $results=$o_reporte->rep_usuario($_POST['id_oficina'],$_POST['estado'],$fecha1,$fecha2,$_POST['id_user']);            
+             $this->template->styles=array('media/css/tablas.css'=>'screen');
+             $this->template->content=View::factory('reportes/vista3')
+                                        ->bind('results',$results)
+                                        ->bind('oficina',$oficina)
+                                        ->bind('id_oficina',$id_oficina)
+                                        ->bind('estado',$estado)
+                                        ->bind('fecha1',$fecha1)
+                                        ->bind('fecha2',$fecha2); 
+      }else{
+        $sel_ofi=array();
+        $sel_estado = array();
+        $sel_user = array();
+
+        
+        $sel_ofi=array();
+        if ($this->user->prioridad==1) {
+          $oficinas = ORM::factory('oficinas')->where('id_entidad','=',$this->user->id_entidad)->find_all();
+          $sel_ofi[''] = '(Seleccione)';
+          foreach ($oficinas as $o) {
+            $sel_ofi[$o->id] = $o->oficina;
+          }
+        }
+        else{
+          $oficina=ORM::factory('oficinas',$this->user->id_oficina);
+        $sel_ofi[''] = '(Seleccione)';
+        $sel_ofi[$oficina->id]=$oficina->oficina;
+        $o_oficinas=ORM::factory('oficinas')->where('padre','=',$this->user->id_oficina)->find_all();
+        foreach($o_oficinas as $e)
+        {
+            $sel_ofi[$e->id]=$e->oficina;
+        }
+        }
+        
+
+        
+
+        $estados = ORM::factory('estados')->find_all();
+        foreach ($estados as $e) {
+          $sel_estado[$e->id]=$e->estado;
+        }
+        $this->template->title.='| Reporte de documentacion por Usuairo';
+        $this->template->styles=array('media/css/jquery-ui-1.8.16.custom.css'=>'screen');
+        $this->template->scripts=array('media/js/jquery-ui-1.8.16.custom.min.js');
+        $this->template->content=View::factory('reportes/rep_usuario')
+                                  ->bind('sel_estado',$sel_estado)
+                                  ->bind('sel_user',$sel_user)
+                                  ->bind('sel_ofi',$sel_ofi);
+      }
+    }   
     
 }
 ?>

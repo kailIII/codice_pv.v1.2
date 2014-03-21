@@ -7,7 +7,7 @@ $fecha2=$_GET['fecha2'];
 /** PHPExcel */
 require_once 'libs/phpExcel/PHPExcel.php';
 require_once 'libs/phpExcel/PHPExcel/IOFactory.php';
-require_once '../db/dbclass.php';
+require_once 'db/dbclass.php';
 $dbh=New db();
 // Check prerequisites
 if (!file_exists("plantilla1.xlsx")) {

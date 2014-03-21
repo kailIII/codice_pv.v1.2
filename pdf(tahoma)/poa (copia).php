@@ -25,18 +25,10 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             }
             $id_entidad=$rs2->id;
         }
-        if($id_entidad<>2 && $id_entidad<>4 && $id_entidad<>5 && $id_entidad<>6){
-        $this->Image($image_file, 80, 5, 60, 25, 'PNG');
+        if($id_entidad<>2 && $id_entidad<>4){
+        $this->Image($image_file, 89, 5, 40, 23, 'PNG');
         }
-        if ($id_entidad==5 || $id_entidad==6) {
-            $image_file2='../media/logos/logo_MDPyEP.png';
-        $this->Image($image_file, 150, 5, 50, 20, 'PNG');
-        $this->Image($image_file2, 20, 5, 60, 25, 'PNG');
-        }
-
-
-        $this->SetFont('Helvetica', 'B', 20);        
-        //$this->Ln(120);
+        $this->SetFont('helvetica', 'B', 20);        
     }
 
     // Page footer
@@ -54,16 +46,18 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             $pie2 = $rs->pie_2;
             $id_entidad=$rs->id;
         }
-        if ($id_entidad <> 2 && $id_entidad <> 4) {
+        if($id_entidad<>2){
+        // Linea vertical negra
             
-            // Position at 15 mm from bottom
-        $this->SetY(-15);
-        // Set font
-        $this->SetFont('Helvetica', 'I', 7);
-
-        $this->Cell(0, 10, utf8_encode($pie1), 'T', false, 'C', 0, '', 0, false, 'T', 'M');
-        $this->Ln(2);
-        $this->Cell(0, 15, utf8_encode($pie2), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        $style = array('width' => 1.5, 'cap' => 'butt', 'join' => 'miter', 'dash' => 0, 'color' => array(0));
+        $this->Line(140, 257, 140, 272, $style);
+        // logo quinua
+        $this->Image('../media/logos/logo_quinua.jpg', 140, 253, 40, 22, 'JPG');
+        // Pie de pagina
+        $this->SetFont('helvetica', 'I', 7);
+        $this->MultiCell(85, 0, $pie1, 0, 'R', false, 1, 50, 260, true, 0, false, true, 0, 'T', false);
+        $this->MultiCell(90, 0, $pie2, 0, 'R', false, 1, 45, 266, true, 0, false, true, 0, 'T', false);
+        $this->SetY(30);
         }
     }
 
@@ -124,40 +118,36 @@ try {
     $documento = $stmt->fetch(PDO::FETCH_OBJ);
     
     ///usuario solicitante
-    //$sql="SELECT * FROM users WHERE id = $documento->id_user";
-    $sql = "SELECT u.* FROM poas p, documentos d, users u  WHERE id_documento = '$id' AND p.id_memo=d.id AND d.id_user=u.id";
-    $stmt = $dbh->prepare($sql);
+    $stmt = $dbh->prepare("SELECT * FROM users WHERE id = $documento->id_user");
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_OBJ);
         
     ///oficina solicitante
-    $sql="SELECT * FROM oficinas WHERE id=$user->id_oficina";
-    $stmt = $dbh->prepare($sql);
+    $stmt = $dbh->prepare("SELECT * FROM oficinas WHERE id=$documento->id_oficina");
     $stmt->execute();
     $oficina = $stmt->fetch(PDO::FETCH_OBJ);
     
     ///Unidad Ejecutora
-    $sql="SELECT * FROM oficinas WHERE id=$oficina->id";
-    $stmt = $dbh->prepare($sql);
+    $stmt = $dbh->prepare("SELECT * FROM oficinas WHERE id=$oficina->id");
     $stmt->execute();
     $oficina2 = $stmt->fetch(PDO::FETCH_OBJ);
-    if($oficina2->padre==0)
-        $sw=1;
-    else
-        $sw=0;
-    
-    while(($oficina2->ppt_unid_ejecutora == NULL || $oficina2->ppt_unid_ejecutora == 0) && $sw==0){
+    while($oficina2->ppt_unid_ejecutora == NULL || $oficina2->ppt_unid_ejecutora == 0){
         $stmt = $dbh->prepare("SELECT * FROM oficinas WHERE id=$oficina2->padre");
         $stmt->execute();
         $oficina2 = $stmt->fetch(PDO::FETCH_OBJ);
-        if ($oficina2->padre == '0') {
-            $sw=1;
-        }
     }
     
    $stmt = $dbh->prepare("select p.*
+        ,ot.codigo cod_est, ot.objetivo obj_est, ot.gestion
+        ,og.codigo cod_ges, og.objetivo obj_ges, og.gestion
+        ,oe.codigo cod_esp, oe.objetivo obj_esp
+        ,ac.codigo cod_act, ac.actividad act
         ,t.nombre
         from poas p 
+        inner join pvoestrategicos ot on p.id_obj_est = ot.id
+				inner join pvogestiones og on p.id_obj_gestion = og.id
+        inner join pvoespecificos oe on p.id_obj_esp = oe.id
+        inner join pvactividades ac on p.id_actividad = ac.id
         inner join poatipocontrataciones t on p.id_tipocontratacion = t.id
         where p.id_documento = $id");
     $stmt->execute();
@@ -189,17 +179,17 @@ try {
     $pdf->SetFont('Helvetica', 'B', 14);
     $pdf->write(0,'CERTIFICACIÓN POA '.$pvobjetivos->gestion,'',0,'C');
     //$pdf->Cell(5, 6, 'D.N.I.:',0,0,'',$valign='M');
-    //$pdf->SetFont('tahoma', 'B', 9);
+    //$pdf->SetFont('Helvetica', 'B', 9);
     $pdf->Ln();
     $pdf->SetFont('Helvetica', '', 13);
     $pdf->write(0,$rs->nur,'',0,'C');
-    //$pdf->SetFont('tahoma', 'B', 14);
+    //$pdf->SetFont('Helvetica', 'B', 14);
     $tabla1 = "
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        &nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <table style=\" width: 156px;\"  border=\"1px\">
             <tr>
                 <td style = \" width: 40px;\" colspan = \"3\"><b>N°</b></td>
@@ -279,7 +269,7 @@ try {
         $tabla1 .= "    <tr>
                             <td bgcolor=\"$color\">PLAN ESTRATEGICO INSTITUCIONAL:</td>
                             <td bgcolor=\"$color\">CODIGO:</td>
-                            <td>$pvobjetivos->id_obj_est</td>
+                            <td>$pvobjetivos->cod_est</td>
                             <td bgcolor=\"$color\"><br />OBJETIVO ESTRATEGICO:</td>
                             <td colspan=\"2\">$pvobjetivos->obj_est</td>
                         </tr>";
@@ -301,11 +291,11 @@ try {
                         </tr>
                         <tr>
                             <td height =\"$altura2\">Objetivo de Gestion</td>
-                            <td>$pvobjetivos->id_obj_gestion</td>
+                            <td>$pvobjetivos->cod_ges</td>
                         </tr>
                         <tr>
                             <td height =\"$altura2\">Objetivo Especifico</td>
-                            <td>$pvobjetivos->obj_gestion}</td>
+                            <td>$pvobjetivos->cod_esp</td>
                         </tr>
                     </table>
                 </td>-->
@@ -317,8 +307,8 @@ try {
                             <td style=\"width: 39%;\">META(Textual)</td>
                         </tr>
                         <tr>
-                            <td>$pvobjetivos->id_actividad</td>
-                            <td>$pvobjetivos->actividad</td>
+                            <td>$pvobjetivos->cod_act</td>
+                            <td>$pvobjetivos->act</td>
                             <td></td>
                         </tr>
                     </table>
@@ -517,8 +507,8 @@ $tabla1 .=" <tr>
                             <td style=\"width: 13%;\">FECHA</td>
                         </tr>
                         <tr>
-                            <td  height =\"$altura2\"><br /><br />$documento->nombre_destinatario</td>
-                            <td><br /><br />$documento->cargo_destinatario</td>
+                            <td  height =\"$altura2\"><br /><br />$user->nombre</td>
+                            <td><br /><br />$user->cargo</td>
                             <td height =\"40\"></td>
                             <td><br /><br />$documento->fecha_creacion</td>
                         </tr>
@@ -564,7 +554,7 @@ $tabla1 .=" <tr>
                             <td style=\"width: 15%;\" bgcolor = \"$color\">Responsable Verificación POA</td>
                             <td style=\"width: 35%;\"><span style=\"color:#DADADA; text-align:center; font-size: 60%;\"><br /><br /><br /><br /><span style=\"color:#000000; text-align:center; font-size: 120%;\">$autoriza</span><br />FIRMA</span></td>
                             <td style=\"width: 35%;\"><span style=\"color:#DADADA; text-align:center; font-size: 60%;\"><br /><br /><br /><br /><br />SELLO</span></td>
-                            <td style=\"width: 15%;\" bgcolor = \"$color\">FECHA </td>
+                            <td style=\"width: 15%;\" bgcolor = \"$color\">FECHA $fecha_aprobado</td>
                         </tr>
                         <tr>
                             <td bgcolor = \"$color\">Dirección General de Planificación</td>

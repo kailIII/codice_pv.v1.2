@@ -27,7 +27,7 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
             $id_entidad=$rs2->id;
         }
         if($id_entidad<>2 && $id_entidad<>4 && $id_entidad<>5 && $id_entidad<>6){
-        $this->Image($image_file, 80, 5, 60, 25, 'PNG');
+        $this->Image($image_file, 25, 5, 60, 25, 'PNG');
         }
         if ($id_entidad==5 || $id_entidad==6) {
             $image_file2='../media/logos/logo_MDPyEP.png';
@@ -40,16 +40,16 @@ INNER JOIN entidades AS c ON b.id_entidad = c.id WHERE a.id = '$id'");
         //$this->Ln(120);
     }
 
-//    // Page footer
-//    public function Footer() {
-//
-//
-//    }
+    // Page footer
+    // public function Footer() {
+
+
+    // }
 
 }
 
 // create new PDF document
-$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'LETTER', true, 'UTF-8', false);
+$pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, 'legal', true, 'UTF-8', false);
 
 // set document information
 $pdf->SetCreator(PDF_CREATOR);
@@ -76,7 +76,7 @@ $stmt->execute();
 while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {
             $id_entidad=$rs->id_entidad;
         } 
-$margin_top=33;
+$margin_top=28;
 if($id_entidad==2){
     $margin_top=33;
 }elseif ($id_entidad==4) {
@@ -84,10 +84,10 @@ if($id_entidad==2){
 }
 
 //set margins
-$pdf->SetMargins(20, $margin_top, 20);
+$pdf->SetMargins(25, $margin_top, 13);
 //$pdf->SetMargins(20, PDF_MARGIN_TOP, 20);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+$pdf->SetFooterMargin(30);
 
 //set auto page breaks
 $pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
@@ -98,11 +98,11 @@ $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 //set some language-dependent strings
 $pdf->setLanguageArray($l);
 
-$pdf->SetFont('tahoma', 'B', 18);
+$pdf->SetFont('Helvetica', 'B', 18);
 
 // add a page
 $pdf->AddPage();
-$nombre = 'Juridica';
+$nombre = 'Administrativa';
 try {
     $dbh = New db();
     $stmt = $dbh->prepare("SELECT * FROM documentos d 
@@ -113,28 +113,45 @@ try {
     //echo "<B>outputting...</B><BR>";
     //$pdf->Ln(7);
     while ($rs = $stmt->fetch(PDO::FETCH_OBJ)) {
-        $pdf->Ln(1);
-//        $pdf->SetFont('tahoma', '', 10);
-        //$pdf->Cell(15, 5, 'La Paz, ');
-//        $mes = (int) date('m', strtotime($rs->fecha_creacion));
-//        $meses = array(1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre');
-//        $fecha = date('d', strtotime($rs->fecha_creacion)) . ' de ' . $meses[$mes] . ' de ' . date('Y', strtotime($rs->fecha_creacion));
-//        $pdf->Write(0, 'La Paz, '.$fecha, '', 0, 'L');
-        $pdf->SetFont('Helvetica', 'B', 13);
-        $pdf->Write(0, strtoupper($rs->referencia), '', 0, 'L');
-        $pdf->Ln();
-        $pdf->SetFont('Helvetica', '', 11);
         $pdf->Ln(3);
-        $pdf->Write(0, 'N°  '. strtoupper($rs->codigo), '', 0, 'R');
+        $pdf->SetFont('Helvetica', '', 11);
+        //$pdf->Cell(15, 5, 'La Paz, ');
+        /*
+        $mes = (int) date('m', strtotime($rs->fecha_creacion));
+        $meses = array(1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre');
+        $fecha = date('d', strtotime($rs->fecha_creacion)) . ' de ' . $meses[$mes] . ' de ' . date('Y', strtotime($rs->fecha_creacion));
+        */
+        // $pdf->Write(0, 'La Paz, '.$fecha, '', 0, 'L');
+        $pdf->Write(0, 'La Paz, ', '', 0, 'L');
+        $pdf->Ln(10);
+        $pdf->SetFont('Helvetica', 'B', 11);
+        $pdf->Write(0, strtoupper($rs->tipo), '', 0, 'L');
+        //$pdf->Ln();
+        $pdf->SetFont('Helvetica', '', 11);
+        $codigo = substr($rs->codigo, -11);
+        $codigo = str_replace('/', '.', $codigo);
+        $pdf->Write(0, strtoupper($codigo), '', 0, 'R');
         
-        $pdf->Ln(0);
+        $pdf->Ln(10);
+        
+
+        $referencia ='<table border="0" width="100%">
+                        <tr  >
+                            <td width="100px" style="text-align:left;"><b>TEMA:</b></td>
+                            <td width="520px" style="text-align:justify;" ><b>'.utf8_encode($rs->referencia).'</b></td>
+                        </tr>
+                        </table>';
+
+        $pdf->writeHTML($referencia);        
+        $pdf->Ln(-8);
+        $pdf->SetFont('Helvetica', '', 10);
         $pdf->writeHTML($rs->contenido);
         $pdf->Ln(10);
         
         //$pdf->writeHTML();
         /*   $pdf->SetY(-5);
           // Set font
-          $pdf->SetFont('helvetica', 'I', 7);
+          $pdf->SetFont('Helvetica', 'I', 7);
           $pdf->Write(0, $fecha,'',0,'L');
          * */
 

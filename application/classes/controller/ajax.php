@@ -463,5 +463,16 @@ class Controller_Ajax extends Controller {
         }
         echo json_encode($resul);
     }
+
+    public function action_ofiuser()
+    {       
+        $id = $_POST['id_oficina'];
+        $resul = ORM::factory('users')->where('id_oficina','=',$id)->find_all();
+        $res = '<option value = "" selected>(Seleccione)</option>';
+        foreach($resul as $o){
+            $res = $res.'<option value="'.$o->id.'">'.$o->nombre.'</option>';
+        }        
+        echo json_encode($res);
+    }
     ///////////////end///////////////////////
 }

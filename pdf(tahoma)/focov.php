@@ -122,7 +122,7 @@ $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 //set some language-dependent strings
 $pdf->setLanguageArray($l);
 
-$pdf->SetFont('Helvetica', 'B', 18);
+$pdf->SetFont('tahoma', 'B', 18);
 
 // add a page
 $pdf->AddPage();
@@ -155,16 +155,16 @@ try {
             $tipoviaje = $viaje->tipoviaje;
         else
             $tipoviaje = '<b>NO SELECCIONADO</b>';
-        $pdf->SetFont('Helvetica', 'B', 15);
+        $pdf->SetFont('tahoma', 'B', 16);
         $pdf->Write(0, 'FORMULARIO DE COMISION DE VIAJE ('.strtoupper($rs->tipo).')', '', 0, 'C');
         $pdf->Ln();
-        $pdf->SetFont('Helvetica', '', 11);
+        $pdf->SetFont('tahoma', '', 12);
         $pdf->Write(0, strtoupper($rs->codigo), '', 0, 'C');
         $pdf->Ln();
-        $pdf->SetFont('Helvetica', 'B', 13);
+        $pdf->SetFont('tahoma', 'B', 14);
         $pdf->Write(0, strtoupper($rs->nur), '', 0, 'C');
         $pdf->Ln();
-        $pdf->SetFont('Helvetica', 'B', 8);
+        $pdf->SetFont('tahoma', 'B', 9);
         //$pdf->Ln();
         $marca = '#DADADA';
         $padding = 2;
@@ -320,31 +320,29 @@ try {
         $contenido .= ' <table border="1" cellpadding="'.$padding.'" width="100%">
                             <thead>
                                 <tr style="text-align:center;background-color: #666666;color: #FFFFFF;">
-                                    <th width="85">Origen</th>
-                                    <th width="85">Destino</th>
+                                    <th width="100">Origen</th>
+                                    <th width="100">Destino</th>
                                     <th width="88">Fecha y Hora <br>Salida</th>
                                     <th width="88">Fecha y Hora <br>Retorno</th>
                                     <th >Transporte</th>
                                     <th width="91.2">Viaticos</th>
                                     <th width="39">Desc. IVA</th> 
                                     <th width="39">Gasto<br>Rep.</th>
-                                    <th width="39">Desc.<br>DUA</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr style="text-align:center;">
-                                    <td width="85">' . $rs->origen . '</td>
-                                    <td width="85">' . $rs->destino . '</td>
+                                    <td width="100">' . $rs->origen . '</td>
+                                    <td width="100">' . $rs->destino . '</td>
                                     <td width="88">' . $diai . ' ' . $fi . '<br>' . $hi . '</td>
                                     <td width="88">' . $diaf . ' ' . $ff . '<br>' . $hf . '</td>
                                     <td >' . $rs->transporte . '</td>
                                     <td width="91.2" style="text-align:left;">' . $cancelar . '</td>
                                     <td width="39" >' . $rs->impuesto . '</td>
                                     <td width="39">' . $rs->representacion . '</td>
-                                    <td width="39">' . $rs->dua . '</td>
                                 </tr>
                                 <tr>
-                                    <td colspan="9"></td>
+                                    <td colspan="8"></td>
                                 </tr>
                             </tbody>
                         </table>';
@@ -431,7 +429,7 @@ try {
 
         $contenido .='</table>';*/
         
-        $pdf->SetFont('Helvetica', '', 9);
+        $pdf->SetFont('tahoma', '', 9);
         $pdf->writeHTML(utf8_decode($contenido));
 
         //$con='<p style="text-align: justify;">Una vez completada la comisión sírvase hacer llegar el informe de descargo dentro de los próximos 8 días hábiles de acuerdo al artículo 25 del reglamento de Pasajes y Viáticos del Ministerio de Desarrollo Productivo y Economía Plural y el Artículo N° 7 del Decreto Supremo 1788.</p>';
@@ -441,11 +439,11 @@ try {
                         <td colspan="2">'.utf8_decode($con).'</td>
                     </tr>
                 </table>';
-        $pdf->SetFont('Helvetica', '', 9);
+        $pdf->SetFont('tahoma', '', 9);
         $pdf->writeHTML(utf8_encode($contenido2));        
 
         //$pdf->Ln(10);
-        $pdf->SetFont('Helvetica', '', 5);
+        $pdf->SetFont('tahoma', '', 6);
         $pdf->writeHTML('cc. ' . strtoupper($rs->copias));
         $pdf->writeHTML('Adj. ' . strtoupper($rs->adjuntos));
         $pdf->writeHTML(strtoupper($rs->mosca_remitente));

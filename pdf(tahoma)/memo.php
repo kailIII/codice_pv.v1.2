@@ -122,7 +122,7 @@ $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 //set some language-dependent strings
 $pdf->setLanguageArray($l);
 
-$pdf->SetFont('Helvetica', 'B', 18);
+$pdf->SetFont('tahoma', 'B', 18);
 
 // add a page
 $pdf->AddPage();
@@ -141,58 +141,58 @@ try {
             $focov = ' DE VIAJE';
         else
             $focov = '';
-        $pdf->SetFont('Helvetica', 'B', 15);
+        $pdf->SetFont('tahoma', 'B', 16);
         $pdf->Write(0, strtoupper($rs->tipo).$focov, '', 0, 'C');
         $pdf->Ln();
-        $pdf->SetFont('Helvetica', '', 11);
+        $pdf->SetFont('tahoma', '', 12);
         $pdf->Write(0, strtoupper($rs->codigo), '', 0, 'C');
         $pdf->Ln();
-        $pdf->SetFont('Helvetica', 'B', 13);
+        $pdf->SetFont('tahoma', 'B', 14);
         $pdf->Write(0, strtoupper($rs->nur), '', 0, 'C');
         $pdf->Ln(10);
-        $pdf->SetFont('Helvetica', 'B', 10);
+        $pdf->SetFont('tahoma', 'B', 11);
         $pdf->Cell(15, 5, 'A:');
-        $pdf->SetFont('Helvetica', '', 10);
+        $pdf->SetFont('tahoma', '', 11);
         $pdf->Write(0, utf8_encode($rs->nombre_destinatario), '', 0, 'L');
         $pdf->Ln();
         $pdf->Cell(15, 5, '');
-        $pdf->SetFont('Helvetica', 'B', 10);
+        $pdf->SetFont('tahoma', 'B', 11);
         $pdf->Write(0, utf8_encode($rs->cargo_destinatario), '', 0, 'L');
         $pdf->Ln(10);
         if (($rs->via != 0) && (trim($rs->nombre_via) != '')) {
-            $pdf->SetFont('Helvetica', 'B', 10);
+            $pdf->SetFont('tahoma', 'B', 11);
             $pdf->Cell(15, 5, 'Via:');
-            $pdf->SetFont('Helvetica', '', 10);
+            $pdf->SetFont('tahoma', '', 11);
             $pdf->Write(0, utf8_encode($rs->nombre_via), '', 0, 'L');
             $pdf->Ln();
             $pdf->Cell(15, 5, '');
-            $pdf->SetFont('Helvetica', 'B', 10);
+            $pdf->SetFont('tahoma', 'B', 11);
             $pdf->Write(0, utf8_encode($rs->cargo_via), '', 0, 'L');
             $pdf->Ln(10);
         }
-        $pdf->SetFont('Helvetica', 'B', 10);
+        $pdf->SetFont('tahoma', 'B', 11);
         $pdf->Cell(15, 5, 'De:');
-        $pdf->SetFont('Helvetica', '', 10);
+        $pdf->SetFont('tahoma', '', 11);
         $pdf->Write(0, utf8_encode($rs->nombre_remitente), '', 0, 'L');
         $pdf->Ln();
         $pdf->Cell(15, 5, '');
-        $pdf->SetFont('Helvetica', 'B', 10);
+        $pdf->SetFont('tahoma', 'B', 11);
         $pdf->Write(0, utf8_encode($rs->cargo_remitente), '', 0, 'L');
         $pdf->Ln(10);
         $pdf->Cell(15, 5, 'Fecha:');
-        $pdf->SetFont('Helvetica', '', 10);
+        $pdf->SetFont('tahoma', '', 11);
         $mes = (int) date('m', strtotime($rs->fecha_creacion));
         $meses = array(1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre');
         $fecha = date('d', strtotime($rs->fecha_creacion)) . ' de ' . $meses[$mes] . ' de ' . date('Y', strtotime($rs->fecha_creacion));
         $pdf->Write(0, $fecha, '', 0, 'L');
         $pdf->Ln(10);
-        $pdf->SetFont('Helvetica', 'B', 10);
+        $pdf->SetFont('tahoma', 'B', 11);
         /*if ($rs->fucov == 1)
             $pdf->Cell(15, 5, 'Motivo:');
         else*/
             $pdf->Cell(15, 5, 'Ref:');
 
-        $pdf->SetFont('Helvetica', '', 10);
+        $pdf->SetFont('tahoma', '', 11);
         $pdf->MultiCell(170, 5, utf8_encode($rs->referencia), 0, 'L');
         
         if($rs->fucov == 1)
@@ -205,7 +205,7 @@ try {
         
 
         $pdf->Ln(10);
-        $pdf->SetFont('Helvetica', '', 5);
+        $pdf->SetFont('tahoma', '', 6);
         $pdf->writeHTML('cc. ' . strtoupper($rs->copias));
         $pdf->writeHTML('Adj. ' . strtoupper($rs->adjuntos));
         $pdf->writeHTML(strtoupper($rs->mosca_remitente));

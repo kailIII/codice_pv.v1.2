@@ -71,7 +71,8 @@ class Model_Reportes extends ORM{
         WHERE s.id_a_oficina='$oficina'        
         AND s.estado ='$estado'   
         and d.original='1'
-        AND s.fecha_emision BETWEEN '$fecha1' AND '$fecha2'";
+        AND s.fecha_emision BETWEEN '$fecha1' AND '$fecha2'
+        ORDER BY derivado_a ASC ";
         return db::query(Database::SELECT, $sql)->execute();
     }
     public function v_recepcion($id_user,$fecha1,$fecha2)
@@ -80,10 +81,22 @@ class Model_Reportes extends ORM{
         FROM documentos d
         WHERE id_user='$id_user'
         AND d.original=1
-        AND d.fecha_creacion BETWEEN '$fecha1' AND '$fecha2'";
+        AND d.fecha_creacion BETWEEN '$fecha1' AND '$fecha2' ";
         return db::query(Database::SELECT,$sql)->execute();
     }
     
+    public function rep_usuario($oficina,$estado,$fecha1,$fecha2,$usuario)
+    {
+        $sql="SELECT s.nur,s.nombre_receptor,s.cargo_receptor,s.nombre_emisor,s.cargo_emisor,s.fecha_emision, s.fecha_recepcion,s.proveido,d.codigo,d.cite_original FROM seguimiento s
+        INNER JOIN documentos d ON s.nur=d.nur
+        WHERE s.id_a_oficina='$oficina'        
+        AND s.estado ='$estado'
+        AND s.derivado_a = '$usuario'   
+        and d.original='1'
+        AND s.fecha_emision BETWEEN '$fecha1' AND '$fecha2'
+        ORDER BY derivado_a ASC ";
+        return db::query(Database::SELECT, $sql)->execute();
+    }
     
 }
 ?>

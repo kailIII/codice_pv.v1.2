@@ -120,10 +120,10 @@ try {
 //        $meses = array(1 => 'Enero', 2 => 'Febrero', 3 => 'Marzo', 4 => 'Abril', 5 => 'Mayo', 6 => 'Junio', 7 => 'Julio', 8 => 'Agosto', 9 => 'Septiembre', 10 => 'Octubre', 11 => 'Noviembre', 12 => 'Diciembre');
 //        $fecha = date('d', strtotime($rs->fecha_creacion)) . ' de ' . $meses[$mes] . ' de ' . date('Y', strtotime($rs->fecha_creacion));
 //        $pdf->Write(0, 'La Paz, '.$fecha, '', 0, 'L');
-        $pdf->SetFont('Helvetica', 'B', 13);
+        $pdf->SetFont('tahoma', 'B', 14);
         $pdf->Write(0, strtoupper($rs->referencia), '', 0, 'L');
         $pdf->Ln();
-        $pdf->SetFont('Helvetica', '', 11);
+        $pdf->SetFont('tahoma', '', 11);
         $pdf->Ln(3);
         $pdf->Write(0, 'N°  '. strtoupper($rs->codigo), '', 0, 'R');
         
@@ -134,7 +134,7 @@ try {
         //$pdf->writeHTML();
         /*   $pdf->SetY(-5);
           // Set font
-          $pdf->SetFont('helvetica', 'I', 7);
+          $pdf->SetFont('tahoma', 'I', 7);
           $pdf->Write(0, $fecha,'',0,'L');
          * */
 

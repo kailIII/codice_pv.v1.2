@@ -94,12 +94,14 @@
                             $('#viatico_dia').val(item.monto);
                             $('#id_viatico_dia').text(item.monto+ ' Bs.');
                             $('#idmoneda').text(' Bs.');
+                            $('.id_monendadua').text(' Bs.');
                             $('#tipo_moneda').val(0);
                         }
                         else{
                             $('#viatico_dia').val(item.monto);
                             $('#id_viatico_dia').text(item.monto+ ' $us.');
                             $('#idmoneda').text(' $us.');
+                            $('.id_monendadua').text(' $us.');
                             $('#tipo_moneda').val(1);
                         }
                                                             
@@ -127,7 +129,9 @@
             calculo_dias();    
             calculo_viaticos();
         });
-
+        $("#dua").blur(function(){
+            calculo_viaticos();
+        });
 
         function calculo_viaticos(){
 
@@ -137,6 +141,7 @@
             var viatico_dia = $('#viatico_dia').val();
             var nro_dias = $('#nro_dias').val();
             var tipo_moneda = $('#tipo_moneda').val();
+            var dua = $('#dua').val();
             //var h_arribo = $('#hora_arribo').val();
 
             if(tipo_moneda==0)
@@ -186,6 +191,10 @@
             var desc_iva = parseFloat(desc_iva_mp)+parseFloat(desc_iva_gr);
             
             var total_viatico=parseFloat(monto_parcial)-parseFloat(desc_iva_mp);
+            if(dua>0){
+                total_viatico=parseFloat(total_viatico)-parseFloat(dua);;
+            }
+
             gastos_rep = parseFloat(gastos_rep)-parseFloat(desc_iva_gr);
             $('#gasto_imp').val(desc_iva.toFixed(2));
             $('#id_gasto_imp').text(desc_iva.toFixed(2)+tipo_moneda);
@@ -695,6 +704,7 @@ function dia_literal($n) {
                                     <th style="text-align:center;">Viaticos</th>
                                     <th style="text-align:center;">Desc. IVA</th> 
                                     <th style="text-align:center;">Gastos<br>Repres.</th>
+                                    <th style="text-align:center;">Desc.<br>DUA</th>
 
                                 </tr>
                             </thead>
@@ -765,6 +775,7 @@ function dia_literal($n) {
                                                    echo 'checked';
                                                } ?>> No<br>
                                     </td>
+                                    <td rowspan='3'><?php echo Form::input('dua', $pvfucov->dua, array('id' => 'dua', 'size' => 3)) ?> <div class="id_monendadua"><?php echo $tipo_moneda;?></div>  </td>
 
                                 </tr>
                                 <tr>
